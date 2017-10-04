@@ -2,8 +2,7 @@ package Controller;
 import java.util.Scanner;
 
 public class Menu {
-	
-
+	//ffuygugygy
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//Create User ID and save user ID
