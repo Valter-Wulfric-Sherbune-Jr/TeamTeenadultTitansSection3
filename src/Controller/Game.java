@@ -4,8 +4,8 @@ package Controller;
 
 /**
  * @author mansoor
- * This class is the game creator and will be invoked from the Main menu selection
- * This class creates, saves, loads, view scores, and exit game
+ * This class is the game creator and will be invoked from the Main menu selection.
+ * This class creates, saves, loads, view scores, and exit game.
  *
  */
 
