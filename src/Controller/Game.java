@@ -10,7 +10,8 @@ package Controller;
  */
 
 public class Game {
-
+	public static Player player;
+	
 
 		public void newGame(Character x){
 			char userId;
@@ -25,9 +26,6 @@ public class Game {
 			
 		}
 		public void exitGame(){
-			
-		
-
 			
 		}
 }
