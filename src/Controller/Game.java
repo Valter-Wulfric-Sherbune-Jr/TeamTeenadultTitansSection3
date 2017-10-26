@@ -14,7 +14,7 @@ public class Game {
 	
 
 		public void newGame(Character x){
-			char userId;
+			
 		}
 		public void loadGame(Character x){
 			
