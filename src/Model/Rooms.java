@@ -65,7 +65,7 @@ class Rooms {
 					+ "inactive, and have had their functions replaced by the emergency lighting stripes situated at "
 					+ "the hallway corners that now illuminate the narrow passages with amber light.");
 			
-			
+			  
 			
 			
 		
