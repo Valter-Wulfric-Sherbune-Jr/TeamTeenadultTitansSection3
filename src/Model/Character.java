@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Character implements Serializable{
 	
-	protected int characterIDValue;
+	protected static int characterIDValue;
 	protected char characterID;
 	protected String name;
 	protected static Rooms currentRoom;
