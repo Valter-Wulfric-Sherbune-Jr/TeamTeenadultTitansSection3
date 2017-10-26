@@ -13,7 +13,5 @@ public class Player extends Character implements Serializable{
 		super();
 	}
 	
-	public Player (int characterID, String name) {
-		super(characterIDValue, characterID, name, currentRoom);
-	}
+
 }

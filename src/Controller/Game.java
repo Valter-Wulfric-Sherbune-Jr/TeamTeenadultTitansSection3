@@ -1,6 +1,7 @@
 package Controller;
+import java.util.Scanner;
 
-import Model.Player;
+import Model.Rooms;
 
 /**
  * @author mansoor
@@ -10,22 +11,50 @@ import Model.Player;
  */
 
 public class Game {
-	public static Player player;
-	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//Create User ID and save user ID
+			Scanner selection = new Scanner(System.in);
+			System.out.println("Welcome to-------- sdfasdf");
+			System.out.println("1. New Game");
+			System.out.println("2. Load Game");
+			System.out.println("3. View Scores");
+			System.out.println("4. Help Menu");
+			System.out.println("5. Exit Game");
+			
+			int gameSelection = selection.nextInt();
+		
+		switch(gameSelection){
+		
+		case 1: //if selection is 1 a new Game is created
+			System.out.println("New Game is created");
+			final int x = 0;
+			final int y = 0;
+			final int z = 4;
+			Rooms[][][] room = new Rooms[x][y][z];
+			String roomPrint = room.toString();
+			
+			System.out.println("The print is " + roomPrint);
+			
+			break;
+		case 2: //if selection 2 is selected loads previous saved data
+			System.out.println("Load Game");
+			break;
+		case 3: //if selection is 3 all previous scores is displayed
+			System.out.println("view score");
+			break;
+		case 4: // if selection is selected help menu is displayed
+			System.out.println("help menu");
+			break;
+		case 5: // if selected the game is terminated
+			System.out.println("Game exit");
+			break;
+		default: 
+			System.out.println("Please Select an Option");
+			break;
+		
+		}
 
-		public void newGame(Character x){
-			
-		}
-		public void loadGame(Character x){
-			
-		}
-		public void viewScore(Character x){
-			
-		}
-		public void helpMenu(){
-			
-		}
-		public void exitGame(){
-			
-		}
+	}
+
 }

@@ -2,19 +2,19 @@ package Model;
 import java.util.Arrays; 
 
 
-class Rooms {
+public class Rooms {
 	 public static void roomCreate(Room[][][] room,final int x, final int y, final int z){
 		for(int i = 0; i < x; i++){
 			for (int j =0; j < y; j++){
 				for(int a = 0; a< z; a++){
-					 room[i][j][a] = new Room(i,j,a,null);
+				//	 room[i][j][a]= new Room(i, "","",null); 
 				}
 			}
 			
 			//Room ArrayList
-			room[0][0][0].setRoomId();
-			room[0][0][0].setName("Roof");
-			room[0][0][0].setDescription();
+		//	room[0][0][0].setRoomId();
+		//	room[0][0][0].setName("Roof");
+		//	room[0][0][0].setDescription();
 			
 			//4th Floor 
 			room[0][0][4].setRoomId(01);
@@ -36,14 +36,56 @@ class Rooms {
 			
 			
 			//Floor 3
-			room[0][0][0].setRoomId(04);
-			room[0][0][0].setName("Third Floor");
-			room[0][0][0].setDescription("An elongated room that has sectioned off areas filled with "
+			room[0][1][3].setRoomId(04);
+			room[0][1][3].setName("Third Floor");
+			room[0][1][3].setDescription("An elongated room that has sectioned off areas filled with "
 					+ "various obsta-cles used for training autonomous"
 					+ " or semi-autonomous machines. The courses show extensive damage from the numerous "
 					+ "live fire exercises done in these environments.");
 			
+			room[0][1][3].setRoomId(05);
+			room[0][1][3].setName("Third Floor");
+			room[0][1][3].setDescription("Large ionization machines are lined up against the walls,"
+					+ " and there are numerous metal pipes and tubing formations throughout the room. "
+					+ "These systems manage the facilities environmental atmosphere, "
+					+ "and the micro-climates that are present within different sectors.");
 			
+			room[1][0][3].setRoomId(06);
+			room[1][0][3].setName("Third Floor");
+			room[1][0][3].setDescription("The expansive room reminiscent of an airport terminal overlooks the con-necting substation in which the trams dock "
+					+ "and drop off personnel who are commuting. Screens that would normally show arrival and departure times "
+					+ "now flash lockdown messages across their displays."
+					+ " (A contingent of non-hostile military androids can be seen guarding the main exit to the substation)");
+			
+			room[1][1][3].setRoomId(07);
+			room[1][1][3].setName("Third Floor");
+			room[1][1][3].setDescription("Additive manufacturing machines are located on one side of the room,"
+					+ " and electronic testing/measurement instruments are present alongside them. "
+					+ "There are numerous stations that possess computer-aided design software used for rapid prototyping.");
+			
+			room[2][0][3].setRoomId(8);
+			room[2][0][3].setName("Third Floor");
+			room[2][0][3].setDescription("Dark grey marble lines the floor, walls, and columns of this expansive corridor."
+					+ " Large cutouts on the side filled with electrotransparent glass des-ignate the office spaces of the company’s administrative personnel.");
+			
+			room[2][1][3].setRoomId(9);
+			room[2][1][3].setName("Third Floor");
+			room[2][1][3].setDescription("This area is reserved for the study of organic materials."
+					+ " The sector in-cludes dedicated ecosystem observatories, specimen containment cells, and a gene-bank repository. "
+					+ "Orange painted hazmat robots are stored in wall mounted cells in an offline state.");
+			
+			room[3][0][3].setRoomId(10);
+			room[3][0][3].setName("Third Floor");
+			room[3][0][3].setDescription("A circular security desk stands in the middle of a large room, "
+					+ "and multiple hallway entrances can be seen nearby with colored lines on their sides designating which sub-sector they lead to. "
+					+ "The main exits leading to other locations are pulsating their emergency lights to indicate that there has been test chamber breaches.");
+			
+			room[3][1][3].setRoomId(11);
+			room[3][1][3].setName("Third Floor");
+			room[3][1][3].setDescription("The O.S.F. is home to various reinforced containers spread along the wall in a hexagonal pattern. "
+					+ "Larger vessels are stored within the floor, and are raised up once access is required. While the majority of the"
+					+ " containers are still in lockdown some of the storage units seem to be unlocked.");
+
 
 			
 			
@@ -198,20 +240,22 @@ class Rooms {
 			room[0][2][0].setDescription("There is a single computer in this room on a desk. "
 					+ "There is very few wires and all of them go to the computer from the walls. ");
 			
-			
+		
 		
 		} 
+		
 	 }
-	
+	 
+	 
 class Room{
 	public int roomId;
 	public String name;
 	public String description;
 	
-	public Room(int roomId, String name, String description){
+	public Room(){
 		
 	}
-	public Room(int i, int j, int a, Object object) {
+	public Room(String string) {
 		// TODO Auto-generated constructor stub
 	}
 	public void setRoomId(int roomId){
@@ -232,6 +276,10 @@ class Room{
 	}
 	public String getDescription(){
 		return this.getDescription();
+	}
+	@Override
+	public String toString() {
+		return "Room [name=" + name + ", description=" + description + "]";
 	}
 	
 }	 
