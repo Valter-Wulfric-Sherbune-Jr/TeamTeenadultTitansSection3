@@ -12,9 +12,9 @@ class Rooms {
 			}
 			
 			//Room ArrayList
-			room[0][0][0].setRoomId();
-			room[0][0][0].setName("Roof");
-			room[0][0][0].setDescription();
+		//	room[0][0][0].setRoomId();
+		//	room[0][0][0].setName("Roof");
+		//	room[0][0][0].setDescription();
 			
 			//4th Floor 
 			room[0][0][4].setRoomId(01);

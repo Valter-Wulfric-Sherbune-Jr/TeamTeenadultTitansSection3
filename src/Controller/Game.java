@@ -1,6 +1,6 @@
 package Controller;
 
-
+import Model.Player;
 
 /**
  * @author mansoor
