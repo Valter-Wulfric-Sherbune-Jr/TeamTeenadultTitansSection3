@@ -36,6 +36,12 @@ class Rooms {
 			
 			
 			//Floor 3
+			room[0][0][0].setRoomId(04);
+			room[0][0][0].setName("Third Floor");
+			room[0][0][0].setDescription("An elongated room that has sectioned off areas filled with "
+					+ "various obsta-cles used for training autonomous"
+					+ " or semi-autonomous machines. The courses show extensive damage from the numerous "
+					+ "live fire exercises done in these environments.");
 			
 			
 
