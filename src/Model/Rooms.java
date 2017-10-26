@@ -12,9 +12,9 @@ class Rooms {
 			}
 			
 			//Room ArrayList
-		//	room[0][0][0].setRoomId();
-		//	room[0][0][0].setName("Roof");
-		//	room[0][0][0].setDescription();
+			room[0][0][0].setRoomId();
+			room[0][0][0].setName("Roof");
+			room[0][0][0].setDescription();
 			
 			//4th Floor 
 			room[0][0][4].setRoomId(01);
@@ -34,7 +34,14 @@ class Rooms {
 			room[1][0][4].setDescription("There is a staircase going down one floor and two doors. "
 					+ "The metal safety shields have removed outside light as lights below flicker.");
 			
-			//
+			
+			//Floor 3
+			
+			
+
+			
+			
+			//Floor 2
 			room[2][2][2].setRoomId(12);
 			room[2][2][2].setName("Second Floor");
 			room[2][2][2].setDescription("This division holds the offices and work centers of employees "
@@ -57,6 +64,7 @@ class Rooms {
 					+ "wall. Throughout the room there are stations with multiple monitors used for analyzing"
 					+ " network operations.");
 			
+
 			room[0][0][0].setRoomId(15);
 			room[0][0][0].setName("Second Floor");
 			room[0][0][0].setDescription("Several elongated hallways are present with numbered residential rooms "
@@ -64,6 +72,74 @@ class Rooms {
 					+ "furnishings knocked over. Many of the lighting fixtures that lined the hallways are now "
 					+ "inactive, and have had their functions replaced by the emergency lighting stripes situated at "
 					+ "the hallway corners that now illuminate the narrow passages with amber light.");
+			
+			
+			
+			
+
+			//Room 20: Connected to Room 21 (South) and Room 25 (West)
+			room[2][0][1].setRoomId(20);
+			room[2][0][1].setName("Floor 1");
+			room[2][0][1].setDescription("A room storing various canisters of foodstuffs and medical supplies."
+					+ "Many of the food cansiters are untouched, but all of the medical supplies have been looted.");
+
+			//Room 21: Connected to Room 20 (North) and Room 24 (West)
+			room[2][1][1].setRoomId(21);
+			room[2][1][1].setName("Floor 1");
+			room[2][1][1].setDescription("A steel corridor that has fluorescent lights integrated into the ceiling."
+					+ "A damaged security droid is laying facedown, and a nearby wall is marked with bullet holes.");
+
+			//Room 22: Connected to Room 23 (West)
+			room[2][2][1].setRoomId(22);
+			room[2][2][1].setName("Floor 1");
+			room[2][2][1].setDescription("Localized computing clusters contained in large metal cases with tempered glass fronts that are organized in lines of five units per row."
+					+ "These systems work independently from the sectors main grid of computers, and they dynamically allocate their resources to whatever department requires more services.");
+
+			//Room 23: Connected to Room 22 (East), Room 24 (North), and Room 28 (West)
+			room[1][2][1].setRoomId(23);
+			room[1][2][1].setName("Floor 1");
+			room[1][2][1].setDescription("This room is the main entrance."
+					+ "There is a metal shield blocking the front door."
+					+ "There are many bodies of people who tried to escape.");
+
+			//Room 24: Connected to Room 21 (East), Room 23 (South), and Room 25 (North)
+			room[1][1][1].setRoomId(24);
+			room[1][1][1].setName("Floor 1");
+			room[1][1][1].setDescription("The center of the room has the EMPYREAN’s famous High-Energy Particle machine."
+					+ "There are many labs and detectors around it to test how particles react under certain conditions."
+					+ "There is a walkway going along the outer part of the room for employees and tour groups to get around the machine and stations.");
+
+			//Room 25: Connected to Room 20 (East), Room 24 (South), and Room 26 (West)
+			room[1][0][1].setRoomId(25);
+			room[1][0][1].setName("Floor 1");
+			room[1][0][1].setDescription("The ceiling of this room is much higher than the ceilings of other rooms."
+					+ "There is glass below the ceiling."
+					+ "There are temperature regulation pipes and bright lights above the glass."
+					+ "The Floor is a sidewalk surrounded by dirt."
+					+ "The dirt has a wide variety of of small trees and other plants."
+					+ "Birds can be heard.");
+
+			//Room 26: Connected to Room 25 (East) and Room 27 (South)
+			room[0][0][1].setRoomId(26);
+			room[0][0][1].setName("Floor 1");
+			room[0][0][1].setDescription("The room has many glass enclosures."
+					+ "A few of the enclosures have dead or diseased animals."
+					+ "Each enclosure has a well recorded binder full of notes stating how the animals reacted to viruses and toxins.");
+
+			//Room 27: Connected to Room 18 (Staircase/Up), Room 26 (North), and Room 28 (South)
+			room[0][1][1].setRoomId(27);
+			room[0][1][1].setName("Floor 1");
+			room[0][1][1].setDescription("This room is the bottom of a stairwell."
+					+ "There is an exit sign near the door to the South and bloody handprint on the door to the North.");
+
+			//Room 28: Connected to Room 23 (East) and Room 27 (North)
+			room[0][2][1].setRoomId(28);
+			room[0][2][1].setName("Floor 1");
+			room[0][2][1].setDescription("There are many desks."
+					+ "There are a few meeting rooms."
+					+ "This is where the bulk of the business is done."
+					+ "Several desks have been knocked over from the panic.");
+
 			
 			  
 			
