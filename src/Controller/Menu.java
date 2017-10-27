@@ -7,7 +7,7 @@ public class Menu {
 		// TODO Auto-generated method stub
 		//Create User ID and save user ID
 			Scanner selection = new Scanner(System.in);
-			System.out.println("Welcome to-------- sdfasdf");
+			System.out.println("Welcome to-------- ");
 			System.out.println("1. New Game");
 			System.out.println("2. Load Game");
 			System.out.println("3. View Scores");

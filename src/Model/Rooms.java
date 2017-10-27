@@ -351,9 +351,9 @@ public class Rooms
 		Set set = map.entrySet();
 	    Iterator iterator = set.iterator();
 	    while(iterator.hasNext()) { 
-	    	Map.Entry mentry = (Map.Entry)iterator.next();
-	    	int[] coordinate =  (int[]) mentry.getValue();
-	         System.out.print(mentry.getKey());
+	    	Map.Entry mEntry = (Map.Entry)iterator.next();
+	    	int[] coordinate =  (int[]) mEntry.getValue();
+	         System.out.print(mEntry.getKey());
 	         	if(iterator.hasNext()) {
 	         		System.out.print(",");
 	         	}
