@@ -248,6 +248,10 @@ public class Rooms
 		return room[x][y][z].toString();
 	}
 }
+
+public void getRoomMenu(String north, String south, String, east, String West){
+	
+}
 	 
 	 
 class Room{
