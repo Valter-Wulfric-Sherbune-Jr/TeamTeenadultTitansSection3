@@ -371,7 +371,6 @@ public class Rooms
 		if(move == true) {
 			String direction = input.nextLine();
 			int[] coordinate = map.get(direction);
-			System.out.println(coordinate[0]+","+ coordinate[1]+","+coordinate[2]);
 			getRoom(coordinate[0], coordinate[1], coordinate[2]);
 		}
 	}
