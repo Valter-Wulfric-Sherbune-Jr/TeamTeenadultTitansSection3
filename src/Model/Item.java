@@ -3,7 +3,6 @@ package Model;
 public class Item {
 	private String name, description,use;
 	private int itemID, value;
-	ItemList items[] = new ItemList[];
 	
 	public Item(String name, int itemID, int value, String use, String description ) {
 	
