@@ -29,7 +29,7 @@ public class Game {
 		case 1: //if selection is 1 a new Game is created
 			System.out.println("New Game is created");
 			Rooms test = new Rooms();
-			
+			//Starts new Game from specified room
 			System.out.println(test.getRoomInfo(2,2,2));
 			
 			break;
