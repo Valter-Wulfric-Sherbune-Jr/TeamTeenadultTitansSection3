@@ -28,13 +28,9 @@ public class Game {
 		
 		case 1: //if selection is 1 a new Game is created
 			System.out.println("New Game is created");
-			final int x = 0;
-			final int y = 0;
-			final int z = 4;
-			Rooms[][][] room = new Rooms[x][y][z];
-			String roomPrint = room.toString();
+			Rooms test = new Rooms();
 			
-			System.out.println("The print is " + roomPrint);
+			System.out.println(test.getRoomInfo(2,2,2));
 			
 			break;
 		case 2: //if selection 2 is selected loads previous saved data

@@ -8,7 +8,7 @@ public class GameStarter {
 	}
 	
 	public void newGame(String gameId){
-		Game newGame = new Game(newGame);
+	//	Game newGame = new Game(newGame);
 
 	}
 	
