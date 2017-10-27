@@ -18,47 +18,47 @@ public class Rooms
 		}
 		
 		//4th Floor 
-				room[0][0][4].setRoomId(01);
+				room[0][0][4].setRoomId(1);
 				room[0][0][4].setName("\nRoof");
 				room[0][0][4].setDescription("A breezy Helicopter landing pad with two metal doors. "
 						+ "\n     	The landing pad sits on top of the building "
 						+ "\n     	and the lights of govern-ment vehicles can be seen below.");
 				
-				room[0][1][4].setRoomId(02);
+				room[0][1][4].setRoomId(2);
 				room[0][1][4].setName("\nRoof");
 				room[0][1][4].setDescription("A room with maroon carpet and potted plastic plants in the corner. "
 						+ "\n     here is an elevator with red stains on it. "
 						+ "\n     It doesn’t appear to be functional as the key scanner is broken.");
 				
-				room[1][0][4].setRoomId(03);
+				room[1][0][4].setRoomId(3);
 				room[1][0][4].setName("\nRoof");
 				room[1][0][4].setDescription("There is a staircase going down one floor and two doors. "
 						+ "\n     The metal safety shields have removed outside light as lights below flicker.");
 				
 				
 				//Floor 3
-				room[0][1][3].setRoomId(04);
+				room[0][1][3].setRoomId(4);
 				room[0][1][3].setName("\nThird Floor");
 				room[0][1][3].setDescription("An elongated room that has sectioned off areas filled with "
 						+ "\n     various obsta-cles used for training autonomous"
 						+ "\n      or semi-autonomous machines. The courses show extensive damage from the numerous "
 						+ "\n     live fire exercises done in these environments.");
 				
-				room[0][1][3].setRoomId(05);
+				room[0][1][3].setRoomId(5);
 				room[0][1][3].setName("\nThird Floor");
 				room[0][1][3].setDescription("Large ionization machines are lined up against the walls,"
 						+ "\n      and there are numerous metal pipes and tubing formations throughout the room. "
 						+ "\n     These systems manage the facilities environmental atmosphere, "
 						+ "\n     and the micro-climates that are present within different sectors.");
 				
-				room[1][0][3].setRoomId(06);
+				room[1][0][3].setRoomId(6);
 				room[1][0][3].setName("\nThird Floor");
 				room[1][0][3].setDescription("The expansive room reminiscent of an airport terminal overlooks the con-necting substation in which the trams dock "
 						+ "\n     and drop off personnel who are commuting. Screens that would normally show arrival and departure times "
 						+ "\n     now flash lockdown messages across their displays."
 						+ "\n      (A contingent of non-hostile military androids can be seen guarding the main exit to the substation)");
 				
-				room[1][1][3].setRoomId(07);
+				room[1][1][3].setRoomId(7);
 				room[1][1][3].setName("\nThird Floor");
 				room[1][1][3].setDescription("Additive manufacturing machines are located on one side of the room,"
 						+ "\n      and electronic testing/measurement instruments are present alongside them. "
