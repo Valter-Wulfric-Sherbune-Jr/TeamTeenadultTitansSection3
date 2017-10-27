@@ -21,8 +21,8 @@ public class Rooms
 				room[0][0][4].setRoomId(1);
 				room[0][0][4].setName("\nRoof");
 				room[0][0][4].setDescription("A breezy Helicopter landing pad with two metal doors. "
-						+ "\n     	The landing pad sits on top of the building "
-						+ "\n     	and the lights of govern-ment vehicles can be seen below.");
+						+ "\n     The landing pad sits on top of the building "
+						+ "\n     and the lights of govern-ment vehicles can be seen below.");
 				
 				room[0][1][4].setRoomId(2);
 				room[0][1][4].setName("\nRoof");
