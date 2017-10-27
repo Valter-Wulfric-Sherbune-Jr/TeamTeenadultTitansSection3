@@ -11,14 +11,11 @@ import Model.Rooms;
  */
 
 public class Game {
-	
-	final static int[] StartingCoordinate = {0,0,4};
-	
 	public static void main(String[] args) {
-		
+		// TODO Auto-generated method stub
 		//Create User ID and save user ID
 			Scanner selection = new Scanner(System.in);
-			System.out.println("Welcome to Hydra Game");
+			System.out.println("Welcome to-------- sdfasdf");
 			System.out.println("1. New Game");
 			System.out.println("2. Load Game");
 			System.out.println("3. View Scores");
@@ -32,12 +29,8 @@ public class Game {
 		case 1: //if selection is 1 a new Game is created
 			System.out.println("New Game is created");
 			Rooms test = new Rooms();
-<<<<<<< HEAD
 			//Starts new Game from specified room
 			System.out.println(test.getRoomInfo(2,2,2));
-=======
-			test.getRoom(StartingCoordinate[0],StartingCoordinate[1],StartingCoordinate[2]);
->>>>>>> branch 'master' of https://github.com/Lusticar/TeamTeenadultTitansSection3.git
 			
 			break;
 		case 2: //if selection 2 is selected loads previous saved data
