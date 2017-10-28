@@ -4,9 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
 import Model.Player;
-import Model.Rooms;
+import Model.RoomManger;
 
 /**
  * @author mansoor
@@ -37,7 +36,9 @@ public class Game {
 		
 		case 1: //if selection is 1 a new Game is created
 			System.out.println("New Game is created");
-			Rooms test = new Rooms();	
+			RoomManger test = new RoomManger();
+			test.makeRoom("Hydra Game File");
+			test.loadRoomID(1);
 			break;
 		case 2: //if selection 2 is selected loads previous saved data
 			System.out.println("Load Game");
