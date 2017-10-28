@@ -1,0 +1,10 @@
+Room Name:
+First Floor
+Room ID:
+27
+Room Description:
+This room is the bottom of a stairwell. There is an exit sign near the door to the South and bloody handprint on the door to the North.
+Room Connection:
+26:North
+28:South
+18:Staircase

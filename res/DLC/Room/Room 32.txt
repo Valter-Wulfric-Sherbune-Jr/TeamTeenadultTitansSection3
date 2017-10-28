@@ -1,0 +1,9 @@
+Room Name:
+Basement
+Room ID:
+32
+Room Description:
+The room isn’t as wired as the others. It has new tech that hasn’t been advertised yet lying around. There’s lots of notes and binders labeled “Prototype 257” through “Prototype 302”. There is a door that says do not enter
+Room Connection:
+31:North
+33:West

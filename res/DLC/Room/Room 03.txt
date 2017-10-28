@@ -1,0 +1,10 @@
+Room Name:
+Roof
+Room ID:
+03
+Room Description:
+There is a staircase going down one floor and two doors. The metal safety shields have removed outside light as lights below flicker.
+Room Connection:
+01:North
+02:North
+04:Staircase
