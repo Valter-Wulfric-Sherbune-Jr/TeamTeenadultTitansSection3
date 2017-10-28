@@ -54,10 +54,6 @@ public class RoomManger{
 	                	setCode = "Room ID";
 	                	fileLine = bufferedReader.readLine();
 	                	break;
-	                case "Room Coordinate:":
-	                	setCode = "Room Coordinate";
-	                	fileLine = bufferedReader.readLine();
-	                	break;
 	                case "Room Description:":
 	                	setCode = "Room Description";
 	                	fileLine = bufferedReader.readLine();
@@ -74,14 +70,6 @@ public class RoomManger{
 	                		break;
 	                	case "Room ID":
 	                		roomObject.setRoomId(Integer.parseInt(fileLine));
-	                		break;
-	                	case "Room Coordinate":
-	                		int[]coordinate = new int[3];
-	                		int num = 0;
-	                		for(String x: fileLine.split(",")) {
-	                			coordinate[num] = 1;
-	                			num++;
-	                		}
 	                		break;
 	                	case "Room Description":
 	                		roomObject.setDescription(fileLine);
@@ -108,7 +96,6 @@ public class RoomManger{
 	
 	public void loadRoomID(int roomID) {
 		Rooms room = roomList.get(roomID);
-		room.getRoomDescription();
 		System.out.println(room.toString());
 	}
 }

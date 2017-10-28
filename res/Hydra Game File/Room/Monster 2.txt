@@ -1,9 +1,7 @@
 Room Name:
-Hazardous Environments Training Course
+Landing Pad
 Room ID:
 01
-Room Coordinate:
-0,0,4
 Room Description:
 A breezy Helicopter landing pad with two metal doors. The landing pad sits on top of the building and the lights of govern-ment vehicles can be seen below.
 Room Connection:
