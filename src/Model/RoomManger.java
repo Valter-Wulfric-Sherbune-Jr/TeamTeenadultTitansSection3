@@ -24,7 +24,7 @@ public class RoomManger{
 				for (File file : listOfFiles) {
 					if (file.isFile()) {
 						fileName = file.getName();
-						folderPath += "/" + fileName;
+						folderPath = "./res/" + gameFolder + "/Room/" + fileName;
 						makeRoomObject(folderPath);
 					}
 				}
@@ -69,15 +69,15 @@ public class RoomManger{
 	                		roomObject.setRoomName(fileLine);
 	                		break;
 	                	case "Room ID":
-	                		roomObject.setRoomId(Integer.parseInt(fileLine));
+	                		roomObject.setRoomId(Integer.valueOf(fileLine));
 	                		break;
 	                	case "Room Description":
 	                		roomObject.setDescription(fileLine);
 	                		break;
 	                	case "Room Connection":
-	                		String[] RoomConnection = fileLine.split("-");
-	                		String Direction = RoomConnection[0];
-	                		String roomID = RoomConnection[1];
+	                		String[] RoomConnection = fileLine.split(":");
+	                		String roomID = RoomConnection[0];
+	                		String Direction = RoomConnection[1];
 	                		roomObject.setRoomConnection(Direction, Integer.parseInt(roomID));
 	                		break;	
 	                	}

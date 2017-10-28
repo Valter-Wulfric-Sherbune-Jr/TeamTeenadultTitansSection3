@@ -1,9 +1,9 @@
 Room Name:
-Landing Pad
+Roof
 Room ID:
 01
 Room Description:
 A breezy Helicopter landing pad with two metal doors. The landing pad sits on top of the building and the lights of govern-ment vehicles can be seen below.
 Room Connection:
-East-02
-South-03
+02:East
+03:South
