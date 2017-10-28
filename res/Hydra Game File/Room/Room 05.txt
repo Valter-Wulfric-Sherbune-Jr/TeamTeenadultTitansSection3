@@ -1,9 +1,0 @@
-Room Name:
-Third Floor
-Room ID:
-05
-Room Description:
-Large ionization machines are lined up against the walls, and there are numerous metal pipes and tubing formations throughout the room. These systems manage the facilities environmental atmosphere, and the micro-climates that are present within different sectors.
-Room Connection:
-04:South
-06:North

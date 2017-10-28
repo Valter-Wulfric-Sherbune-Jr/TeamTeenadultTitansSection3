@@ -15,7 +15,7 @@ public class RoomManger{
 	HashMap<Integer, Rooms> roomList = new HashMap();
 	
 	public void makeRoom(String gameFolder) {
-		//Create a list of all the file in the Game Folder
+		//Check a specify folder for all room file, then make an object for each one
 		String folderPath = "./res/" + gameFolder + "/Room";
 		try {	
 			File folder = new File(folderPath);
@@ -37,14 +37,18 @@ public class RoomManger{
 	public void makeRoomObject(String filePath) {
 		//Get the name of the file one at a time, and make an object with them
 		try {
+			
+			//File Reader
 			BufferedReader bufferedReader = 
 	        	new BufferedReader(new FileReader(filePath));
 	           
 	        String fileLine = null;
+	        //Set Code is the title of the string ex: (Room Name, Room ID)
 	        String setCode = null;
 	        Rooms roomObject = new Rooms();
 	           
 	        while((fileLine = bufferedReader.readLine()) != null) {
+	        	//If fileLine reads a setCode, it get's replace it's current fileline with the next fileline and sets the setcode;
 	        	switch(fileLine) {
 	            	case "Room Name:":
 	                	setCode = "Room Name";
@@ -64,6 +68,7 @@ public class RoomManger{
 	                	break;	
 	                }	
 	        	if(setCode != null) {
+	        		//Depending on the setcode, it'll set the infromation it got from flieLine
 	            	switch(setCode) {
 	                	case "Room Name":
 	                		roomObject.setRoomName(fileLine);
@@ -72,7 +77,7 @@ public class RoomManger{
 	                		roomObject.setRoomId(Integer.valueOf(fileLine));
 	                		break;
 	                	case "Room Description":
-	                		roomObject.setDescription(fileLine);
+	                		roomObject.setRoomDescription(fileLine);
 	                		break;
 	                	case "Room Connection":
 	                		String[] RoomConnection = fileLine.split(":");
@@ -82,7 +87,8 @@ public class RoomManger{
 	                		break;	
 	                	}
 	            	}
-	            }   
+	            }
+	        	//After it finish setting up object, object is then sent to a hashmap with room id as a key
 	        	roomList.put(roomObject.getRoomId(), roomObject);
 	            bufferedReader.close();         
 	        }
@@ -94,6 +100,7 @@ public class RoomManger{
 	        }
 	}
 	
+	//Get Room object from hashmap and prints the toString
 	public void loadRoomID(int roomID) {
 		Rooms room = roomList.get(roomID);
 		System.out.println(room.toString());
@@ -107,7 +114,9 @@ class Rooms{
 	HashMap<String, Integer> map = new HashMap();
 	
 	public Rooms(){
-		
+		this.roomId = 99;
+		this.roomName = "Invalid Room";
+		this.roomDescription = "Invalid Description";
 	}
 	
 	public void setRoomId(int roomId){
@@ -118,7 +127,7 @@ class Rooms{
 		this.roomName = roomName;
 	}
 	
-	public void setDescription(String roomDescription){
+	public void setRoomDescription(String roomDescription){
 		if(roomDescription.length() > 50) {
 			int totalCharacterLength = 0;
 			int descriptionLength = roomDescription.length();

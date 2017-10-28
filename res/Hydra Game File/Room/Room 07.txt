@@ -1,9 +1,0 @@
-Room Name:
-Third Floor
-Room ID:
-07
-Room Description:
-Additive manufacturing machines are located on one side of the room, and electronic testing/measurement instruments are present alongside them. There are numerous stations that possess computer-aided design software used for rapid prototyping.
-Room Connection:
-04:West
-08:North

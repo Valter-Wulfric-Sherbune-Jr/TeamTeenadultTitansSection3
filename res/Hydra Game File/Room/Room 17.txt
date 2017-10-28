@@ -1,9 +1,0 @@
-Room Name:
-Second Floor
-Room ID:
-17
-Room Description:
-Metallic booths and scanners are present in the middle of the hall and cut the room into two sections. White concrete lines the walls, and the floors are composed of satin white marble broken up by grey tiles in square patterns. Office supplies and papers are scattered all over, and security cameras can be found in every corner.
-Room Connection:
-16:South
-19:West
