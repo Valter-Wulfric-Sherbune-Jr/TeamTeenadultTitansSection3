@@ -1,0 +1,12 @@
+Item Name:
+EMH1
+Item ID:
+I01
+Item Description:
+A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+Item Type:
+Weapon
+Item Action Value:
+5
+Item Usage Times:
+30

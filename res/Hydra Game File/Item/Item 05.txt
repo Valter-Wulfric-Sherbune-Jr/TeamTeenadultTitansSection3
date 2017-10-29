@@ -1,0 +1,12 @@
+Item Name:
+T97 Energy Rifle
+Item ID:
+I05
+Item Description:
+A directed-energy based weapon that fires five high-density focused beams of lasers simultaneously towards the directed target.
+Item Type:
+Weapon
+Item Action Value:
+25
+Item Usage Times:
+5
