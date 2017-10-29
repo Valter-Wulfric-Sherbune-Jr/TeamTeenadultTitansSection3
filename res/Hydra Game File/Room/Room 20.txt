@@ -7,3 +7,4 @@ A room storing various canisters of foodstuffs and medical supplies. Many of the
 Room Connection:
 21:South
 25:West
+29:Staircase

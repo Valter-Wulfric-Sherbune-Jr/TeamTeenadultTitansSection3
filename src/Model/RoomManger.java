@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class RoomManger{
@@ -104,6 +105,17 @@ public class RoomManger{
 	public void loadRoomID(int roomID) {
 		Rooms room = roomList.get(roomID);
 		System.out.println(room.toString());
+		move(roomID);
+	}
+	
+	public void move(int roomID) {
+		Rooms room = roomList.get(roomID);
+		Scanner input = new Scanner(System.in);
+		String direction = input.nextLine();
+		HashMap<String, Integer> map = room.getHashMap();
+		
+		loadRoomID(map.get(direction));
+		
 	}
 }
 
@@ -148,6 +160,7 @@ class Rooms{
 
 		this.roomDescription = roomDescription;
 	}
+	
 	
 	public void setRoomConnection(String string1, int parseInt) {
 		map.put(string1, parseInt);	

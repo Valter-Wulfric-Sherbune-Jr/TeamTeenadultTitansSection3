@@ -7,3 +7,4 @@ No Description
 Room Connection:
 30:East
 31:South
+20:Staircase
