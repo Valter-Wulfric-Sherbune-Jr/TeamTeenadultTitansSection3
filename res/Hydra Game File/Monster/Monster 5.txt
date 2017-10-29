@@ -1,0 +1,12 @@
+Monster Name:
+Autonomous Combat EXO-Suit
+Monster ID:
+E05
+Monster Description:
+A nine foot, heavily reinforced powered suit of armor that can operate with a pilot or by itself. Armaments include a light machine gun, energy based chain gun, and a shoulder mounted grenade launcher.
+Monster Health:
+55
+Monster Damage:
+25
+Monster Hit Percentage:
+.90

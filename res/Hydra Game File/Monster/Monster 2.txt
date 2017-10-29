@@ -1,0 +1,12 @@
+Monster Name:
+Level 2 Security Droid
+Monster ID:
+E02
+Monster Description:
+A bipedal lightweight armored security unit that stands at six feet and carriers a VF6 ballistics assault rifle with a stun attachment.
+Monster Health:
+25
+Monster Damage:
+7
+Monster Hit Percentage:
+.75

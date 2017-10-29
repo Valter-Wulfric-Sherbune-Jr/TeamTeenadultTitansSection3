@@ -1,0 +1,12 @@
+Monster Name:
+AT, Armored Turret
+Monster ID:
+E09
+Monster Description:
+Ceiling mounted Automated Machine Gun Turret, when active will target any-thing in its vicinity.
+Monster Health:
+50
+Monster Damage:
+15
+Monster Hit Percentage:
+.88

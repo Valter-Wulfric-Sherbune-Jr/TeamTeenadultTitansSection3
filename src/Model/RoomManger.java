@@ -216,5 +216,5 @@ class Rooms{
 		returnString += "---------------------------------------";
 		
 		return returnString;
-		}
+	}
 }

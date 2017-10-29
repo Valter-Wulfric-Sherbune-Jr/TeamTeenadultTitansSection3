@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+
+import Model.MonsterManager;
 import Model.Player;
 import Model.RoomManger;
 
@@ -37,8 +39,14 @@ public class Game {
 		case 1: //if selection is 1 a new Game is created
 			System.out.println("New Game is created");
 			RoomManger test = new RoomManger();
+			MonsterManager test2 = new MonsterManager();
+			test2.makeMonster("Hydra Game File");
+			test2.loadMonsterId("E01");
+			test2.loadMonsterId("E02");
+			test2.loadMonsterId("E03");
 			test.makeRoom("Hydra Game File");
 			test.loadRoomID(1);
+			
 			break;
 		case 2: //if selection 2 is selected loads previous saved data
 			System.out.println("Load Game");

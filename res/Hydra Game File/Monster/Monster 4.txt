@@ -1,0 +1,12 @@
+Monster Name:
+XB-17 Spi-der Drone
+Monster ID:
+E04
+Monster Description:
+An eight-legged drone with a diameter of three feet, and multiple image sensors spread across it’s rotating main body. This mobile unit has a main attack that shoots 9x19mm rounds in bursts of three rounds, and secondarily it can attempt to grapple onto an enemy and pierce them by using its retractable blades.
+Monster Health:
+20
+Monster Damage:
+6
+Monster Hit Percentage:
+.85
