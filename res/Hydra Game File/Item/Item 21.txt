@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+T97 Energy Rifle Ammunition
 Item ID:
-I01
+I21
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+Ammo for T97 Energy Rifle
 Item Type:
-Weapon
+Ammo
 Item Action Value:
-5
+I05
 Item Usage Times:
-30
+1

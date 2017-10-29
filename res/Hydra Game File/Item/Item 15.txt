@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+Post-it Note 2
 Item ID:
-I01
+I15
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+A post-it posted with a number 975806 on it
 Item Type:
-Weapon
+Note
 Item Action Value:
 5
 Item Usage Times:
-30
+0

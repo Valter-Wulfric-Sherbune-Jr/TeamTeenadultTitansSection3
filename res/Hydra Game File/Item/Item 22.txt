@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+RS15 KE-Rifle Ammunition
 Item ID:
-I01
+I22
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+Ammo for RS15 KE-Rifle
 Item Type:
-Weapon
+Ammo
 Item Action Value:
-5
+I06
 Item Usage Times:
-30
+1
