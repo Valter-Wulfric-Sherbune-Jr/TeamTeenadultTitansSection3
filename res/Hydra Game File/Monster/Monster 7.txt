@@ -1,0 +1,12 @@
+Monster Name:
+Class-A Assault Walker
+Monster ID:
+E07
+Monster Description:
+This variant of the Ajax platform fea-tures dual 2x35mm anti-armor rotary cannons, active warning radar sensors, autoreactive countermeasures, front mounted coaxial gun, laser targeting systems, and a high-acceleration linear induction motor based weapon.
+Monster Health:
+65
+Monster Damage:
+40
+Monster Hit Percentage:
+.95

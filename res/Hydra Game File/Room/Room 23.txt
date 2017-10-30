@@ -1,0 +1,10 @@
+Room Name:
+First Floor
+Room ID:
+23
+Room Description:
+This room is the main entrance. There is a metal shield block-ing the front door. There are many bodies of people who tried to escape. 
+Room Connection:
+28:West
+24:North
+22:East

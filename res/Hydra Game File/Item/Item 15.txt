@@ -1,0 +1,12 @@
+Item Name:
+Post-it Note 2
+Item ID:
+I15
+Item Description:
+A post-it posted with a number 975806 on it
+Item Type:
+Note
+Item Action Value:
+5
+Item Usage Times:
+0

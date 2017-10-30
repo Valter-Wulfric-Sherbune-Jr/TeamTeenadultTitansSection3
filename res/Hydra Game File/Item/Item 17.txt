@@ -1,0 +1,12 @@
+Item Name:
+EMH1 Ammunition
+Item ID:
+I17
+Item Description:
+Ammo for EMH1
+Item Type:
+Ammo
+Item Action Value:
+I01
+Item Usage Times:
+1

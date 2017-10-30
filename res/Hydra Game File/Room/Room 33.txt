@@ -1,0 +1,8 @@
+Room Name:
+Basement
+Room ID:
+33
+Room Description:
+There is a single computer in this room on a desk. There is very few wires and all of them go to the computer from the walls. 
+Room Connection:
+32:East

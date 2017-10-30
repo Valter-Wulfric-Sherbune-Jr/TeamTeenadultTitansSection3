@@ -1,0 +1,12 @@
+Item Name:
+AAR250 Rail-gun Ammunition
+Item ID:
+I18
+Item Description:
+Ammo for AAR250
+Item Type:
+Ammo
+Item Action Value:
+I02
+Item Usage Times:
+1

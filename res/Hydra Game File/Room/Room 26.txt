@@ -1,0 +1,9 @@
+Room Name:
+First Floor
+Room ID:
+26
+Room Description:
+The room has many glass enclosures. A few of the enclosures have dead or diseased animals. Each enclosure has a well recorded binder full of notes stating how the animals reacted to viruses and toxins.
+Room Connection:
+25:East
+27:South

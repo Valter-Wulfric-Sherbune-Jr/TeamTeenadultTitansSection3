@@ -1,0 +1,9 @@
+Room Name:
+First Floor
+Room ID:
+21
+Room Description:
+A steel corridor that has fluorescent lights integrated into the ceiling. A damaged security droid is laying facedown, and a nearby wall is marked with bullet holes.
+Room Connection:
+20:North
+24:West

@@ -1,0 +1,12 @@
+Monster Name:
+Level 3 Security Droid
+Monster ID:
+E03
+Monster Description:
+A more heavily armored and bulkier security unit that has pacifying coun-termeasures built into its frame. The droid carries a high-caliber assault rifle that can fire armor-piercing rounds.
+Monster Health:
+35
+Monster Damage:
+14
+Monster Hit Percentage:
+.80

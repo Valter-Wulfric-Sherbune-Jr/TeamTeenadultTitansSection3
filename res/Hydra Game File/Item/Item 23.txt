@@ -1,0 +1,12 @@
+Item Name:
+Z110 Light Machine Gun Ammunition
+Item ID:
+I23
+Item Description:
+Ammo for Z110
+Item Type:
+Ammo
+Item Action Value:
+I08
+Item Usage Times:
+1

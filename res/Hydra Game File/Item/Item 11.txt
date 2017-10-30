@@ -1,0 +1,12 @@
+Item Name:
+Nanomachine Repair Kit
+Item ID:
+I11
+Item Description:
+Various plates that can be added onto your shell to provide a buffering layer from damage.
+Item Type:
+Health
+Item Action Value:
+35
+Item Usage Times:
+1

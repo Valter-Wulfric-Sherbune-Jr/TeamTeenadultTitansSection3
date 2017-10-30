@@ -1,0 +1,12 @@
+Item Name:
+VECTOR V5 Submachine Gun Ammunition
+Item ID:
+I19
+Item Description:
+Ammo for VECTOR V5
+Item Type:
+Ammo 
+Item Action Value:
+I03
+Item Usage Times:
+1

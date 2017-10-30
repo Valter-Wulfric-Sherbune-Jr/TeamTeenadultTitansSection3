@@ -1,0 +1,12 @@
+Item Name:
+T97 Energy Rifle Ammunition
+Item ID:
+I21
+Item Description:
+Ammo for T97 Energy Rifle
+Item Type:
+Ammo
+Item Action Value:
+I05
+Item Usage Times:
+1

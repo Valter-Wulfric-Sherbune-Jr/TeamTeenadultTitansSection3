@@ -1,0 +1,12 @@
+Item Name:
+Basement Authorization Card
+Item ID:
+I16
+Item Description:
+An important looking authorization card. Used to access the underground level.
+Item Type:
+Key
+Item Action Value:
+29
+Item Usage Times:
+1

@@ -1,0 +1,12 @@
+Item Name:
+SIZ MCXE2 Ammunition
+Item ID:
+I20
+Item Description:
+Ammo for SIZ MCXE2
+Item Type:
+Ammo
+Item Action Value:
+I04
+Item Usage Times:
+1
