@@ -1,23 +1,43 @@
 package Model;
 
 public class Monsters {
-  private String monsterID;
+	private Item dropItems;
+	private String monsterID;
 	private String monsterName;
 	private String monsterDesc;
+	private String enterStatement;
+	private String winStatement;
+	private String exitStatement;
 	private int monsterHealth;
 	private int monsterDamage;
 	private double monsterHitPercentage;
 	
 	
-	public Monsters(String monsterID, String monsterName, String monsterDesc, int monsterHealth, int monsterDamage,
+	
+	public Monsters(Item dropItems, String monsterID, String monsterName, String monsterDesc, String enterStatement
+			, String winStatement, String exitStatement, int monsterHealth, int monsterDamage,
 			double monsterHitPercentage) {
 		super();
+		this.dropItems = dropItems;
 		this.monsterID = monsterID;
 		this.monsterName = monsterName;
 		this.monsterDesc = monsterDesc;
+		this.enterStatement = enterStatement;
+		this.winStatement = winStatement;
+		this.exitStatement = exitStatement;
 		this.monsterHealth = monsterHealth;
 		this.monsterDamage = monsterDamage;
 		this.monsterHitPercentage = monsterHitPercentage;
+	}
+	
+
+	public Item getDropItems() {
+		return dropItems;
+	}
+
+
+	public void setDropItems(Item dropItems) {
+		this.dropItems = dropItems;
 	}
 
 
@@ -49,6 +69,38 @@ public class Monsters {
 	public void setMonsterDesc(String monsterDesc) {
 		this.monsterDesc = monsterDesc;
 	}
+	
+	
+	public String getEnterStatement() {
+		return enterStatement;
+	}
+
+
+	public void setEnterStatement(String enterStatement) {
+		this.enterStatement = enterStatement;
+	}
+
+
+	public String getWinStatement() {
+		return winStatement;
+	}
+
+
+	public void setWinStatement(String winStatement) {
+		this.winStatement = winStatement;
+	}
+
+
+	public String getExitStatement() {
+		return exitStatement;
+	}
+
+
+	public void setExitStatement(String exitStatement) {
+		this.exitStatement = exitStatement;
+	}
+
+
 
 
 	public int getMonsterHealth() {
