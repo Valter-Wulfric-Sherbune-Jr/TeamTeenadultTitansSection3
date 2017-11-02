@@ -7,3 +7,5 @@ Additive manufacturing machines are located on one side of the room, and electro
 Room Connection:
 04:West
 08:North
+Room Access:
+True

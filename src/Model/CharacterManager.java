@@ -14,7 +14,7 @@ public class CharacterManager {
 
 		public void makeCharacter(String gameFolder) {
 			//Check a specify folder for all room file, then make an object for each one
-			String folderPath = "./res/" + gameFolder + "/Item";
+			String folderPath = "./res/" + gameFolder + "/Character";
 			try {	
 				File folder = new File(folderPath);
 				File[] listOfFiles = folder.listFiles();
@@ -114,6 +114,10 @@ public class CharacterManager {
 		public void loadItemId(String itemId) {
 			Items item = itemList.get(itemId);
 			System.out.println(item.toString());
+		}
+		
+		public HashMap getItemList() {
+			return itemList;
 		}
 }
 

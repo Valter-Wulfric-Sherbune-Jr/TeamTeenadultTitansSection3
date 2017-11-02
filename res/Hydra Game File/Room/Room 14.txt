@@ -7,3 +7,5 @@ This location manages and controls the various communications traffic within the
 Room Connection:
 00:Elevator
 13:South
+Room Access:
+True

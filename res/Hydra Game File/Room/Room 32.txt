@@ -7,3 +7,5 @@ The room isn’t as wired as the others. It has new tech that hasn’t been advertis
 Room Connection:
 31:North
 33:West
+Room Access:
+True

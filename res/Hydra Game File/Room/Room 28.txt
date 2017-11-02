@@ -7,3 +7,5 @@ There are many desks. There are a few meeting rooms. This is where the bulk of t
 Room Connection:
 23:East
 27:North
+Room Access:
+True

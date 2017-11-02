@@ -1,7 +1,7 @@
-Item Name:
-EMH1
-Item ID:
-I01
+Character Name:
+Null Name
+Character ID:
+00
 Item Description:
 A semi-automatic energy pistol that is known for its ammunition conserva-tion.
 Item Type:

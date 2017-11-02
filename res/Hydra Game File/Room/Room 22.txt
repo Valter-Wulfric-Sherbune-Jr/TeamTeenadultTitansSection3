@@ -6,3 +6,5 @@ Room Description:
 Localized computing clusters contained in large metal cases with tempered glass fronts that are organized in lines of five units per row. These systems work independently from the sectors main grid of computers, and they dynamically allocate their resources to whatever department requires more services. 
 Room Connection:
 23:West
+Room Access:
+True

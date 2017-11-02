@@ -8,3 +8,5 @@ Room Connection:
 05:North
 07:East
 03:Staircase
+Room Access:
+True

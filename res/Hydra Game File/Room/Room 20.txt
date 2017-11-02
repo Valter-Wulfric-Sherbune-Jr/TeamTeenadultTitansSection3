@@ -8,3 +8,5 @@ Room Connection:
 21:South
 25:West
 29:Staircase
+Room Access:
+True

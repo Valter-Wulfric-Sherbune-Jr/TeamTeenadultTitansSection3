@@ -7,3 +7,5 @@ There are wire coming in and out of the room to the West and South. The wires ar
 Room Connection:
 29:West
 31:South
+Room Access:
+True

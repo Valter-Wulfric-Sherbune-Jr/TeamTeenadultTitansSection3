@@ -8,3 +8,5 @@ Room Connection:
 01:North Left
 02:North Right
 04:Staircase
+Room Access:
+True

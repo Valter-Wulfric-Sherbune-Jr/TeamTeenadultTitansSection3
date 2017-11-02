@@ -7,3 +7,5 @@ A steel corridor that has fluorescent lights integrated into the ceiling. A dama
 Room Connection:
 20:North
 24:West
+Room Access:
+True

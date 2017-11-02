@@ -7,3 +7,5 @@ Metallic booths and scanners are present in the middle of the hall and cut the r
 Room Connection:
 16:South
 19:West
+Room Access:
+True

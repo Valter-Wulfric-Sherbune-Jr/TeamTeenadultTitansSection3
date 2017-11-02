@@ -7,3 +7,5 @@ A breezy Helicopter landing pad with two metal doors. The landing pad sits on to
 Room Connection:
 02:East
 03:South
+Room Access:
+True

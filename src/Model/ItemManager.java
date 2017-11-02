@@ -7,13 +7,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class ItemManager {
-	//List of all the Item
-	HashMap<String, Items> itemList = new HashMap();
+public class ItemManager implements ManagerInterface{
 
-	public void makeItem(String gameFolder) {
-		//Check a specify folder for all room file, then make an object for each one
-		String folderPath = "./res/" + gameFolder + "/Item";
+	private HashMap<String, Items> itemList = new HashMap<String, Items>();
+	private final String gameSubFolder = "/Room";
+	private String gameFolder = "";
+
+	@Override
+	public void makeList(String gameFolder) {
+		String folderPath = gameFolder + gameSubFolder;
 		try {	
 			File folder = new File(folderPath);
 			File[] listOfFiles = folder.listFiles();
@@ -21,17 +23,18 @@ public class ItemManager {
 			for (File file : listOfFiles) {
 				if (file.isFile()) {
 					fileName = file.getName();
-					folderPath = "./res/" + gameFolder + "/Item/" + fileName;
-					makeItemObject(folderPath);
+					folderPath = gameFolder + gameSubFolder + "/" + fileName;
+					makeListObject(folderPath);
 				}
 			}
 		}
 		catch(Exception e) {
-			System.out.println(e);                
+			System.out.println("Error in "+ gameSubFolder + ":/n" + e.toString());
 		}	
 	}
 
-	public void makeItemObject(String filePath) {
+	@Override
+	public void makeListObject(String filePath) {
 		//Get the name of the file one at a time, and make an object with them
 		try {
 
@@ -107,12 +110,33 @@ public class ItemManager {
 		catch(IOException ex) {
 			System.out.println("Error reading file '" + filePath+ "'");                  
 		}
+
 	}
 
-	//Get Item object from hashmap and prints the toString
-	public void loadItemId(String itemId) {
-		Items item = itemList.get(itemId);
+	@Override
+	public void loadListId(String Id) {
+		Items item = itemList.get(Id);
 		System.out.println(item.toString());
+	}
+
+	@Override
+	public void setGameFolder(String gameFolder) {
+		this.gameFolder = "./res/" + gameFolder;
+	}
+
+	@Override
+	public String getGameFolder() {
+		return gameFolder;
+	}
+
+	@Override
+	public String getGameSubFolder() {
+		return gameSubFolder;
+	}
+
+	@Override
+	public HashMap getList() {
+		return itemList;
 	}
 
 }
@@ -134,9 +158,9 @@ class Items {
 		this.itemActionValue = "Invalid Item Action Value";
 		this.itemUsageTime = 0;
 	}
+
 	public Items(String itemName, String itemId, String itemDesc, int itemType, String itemActionValue,
 			int itemUsageTime) {
-		super();
 		this.itemName = itemName;
 		this.itemId = itemId;
 		this.itemDesc = itemDesc;
@@ -149,50 +173,50 @@ class Items {
 		return itemName;
 	}
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
-
 	public String getItemId() {
 		return itemId;
-	}
-
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
 	}
 
 	public String getItemDesc() {
 		return itemDesc;
 	}
 
-	public void setItemDesc(String itemDesc) {
-		this.itemDesc = itemDesc;
-	}
-
 	public int getItemType() {
 		return itemType;
-	}
-
-	public void setItemType(int itemType) {
-		this.itemType = itemType;
 	}
 
 	public String getItemActionValue() {
 		return itemActionValue;
 	}
 
-	public void setItemActionValue(String itemActionValue) {
-		this.itemActionValue = itemActionValue;
-	}
-
 	public int getItemUsageTime() {
 		return itemUsageTime;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}	
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public void setItemDesc(String itemDesc) {
+		this.itemDesc = itemDesc;
+	}
+
+	public void setItemType(int itemType) {
+		this.itemType = itemType;
+	}
+
+	public void setItemActionValue(String itemActionValue) {
+		this.itemActionValue = itemActionValue;
 	}
 
 	public void setItemUsageTime(int itemUsageTime) {
 		this.itemUsageTime = itemUsageTime;
 	}
-	
+
 	public String toString() {
 		String returnString = "";
 
@@ -222,7 +246,5 @@ class Items {
 
 		return returnString;
 	}
-
-
 
 }

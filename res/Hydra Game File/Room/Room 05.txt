@@ -7,3 +7,5 @@ Large ionization machines are lined up against the walls, and there are numerous
 Room Connection:
 04:South
 06:North
+Room Access:
+True

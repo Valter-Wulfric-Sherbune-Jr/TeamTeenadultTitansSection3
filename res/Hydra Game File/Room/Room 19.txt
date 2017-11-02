@@ -7,3 +7,5 @@ A contrasting rectangular room with white colored sides, black furni-ture, grey 
 Room Connection:
 17:East
 18:South
+Room Access:
+True

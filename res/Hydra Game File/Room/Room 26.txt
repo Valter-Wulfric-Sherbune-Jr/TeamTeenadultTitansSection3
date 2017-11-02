@@ -7,3 +7,5 @@ The room has many glass enclosures. A few of the enclosures have dead or disease
 Room Connection:
 25:East
 27:South
+Room Access:
+True

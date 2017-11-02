@@ -7,3 +7,5 @@ This area is reserved for the study of organic materials. The sector in-cludes d
 Room Connection:
 10:North
 12:Staircase
+Room Access:
+True

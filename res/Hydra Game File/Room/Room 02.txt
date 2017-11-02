@@ -8,3 +8,5 @@ Room Connection:
 01:West
 03:South
 00:Elevator
+Room Access:
+True

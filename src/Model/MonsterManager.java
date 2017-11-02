@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class MonsterManager {
+public class MonsterManager implements ManagerInterface{
 	//List of all the Monster
 	HashMap<String, Monsters> monsterList = new HashMap();
+	
+	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
 
 	public void makeMonster(String gameFolder) {
 		//Check a specify folder for all room file, then make an object for each one
@@ -114,6 +116,70 @@ public class MonsterManager {
 	public void loadMonsterId(String monsterId) {
 		Monsters monster = monsterList.get(monsterId);
 		System.out.println(monster.toString());
+	}
+	
+	public HashMap getMonsterList() {
+		return monsterList;
+	}
+
+	
+	
+	
+	
+	@Override
+	public void makeList(String gameFolder) {
+		String folderPath = gameFolder + gameSubFolder;
+		try {	
+			File folder = new File(folderPath);
+			File[] listOfFiles = folder.listFiles();
+			String fileName = null;
+			for (File file : listOfFiles) {
+				if (file.isFile()) {
+					fileName = file.getName();
+					folderPath = gameFolder + gameSubFolder + "/" + fileName;
+					makeListObject(folderPath);
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Error in "+ gameSubFolder + ":/n" + e.toString());
+		}
+	}
+
+	@Override
+	public void makeListObject(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loadListId(String Id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGameFolder(String gameFolder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getGameFolder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getGameSubFolder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap getList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

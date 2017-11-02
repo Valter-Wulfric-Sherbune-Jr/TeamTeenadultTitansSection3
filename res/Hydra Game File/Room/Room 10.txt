@@ -8,3 +8,5 @@ Room Connection:
 08:West
 09:South
 11:North
+Room Access:
+True
