@@ -9,123 +9,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class MonsterManager implements ManagerInterface{
-	//List of all the Monster
-	HashMap<String, Monsters> monsterList = new HashMap();
-	
-	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
 
-	public void makeMonster(String gameFolder) {
-		//Check a specify folder for all room file, then make an object for each one
-		String folderPath = "./res/" + gameFolder + "/Monster";
-		try {	
-			File folder = new File(folderPath);
-			File[] listOfFiles = folder.listFiles();
-			String fileName = null;
-			for (File file : listOfFiles) {
-				if (file.isFile()) {
-					fileName = file.getName();
-					folderPath = "./res/" + gameFolder + "/Monster/" + fileName;
-					makeMonsterObject(folderPath);
-				}
-			}
-		}
-		catch(Exception e) {
-			System.out.println(e);                
-		}	
-	}
+	private HashMap<String, Monsters> monsterList = new HashMap<String, Monsters>();
+	private final String gameSubFolder = "/Monster";
+	private String gameFolder = "";
 
-	public void makeMonsterObject(String filePath) {
-		//Get the name of the file one at a time, and make an object with them
-		try {
 
-			//File Reader
-			BufferedReader bufferedReader = 
-					new BufferedReader(new FileReader(filePath));
-
-			String fileLine = null;
-			//Set Code is the title of the string ex: (Monster Name, Monster ID)
-			String setCode = null;
-			Monsters monsterObject = new Monsters();
-
-			while((fileLine = bufferedReader.readLine()) != null) {
-				//If fileLine reads a setCode, it get's replace it's current fileline with the next fileline and sets the setcode;
-				switch(fileLine) {
-				case "Monster Name:":
-					setCode = "Monster Name";
-					fileLine = bufferedReader.readLine();
-					break;
-				case "Monster ID:":
-					setCode = "Monster ID";
-					fileLine = bufferedReader.readLine();
-					break;
-				case "Monster Description:":
-					setCode = "Monster Description";
-					fileLine = bufferedReader.readLine();
-					break;
-				case "Monster Health:":
-					setCode = "Monster Health";
-					fileLine = bufferedReader.readLine();
-					break;	
-				case "Monster Damage:":
-					setCode = "Monster Damage";
-					fileLine = bufferedReader.readLine();
-					break;	
-				case "Monster Hit Percentage:":
-					setCode = "Monster Hit Percentage";
-					fileLine = bufferedReader.readLine();
-					break;	
-				}	
-				if(setCode != null) {
-					//Depending on the setcode, it'll set the infromation it got from flieLine
-					switch(setCode) {
-					case "Monster Name":
-						monsterObject.setMonsterName(fileLine);
-						break;
-					case "Monster ID":
-						monsterObject.setMonsterId(fileLine);
-						break;
-					case "Monster Description":
-						monsterObject.setMonsterDesc(fileLine);
-						break;
-					case "Monster Health":
-						monsterObject.setMonsterHealth(Integer.parseInt(fileLine));
-						break;	
-					case "Monster Damage":
-						monsterObject.setMonsterDamage(Integer.parseInt(fileLine));
-						break;	
-					case "Monster Hit Percentage":
-						monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
-						break;	
-					}
-				}
-			}
-			//After it finish setting up object, object is then sent to a hashmap with Monster id as a key
-			monsterList.put(monsterObject.getMonsterId(), monsterObject);
-
-			bufferedReader.close();         
-		}
-		catch(FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + filePath + "'");                
-		}
-		catch(IOException ex) {
-			System.out.println("Error reading file '" + filePath+ "'");                  
-		}
-	}
-
-	//Get Monster object from hashmap and prints the toString
-	public void loadMonsterId(String monsterId) {
-		Monsters monster = monsterList.get(monsterId);
-		System.out.println(monster.toString());
-	}
-	
-	public HashMap getMonsterList() {
-		return monsterList;
-	}
-
-	
-	
-	
-	
 	@Override
 	public void makeList(String gameFolder) {
 		String folderPath = gameFolder + gameSubFolder;
@@ -143,43 +32,113 @@ public class MonsterManager implements ManagerInterface{
 		}
 		catch(Exception e) {
 			System.out.println("Error in "+ gameSubFolder + ":/n" + e.toString());
-		}
+		}	
 	}
 
 	@Override
 	public void makeListObject(String filePath) {
-		// TODO Auto-generated method stub
-		
+		//Get the name of the file one at a time, and make an object with them
+				try {
+
+					//File Reader
+					BufferedReader bufferedReader = 
+							new BufferedReader(new FileReader(filePath));
+
+					String fileLine = null;
+					//Set Code is the title of the string ex: (Monster Name, Monster ID)
+					String setCode = null;
+					Monsters monsterObject = new Monsters();
+
+					while((fileLine = bufferedReader.readLine()) != null) {
+						//If fileLine reads a setCode, it get's replace it's current fileline with the next fileline and sets the setcode;
+						switch(fileLine) {
+						case "Monster Name:":
+							setCode = "Monster Name";
+							fileLine = bufferedReader.readLine();
+							break;
+						case "Monster ID:":
+							setCode = "Monster ID";
+							fileLine = bufferedReader.readLine();
+							break;
+						case "Monster Description:":
+							setCode = "Monster Description";
+							fileLine = bufferedReader.readLine();
+							break;
+						case "Monster Health:":
+							setCode = "Monster Health";
+							fileLine = bufferedReader.readLine();
+							break;	
+						case "Monster Damage:":
+							setCode = "Monster Damage";
+							fileLine = bufferedReader.readLine();
+							break;	
+						case "Monster Hit Percentage:":
+							setCode = "Monster Hit Percentage";
+							fileLine = bufferedReader.readLine();
+							break;	
+						}	
+						if(setCode != null) {
+							//Depending on the setcode, it'll set the infromation it got from flieLine
+							switch(setCode) {
+							case "Monster Name":
+								monsterObject.setMonsterName(fileLine);
+								break;
+							case "Monster ID":
+								monsterObject.setMonsterId(fileLine);
+								break;
+							case "Monster Description":
+								monsterObject.setMonsterDesc(fileLine);
+								break;
+							case "Monster Health":
+								monsterObject.setMonsterHealth(Integer.parseInt(fileLine));
+								break;	
+							case "Monster Damage":
+								monsterObject.setMonsterDamage(Integer.parseInt(fileLine));
+								break;	
+							case "Monster Hit Percentage":
+								monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
+								break;	
+							}
+						}
+					}
+					//After it finish setting up object, object is then sent to a hashmap with Monster id as a key
+					monsterList.put(monsterObject.getMonsterId(), monsterObject);
+
+					bufferedReader.close();         
+				}
+				catch(FileNotFoundException ex) {
+					System.out.println("Unable to open file '" + filePath + "'");                
+				}
+				catch(IOException ex) {
+					System.out.println("Error reading file '" + filePath+ "'");                  
+				}
+
 	}
 
 	@Override
 	public void loadListId(String Id) {
-		// TODO Auto-generated method stub
-		
+		Monsters monster = monsterList.get(Id);
+		System.out.println(monster.toString());
 	}
 
 	@Override
 	public void setGameFolder(String gameFolder) {
-		// TODO Auto-generated method stub
-		
+		this.gameFolder = "./res/" + gameFolder;
 	}
 
 	@Override
 	public String getGameFolder() {
-		// TODO Auto-generated method stub
-		return null;
+		return gameFolder;
 	}
 
 	@Override
 	public String getGameSubFolder() {
-		// TODO Auto-generated method stub
-		return null;
+		return gameSubFolder;
 	}
 
 	@Override
-	public HashMap getList() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<String, Monsters> getList() {
+		return monsterList;
 	}
 
 }

@@ -3,7 +3,7 @@ package Model;
 public class GameManager {
 
 	
-	public loadMonsterList() {
+	public void loadMonsterList() {
 		
 	}
 	public void saveGame() {

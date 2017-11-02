@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class ItemManager implements ManagerInterface{
 
 	private HashMap<String, Items> itemList = new HashMap<String, Items>();
-	private final String gameSubFolder = "/Room";
+	private final String gameSubFolder = "/Item";
 	private String gameFolder = "";
 
 	@Override
@@ -135,7 +135,7 @@ public class ItemManager implements ManagerInterface{
 	}
 
 	@Override
-	public HashMap getList() {
+	public HashMap<String, Items> getList() {
 		return itemList;
 	}
 

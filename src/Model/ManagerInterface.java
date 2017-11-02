@@ -15,7 +15,7 @@ public interface ManagerInterface {
 	 * */
 	public void makeListObject(String filePath);
 	
-	/* Retrive the object and executing toString by accessing the
+	/* Retrieve the object and executing toString by accessing the
 	 * hashmap of the object list
 	 * */
 	public void loadListId(String Id);
@@ -26,6 +26,8 @@ public interface ManagerInterface {
 		
 	public String getGameSubFolder();
 	
-	//Return the HashMap with all the object added to the list
-	public HashMap getList();
+	/*Return the HashMap with all the object added to the list
+	 * Key: ID, Value: SubFolderObject
+	 * */
+	public HashMap<String, ?> getList();
 }
