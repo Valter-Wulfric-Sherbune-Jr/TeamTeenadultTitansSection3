@@ -2,7 +2,7 @@ package Model;
 
 import java.util.HashMap;
 
-public interface ManagerInterface {
+public interface SubManagerInterface {
 	
 	/* Import all the information of one of the subfolder 
 	 * hierarchy to the main game folder and create individual object

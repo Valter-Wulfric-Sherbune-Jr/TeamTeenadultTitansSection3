@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class ItemManager implements ManagerInterface{
+public class ItemSubManager implements SubManagerInterface{
 
 	private HashMap<String, Items> itemList = new HashMap<String, Items>();
 	private final String gameSubFolder = "/Item";

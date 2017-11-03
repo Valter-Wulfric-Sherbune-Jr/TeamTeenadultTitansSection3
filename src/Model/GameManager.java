@@ -1,43 +1,103 @@
 package Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
-public class GameManager implements ManagerInterface{
+public class GameManager{
+
+	private MonsterSubManager monsterInfo;
+	private RoomSubManager roomInfo;
+	private ItemSubManager itemInfo;
+	private Players player;
+	private Scanner input = new Scanner(System.in);
+	private String gameFolder = "";
+	private ArrayList<String> gameList = new ArrayList<String>();
 
 
-	@Override
-	public void makeList(String gameFolder) {
-		// TODO Auto-generated method stub
-
+	public void newGame() {
+		getAllGameFolder();
+		chooseGameFolder();
+		setSubManagerList(gameFolder);
+		Players player = new Players();
+		saveGame();
+		
+		private String playerId;
+		private String playerName;
+		private int playerHealth;
+		private String weapon;
+		private int playerScore;
+		private ArrayList<Items> inventoryList;
+		
 	}
-	@Override
-	public void makeListObject(String filePath) {
-		// TODO Auto-generated method stub
 
+	/*Ask the user to choose a game folder then set the game folder*/
+	public void chooseGameFolder() {
+		boolean loop = true;
+		while(loop == true) {
+			System.out.println("Choose the game folder that you want to play:");	
+			for(String folder : gameList) {
+				System.out.println(folder);
+			}	
+			String userFolderChoice = getUserInput();
+			for(String folder : gameList) {
+				if(userFolderChoice.equalsIgnoreCase(folder)) {
+					gameFolder = folder;
+					loop = true;
+					break;
+				}
+			}
+			if(gameFolder.equals("")) {
+				System.out.println("\nYou did not choose a valid game folder\n");
+			}	
+		}
 	}
-	@Override
+	
+	/*Add all game folder into an arraylist*/
+	public void getAllGameFolder() {	
+		try {
+			File folder = new File("./res/");
+			File[] files = folder.listFiles();
+			for (File file : files) {
+				if (file.isDirectory()) {
+					gameList.add(file.getName());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*After a user picks a gamefolder, it loads all the
+	asset from that game folder*/
+	public void setSubManagerList(String gameFolder) {
+		monsterInfo = new MonsterSubManager();
+		roomInfo = new RoomSubManager();
+		itemInfo = new ItemSubManager();
+
+		monsterInfo.makeList(gameFolder);
+		itemInfo.makeList(gameFolder);
+		roomInfo.makeList(gameFolder);
+	}
+
+	
+	
 	public void loadListId(String Id) {
 		// TODO Auto-generated method stub
 
 	}
-	@Override
-	public void setGameFolder(String gameFolder) {
-		// TODO Auto-generated method stub
 
+	public void setGameFolder(String gameFolder) {
+		this.gameFolder = gameFolder;
 	}
-	@Override
-	public String getGameFolder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
+	
 	public String getGameSubFolder() {
-		// TODO Auto-generated method stub
-		return null;
+		return gameFolder;
 	}
-	@Override
+
 	public HashMap<String, ?> getList() {
 		// TODO Auto-generated method stub
 		return null;
@@ -46,9 +106,12 @@ public class GameManager implements ManagerInterface{
 	public void loadMonsterList() {
 
 	}
-	public void newGame() {
 
+	public String getUserInput() {
+		System.out.print("\nInput:\n> ");
+		return input.nextLine();
 	}
+	
 	public void saveGame() {
 
 	}
@@ -61,11 +124,54 @@ public class GameManager implements ManagerInterface{
 
 class SaveDate{
 
-	private Characters charData;
+	private String dataId;
+	private String gameFolder;
 	private HashMap<String, Items> itemList;
 	private HashMap<String, Monsters> monsterList;
 	private ArrayList<Items> inventoryList;
 
+	public SaveDate() {
+	}
+
+	public SaveDate(String dataId, HashMap<String, Items> itemList, HashMap<String, Monsters> monsterList,
+			ArrayList<Items> inventoryList) {
+		this.dataId = dataId;
+		this.itemList = itemList;
+		this.monsterList = monsterList;
+		this.inventoryList = inventoryList;
+	}
+
+	public String getDataId() {
+		return dataId;
+	}
+
+	public void setDataId(String dataId) {
+		this.dataId = dataId;
+	}
+
+	public HashMap<String, Items> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(HashMap<String, Items> itemList) {
+		this.itemList = itemList;
+	}
+
+	public HashMap<String, Monsters> getMonsterList() {
+		return monsterList;
+	}
+
+	public void setMonsterList(HashMap<String, Monsters> monsterList) {
+		this.monsterList = monsterList;
+	}
+
+	public ArrayList<Items> getInventoryList() {
+		return inventoryList;
+	}
+
+	public void setInventoryList(ArrayList<Items> inventoryList) {
+		this.inventoryList = inventoryList;
+	}
 
 }
 
@@ -88,9 +194,17 @@ class Players implements Serializable{
 		this.inventoryList = new ArrayList<Items>();
 	}
 
+	public Players(String playerId, String playerName, int playerHealth, String weapon, int playerScore) {
+		this.playerId = playerId;
+		this.playerName = playerName;
+		this.playerHealth = playerHealth;
+		this.weapon = weapon;
+		this.playerScore = playerScore;
+		this.inventoryList = inventoryList;
+	}
+	
 	public Players(String playerId, String playerName, int playerHealth, String weapon, int playerScore,
 			ArrayList<Items> inventoryList) {
-		super();
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.playerHealth = playerHealth;
@@ -112,7 +226,7 @@ class Players implements Serializable{
 	}
 
 	public void setWeapon(String weaponId) {
-		
+
 		this.weapon = weapon;
 	}
 
@@ -152,50 +266,11 @@ class Players implements Serializable{
 	}
 	public void addItem(String itemId) {
 		try{
-			ItemManager itemList = new ItemManager();
+			ItemSubManager itemList = new ItemSubManager();
 			itemList.getList().get(itemId);
 			inventoryList.add(itemList.getList().get(itemId));
 		}catch(Exception e) {
 			System.out.println("Error Adding Item to Inventory");
 		}
-	}
-
-
-
-	protected Players(int characterIDValue, char characterID, String name, Rooms currentRoom){
-		this.characterIDValue = characterIDValue;
-		this.characterID = characterID;
-		this.name = name;
-		Character.currentRoom = currentRoom;
-	}
-	public int getCharacterIDValue() {
-		return characterIDValue;
-	}
-	public void setCharacterIDValue(int characterIDValue) {
-		this.characterIDValue = characterIDValue;
-	}
-	public char getCharacterID() {
-		return characterID;
-	}
-	public void setCharacterID(char characterID) {
-		this.characterID = characterID;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public static Rooms getCurrentRoom() {
-		return currentRoom;
-	}
-	public static void setCurrentRoom(Rooms currentRoom) {
-		Character.currentRoom = currentRoom;
-	}
-	public static Rooms getRoom() {
-		return room;
-	}
-	public static void setRoom(Rooms room) {
-		Character.room = room;
 	}
 }

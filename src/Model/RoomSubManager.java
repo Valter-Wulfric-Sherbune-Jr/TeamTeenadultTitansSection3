@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class RoomManger implements ManagerInterface{
+public class RoomSubManager implements SubManagerInterface{
 	
 	//List of all the room
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();

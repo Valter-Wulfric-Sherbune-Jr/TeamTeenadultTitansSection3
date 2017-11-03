@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class MonsterManager implements ManagerInterface{
+public class MonsterSubManager implements SubManagerInterface{
 
 	private HashMap<String, Monsters> monsterList = new HashMap<String, Monsters>();
 	private final String gameSubFolder = "/Monster";
