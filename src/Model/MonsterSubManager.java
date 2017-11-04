@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -122,28 +123,13 @@ public class MonsterSubManager implements SubManagerInterface{
 	}
 
 	@Override
-	public void setGameFolder(String gameFolder) {
-		this.gameFolder = "./res/" + gameFolder;
-	}
-
-	@Override
-	public String getGameFolder() {
-		return gameFolder;
-	}
-
-	@Override
-	public String getGameSubFolder() {
-		return gameSubFolder;
-	}
-
-	@Override
 	public HashMap<String, Monsters> getList() {
 		return monsterList;
 	}
 
 }
 
-class Monsters {
+class Monsters implements Serializable{
 	private String monsterName;
 	private String monsterId;
 	private String monsterDesc;

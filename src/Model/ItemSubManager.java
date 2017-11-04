@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 
 public class ItemSubManager implements SubManagerInterface{
@@ -88,7 +89,7 @@ public class ItemSubManager implements SubManagerInterface{
 						itemObject.setItemDesc(fileLine);
 						break;
 					case "Item Type":
-						itemObject.setItemType(Integer.parseInt(fileLine));
+						itemObject.setItemType(fileLine);
 						break;	
 					case "Item Action Value":
 						itemObject.setItemActionValue(fileLine);
@@ -120,21 +121,6 @@ public class ItemSubManager implements SubManagerInterface{
 	}
 
 	@Override
-	public void setGameFolder(String gameFolder) {
-		this.gameFolder = "./res/" + gameFolder;
-	}
-
-	@Override
-	public String getGameFolder() {
-		return gameFolder;
-	}
-
-	@Override
-	public String getGameSubFolder() {
-		return gameSubFolder;
-	}
-
-	@Override
 	public HashMap<String, Items> getList() {
 		return itemList;
 	}
@@ -142,11 +128,11 @@ public class ItemSubManager implements SubManagerInterface{
 }
 
 
-class Items {
+class Items implements Serializable{
 	private String itemName;
 	private String itemId;
 	private String itemDesc;
-	private int itemType;
+	private String itemType;
 	private String itemActionValue;
 	private int itemUsageTime;
 
@@ -154,12 +140,12 @@ class Items {
 		this.itemName = "I00";
 		this.itemId = "Invalid Item Name";
 		this.itemDesc = "Invalid Item Description";
-		this.itemType = 00;
+		this.itemType = "Invalid";
 		this.itemActionValue = "Invalid Item Action Value";
 		this.itemUsageTime = 0;
 	}
 
-	public Items(String itemName, String itemId, String itemDesc, int itemType, String itemActionValue,
+	public Items(String itemName, String itemId, String itemDesc, String itemType, String itemActionValue,
 			int itemUsageTime) {
 		this.itemName = itemName;
 		this.itemId = itemId;
@@ -181,7 +167,7 @@ class Items {
 		return itemDesc;
 	}
 
-	public int getItemType() {
+	public String getItemType() {
 		return itemType;
 	}
 
@@ -205,7 +191,7 @@ class Items {
 		this.itemDesc = itemDesc;
 	}
 
-	public void setItemType(int itemType) {
+	public void setItemType(String itemType) {
 		this.itemType = itemType;
 	}
 

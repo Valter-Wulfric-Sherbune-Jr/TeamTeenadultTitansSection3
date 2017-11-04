@@ -20,12 +20,6 @@ public interface SubManagerInterface {
 	 * */
 	public void loadListId(String Id);
 	
-	public void setGameFolder(String gameFolder);
-	
-	public String getGameFolder();
-		
-	public String getGameSubFolder();
-	
 	/*Return the HashMap with all the object added to the list
 	 * Key: ID, Value: SubFolderObject
 	 * */

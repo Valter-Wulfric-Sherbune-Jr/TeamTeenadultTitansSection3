@@ -1,7 +1,12 @@
 package Model;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,29 +14,27 @@ import java.util.Scanner;
 
 public class GameManager{
 
-	private MonsterSubManager monsterInfo;
-	private RoomSubManager roomInfo;
-	private ItemSubManager itemInfo;
+	private HashMap<String, Items> itemList;
+	private HashMap<String, Monsters> monsterList;
+	private HashMap<String, Rooms> roomList;
+
 	private Players player;
 	private Scanner input = new Scanner(System.in);
 	private String gameFolder = "";
 	private ArrayList<String> gameList = new ArrayList<String>();
 
+	private HashMap<String, SaveData> saveList = new HashMap<String, SaveData>();
 
 	public void newGame() {
 		getAllGameFolder();
 		chooseGameFolder();
-		setSubManagerList(gameFolder);
-		Players player = new Players();
-		saveGame();
+		makeSaveList();
+		System.out.println("Please choose your name:");
+		String playerName = getUserInput();
+		Players player = new Players(playerName,100,itemList.get("I01"),00);
+		saveGame("S1",player);
 		
-		private String playerId;
-		private String playerName;
-		private int playerHealth;
-		private String weapon;
-		private int playerScore;
-		private ArrayList<Items> inventoryList;
-		
+
 	}
 
 	/*Ask the user to choose a game folder then set the game folder*/
@@ -45,8 +48,8 @@ public class GameManager{
 			String userFolderChoice = getUserInput();
 			for(String folder : gameList) {
 				if(userFolderChoice.equalsIgnoreCase(folder)) {
-					gameFolder = folder;
-					loop = true;
+					gameFolder = "./res/" + folder;
+					loop = false;
 					break;
 				}
 			}
@@ -54,8 +57,21 @@ public class GameManager{
 				System.out.println("\nYou did not choose a valid game folder\n");
 			}	
 		}
+
+		MonsterSubManager monsterInfo = new MonsterSubManager();
+		RoomSubManager roomInfo = new RoomSubManager();
+		ItemSubManager itemInfo = new ItemSubManager();
+
+		monsterInfo.makeList(gameFolder);
+		itemInfo.makeList(gameFolder);
+		roomInfo.makeList(gameFolder);
+
+		monsterList = monsterInfo.getList();
+		roomList = roomInfo.getList();
+		itemList = itemInfo.getList();
+
 	}
-	
+
 	/*Add all game folder into an arraylist*/
 	public void getAllGameFolder() {	
 		try {
@@ -71,20 +87,6 @@ public class GameManager{
 		}
 	}
 
-	/*After a user picks a gamefolder, it loads all the
-	asset from that game folder*/
-	public void setSubManagerList(String gameFolder) {
-		monsterInfo = new MonsterSubManager();
-		roomInfo = new RoomSubManager();
-		itemInfo = new ItemSubManager();
-
-		monsterInfo.makeList(gameFolder);
-		itemInfo.makeList(gameFolder);
-		roomInfo.makeList(gameFolder);
-	}
-
-	
-	
 	public void loadListId(String Id) {
 		// TODO Auto-generated method stub
 
@@ -93,7 +95,7 @@ public class GameManager{
 	public void setGameFolder(String gameFolder) {
 		this.gameFolder = gameFolder;
 	}
-	
+
 	public String getGameSubFolder() {
 		return gameFolder;
 	}
@@ -103,50 +105,49 @@ public class GameManager{
 		return null;
 	}
 
-	public void loadMonsterList() {
-
+	public void makeSaveList() {
+		String folderPath = "./res/Save/";
+		try {	
+			File folder = new File(folderPath);
+			File[] listOfFiles = folder.listFiles();
+			for (File file : listOfFiles) {
+				if (file.isFile()) {
+					ObjectInputStream input = new ObjectInputStream(new FileInputStream(folderPath + file));
+					SaveData obj =  (SaveData)(input.readObject());
+					String saveId = obj.getSaveId();
+					saveList.put(saveId, obj);	
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Error in "+ "Save" + ":/n" + e.toString());
+		}
 	}
+
+
 
 	public String getUserInput() {
 		System.out.print("\nInput:\n> ");
 		return input.nextLine();
 	}
-	
-	public void saveGame() {
 
+	public void saveGame(String saveId,Players player) {
+		try {
+			SaveData save = new SaveData(saveId,gameFolder,player,itemList,monsterList,roomList);
+			if(saveList.isEmpty()) {
+				saveId = "S1";
+			}
+			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("./res/Save/" + saveId + ".dat"));
+			output.writeObject(save);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void loadGame() {
 
-	}
-
-}
-
-class SaveDate{
-
-	private String dataId;
-	private String gameFolder;
-	private HashMap<String, Items> itemList;
-	private HashMap<String, Monsters> monsterList;
-	private ArrayList<Items> inventoryList;
-
-	public SaveDate() {
-	}
-
-	public SaveDate(String dataId, HashMap<String, Items> itemList, HashMap<String, Monsters> monsterList,
-			ArrayList<Items> inventoryList) {
-		this.dataId = dataId;
-		this.itemList = itemList;
-		this.monsterList = monsterList;
-		this.inventoryList = inventoryList;
-	}
-
-	public String getDataId() {
-		return dataId;
-	}
-
-	public void setDataId(String dataId) {
-		this.dataId = dataId;
 	}
 
 	public HashMap<String, Items> getItemList() {
@@ -165,28 +166,79 @@ class SaveDate{
 		this.monsterList = monsterList;
 	}
 
-	public ArrayList<Items> getInventoryList() {
-		return inventoryList;
+	public HashMap<String, Rooms> getRoomList() {
+		return roomList;
 	}
 
-	public void setInventoryList(ArrayList<Items> inventoryList) {
-		this.inventoryList = inventoryList;
+	public void setRoomList(HashMap<String, Rooms> roomList) {
+		this.roomList = roomList;
+	}
+	
+	
+
+}
+
+class SaveData implements Serializable{
+
+	private String saveId;
+	private String gameFolder;
+	private Players playerData;
+	private HashMap<String, Items> itemList;
+	private HashMap<String, Monsters> monsterList;
+	private HashMap<String, Rooms> roomList;
+
+	public SaveData() {
+	}
+
+	public SaveData(String saveId, String gameFolder, Players playerData, HashMap<String, Items> itemList,
+			HashMap<String, Monsters> monsterList, HashMap<String, Rooms> roomList) {
+		super();
+		this.saveId = saveId;
+		this.gameFolder = gameFolder;
+		this.playerData = playerData;
+		this.itemList = itemList;
+		this.monsterList = monsterList;
+		this.roomList = roomList;
+	}
+
+
+
+	public String getSaveId() {
+		return saveId;
+	}
+
+	public void setsaveId(String saveId) {
+		this.saveId = saveId;
+	}
+
+	public HashMap<String, Items> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(HashMap<String, Items> itemList) {
+		this.itemList = itemList;
+	}
+
+	public HashMap<String, Monsters> getMonsterList() {
+		return monsterList;
+	}
+
+	public void setMonsterList(HashMap<String, Monsters> monsterList) {
+		this.monsterList = monsterList;
 	}
 
 }
 
 class Players implements Serializable{
 
-	private String playerId;
 	private String playerName;
 	private int playerHealth;
-	private String weapon;
+	private Items weapon;
 	private int playerScore;
 	private ArrayList<Items> inventoryList;
 
 
 	public Players() {
-		this.playerId = "00";
 		this.playerName = "Default Player Name";
 		this.playerHealth = 00;
 		this.weapon = null;
@@ -194,27 +246,20 @@ class Players implements Serializable{
 		this.inventoryList = new ArrayList<Items>();
 	}
 
-	public Players(String playerId, String playerName, int playerHealth, String weapon, int playerScore) {
-		this.playerId = playerId;
+	public Players(String playerName, int playerHealth, Items weapon, int playerScore) {
 		this.playerName = playerName;
 		this.playerHealth = playerHealth;
 		this.weapon = weapon;
 		this.playerScore = playerScore;
-		this.inventoryList = inventoryList;
-	}
-	
-	public Players(String playerId, String playerName, int playerHealth, String weapon, int playerScore,
-			ArrayList<Items> inventoryList) {
-		this.playerId = playerId;
-		this.playerName = playerName;
-		this.playerHealth = playerHealth;
-		this.weapon = weapon;
-		this.playerScore = playerScore;
-		this.inventoryList = inventoryList;
 	}
 
-	public void setPlayerId(String playerId) {
-		this.playerId = playerId;
+	public Players(String playerName, int playerHealth, Items weapon, int playerScore,
+			ArrayList<Items> inventoryList) {
+		this.playerName = playerName;
+		this.playerHealth = playerHealth;
+		this.weapon = weapon;
+		this.playerScore = playerScore;
+		this.inventoryList = inventoryList;
 	}
 
 	public void setPlayerName(String playerName) {
@@ -226,16 +271,12 @@ class Players implements Serializable{
 	}
 
 	public void setWeapon(String weaponId) {
-
-		this.weapon = weapon;
+		GameManager itemManager = new GameManager();
+		this.weapon = itemManager.getItemList().get(weaponId);
 	}
 
 	public void setPlayerScore(int playerScore) {
 		this.playerScore = playerScore;
-	}
-
-	public String getPlayerId() {
-		return playerId;
 	}
 
 	public String getPlayerName() {
@@ -246,7 +287,7 @@ class Players implements Serializable{
 		return playerHealth;
 	}
 
-	public String getWeapon() {
+	public Items getWeapon() {
 		return weapon;
 	}
 
