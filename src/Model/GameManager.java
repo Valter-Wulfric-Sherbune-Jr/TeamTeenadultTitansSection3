@@ -31,10 +31,16 @@ public class GameManager{
 		makeSaveList();
 		System.out.println("Please choose your name:");
 		String playerName = getUserInput();
-		Players player = new Players(playerName,100,itemList.get("I01"),00);
-		saveGame("S1",player);
-		
+		player = new Players(playerName,100,itemList.get("I01"),0,roomList.get("01"));
+		//Debug Save later
+		//saveGame("S1",player);
 
+		System.out.println("New Game Created");
+		System.out.println("\nPrivate your mission is to investigate this building and clear out all enemy");
+		System.out.println("You Jumped out of the plan and landed on the roof");
+
+		System.out.println(roomList.get("01").toString());
+		action("01");
 	}
 
 	/*Ask the user to choose a game folder then set the game folder*/
@@ -105,6 +111,82 @@ public class GameManager{
 		return null;
 	}
 
+	public void action(String roomId) {
+		if(player.getCurrentRoom().hasItem == false) {
+			System.out.println("What will you do?");
+			System.out.println("1. Move");
+			System.out.println("2. Search Room");
+			System.out.println("3. Check Inventory");
+
+			String userinput = getUserInput();
+			switch(userinput) {
+			case "Move":
+				move(roomId);
+				break;
+			case "Search Room":
+				System.out.println("There is nothing in this room\n");
+				action(roomId);
+				break;
+			case "Check Inventory":
+				if(player.getInventoryList() == null || player.getInventoryList().size() == 0) {
+					System.out.println("You have nothing\n");
+				}
+				else {
+					for(Items item : player.getInventoryList()) {
+						System.out.println(item.getItemName());
+					}
+				}
+				action(roomId);
+				break;
+			default:
+				System.out.println("Wrong Command inputed\n");
+				action(roomId);
+				break;
+			}
+		}
+		else if(player.getCurrentRoom().hasItem == true) {
+			System.out.println("What will you do?");
+			System.out.println("1. Move");
+			System.out.println("2. Search Room");
+			System.out.println("3. Check Inventory");
+
+			String userinput = getUserInput();
+			switch(userinput) {
+			case "Move":
+				move(roomId);
+				break;
+			case "Search Room":
+				System.out.println("You found a " + roomList.get(roomId).getRoomItem().getItemName());
+				System.out.println("You added it into your inventory");
+				player.addItem(roomList.get(roomId).getRoomItem().getItemName());
+				action(roomId);
+				break;
+			case "Check Inventory":
+				if(player.getInventoryList() == null || player.getInventoryList().size() == 0) {
+					System.out.println("You have nothing\n");
+				}
+				else {
+					for(Items item : player.getInventoryList()) {
+						System.out.println(item.getItemName());
+					}
+				}
+				action(roomId);
+				break;
+			default:
+				System.out.println("Wrong Command inputed\n");
+				action(roomId);
+				break;
+			}
+		}
+	}
+
+	public String checkRoom(String id) {
+		if(roomList.get(id).getRoomMonster() != null) {
+			return "Monster Room";
+		}
+		return null;
+	}
+
 	public void makeSaveList() {
 		String folderPath = "./res/Save/";
 		try {	
@@ -149,6 +231,18 @@ public class GameManager{
 	public void loadGame() {
 
 	}
+	
+	public void move(String roomId) {
+		Rooms room = roomList.get(roomId);
+		System.out.print("What direction you wanna move?\n");
+		System.out.println(room.getRoomConnection());
+		Scanner input = new Scanner(System.in);
+		String direction = getUserInput();
+		HashMap<String, String> map = room.getRoomNavigation();
+		player.setCurrentRoom(roomList.get(map.get(direction)));
+		System.out.println(roomList.get(map.get(direction)).toString());
+		action(map.get(direction));
+	}
 
 	public HashMap<String, Items> getItemList() {
 		return itemList;
@@ -173,8 +267,8 @@ public class GameManager{
 	public void setRoomList(HashMap<String, Rooms> roomList) {
 		this.roomList = roomList;
 	}
-	
-	
+
+
 
 }
 
@@ -236,6 +330,7 @@ class Players implements Serializable{
 	private Items weapon;
 	private int playerScore;
 	private ArrayList<Items> inventoryList;
+	private Rooms currentRoom;
 
 
 	public Players() {
@@ -246,20 +341,30 @@ class Players implements Serializable{
 		this.inventoryList = new ArrayList<Items>();
 	}
 
-	public Players(String playerName, int playerHealth, Items weapon, int playerScore) {
+	public Players(String playerName, int playerHealth, Items weapon, int playerScore,Rooms currentRoom) {
 		this.playerName = playerName;
 		this.playerHealth = playerHealth;
 		this.weapon = weapon;
 		this.playerScore = playerScore;
+		this.currentRoom = currentRoom;
 	}
 
 	public Players(String playerName, int playerHealth, Items weapon, int playerScore,
-			ArrayList<Items> inventoryList) {
+			ArrayList<Items> inventoryList,Rooms currentRoom) {
 		this.playerName = playerName;
 		this.playerHealth = playerHealth;
 		this.weapon = weapon;
 		this.playerScore = playerScore;
 		this.inventoryList = inventoryList;
+	}
+
+
+	public Rooms getCurrentRoom() {
+		return currentRoom;
+	}
+
+	public void setCurrentRoom(Rooms currentRoom) {
+		this.currentRoom = currentRoom;
 	}
 
 	public void setPlayerName(String playerName) {

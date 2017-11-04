@@ -9,3 +9,7 @@ Room Connection:
 27:South
 Room Access:
 True
+Room Item:
+I05
+Room Enemy:
+null

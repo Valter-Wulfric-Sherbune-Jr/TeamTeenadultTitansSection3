@@ -10,3 +10,7 @@ Room Connection:
 17:North
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+null

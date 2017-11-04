@@ -10,3 +10,7 @@ Room Connection:
 32:South
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+null

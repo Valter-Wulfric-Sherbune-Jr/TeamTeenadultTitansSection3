@@ -9,3 +9,7 @@ Room Connection:
 08:North
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+null

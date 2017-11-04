@@ -10,3 +10,7 @@ Room Connection:
 00:Elevator
 Room Access:
 True
+Room Item:
+I10
+Room Enemy:
+null

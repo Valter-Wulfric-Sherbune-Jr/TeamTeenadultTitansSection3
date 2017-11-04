@@ -10,3 +10,7 @@ Room Connection:
 22:East
 Room Access:
 True
+Room Item:
+I10
+Room Enemy:
+E09

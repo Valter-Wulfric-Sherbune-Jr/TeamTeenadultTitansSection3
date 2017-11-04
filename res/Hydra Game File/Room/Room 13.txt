@@ -10,3 +10,7 @@ Room Connection:
 12:South
 Room Access:
 True
+Room Item:
+I13
+Room Enemy:
+E02

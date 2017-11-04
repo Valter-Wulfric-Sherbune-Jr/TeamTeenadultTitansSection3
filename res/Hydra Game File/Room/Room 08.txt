@@ -10,3 +10,7 @@ Room Connection:
 10:East
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+E01

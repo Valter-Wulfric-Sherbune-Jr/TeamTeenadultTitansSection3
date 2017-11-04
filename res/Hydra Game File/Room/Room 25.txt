@@ -10,3 +10,7 @@ Room Connection:
 26:West
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+E09

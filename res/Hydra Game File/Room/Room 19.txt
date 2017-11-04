@@ -9,3 +9,7 @@ Room Connection:
 18:South
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+E04

@@ -9,3 +9,7 @@ Room Connection:
 12:Staircase
 Room Access:
 True
+Room Item:
+I03
+Room Enemy:
+E02

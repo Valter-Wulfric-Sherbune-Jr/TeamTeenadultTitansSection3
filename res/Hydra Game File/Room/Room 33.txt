@@ -8,3 +8,7 @@ Room Connection:
 32:East
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+null

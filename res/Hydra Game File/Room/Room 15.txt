@@ -10,3 +10,7 @@ Room Connection:
 18:North Left
 Room Access:
 True
+Room Item:
+I12
+Room Enemy:
+E02

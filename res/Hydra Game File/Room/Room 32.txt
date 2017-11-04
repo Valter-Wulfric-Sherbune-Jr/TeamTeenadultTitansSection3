@@ -9,3 +9,7 @@ Room Connection:
 33:West
 Room Access:
 True
+Room Item:
+I09
+Room Enemy:
+E08

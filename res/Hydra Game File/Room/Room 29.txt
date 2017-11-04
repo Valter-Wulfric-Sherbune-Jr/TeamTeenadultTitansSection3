@@ -10,3 +10,7 @@ Room Connection:
 20:Staircase
 Room Access:
 True
+Room Item:
+null
+Room Enemy:
+E07

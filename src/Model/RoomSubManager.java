@@ -13,21 +13,13 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class RoomSubManager implements SubManagerInterface{
-	
+
 	//List of all the room
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
 	private final String gameSubFolder = "/Room";
 	private String gameFolder = "";
 
 
-
-//	public void move(int roomID) {
-//		Rooms room = roomList.get(roomID);
-//		Scanner input = new Scanner(System.in);
-//		String direction = input.nextLine();
-//		HashMap<String, Integer> map = room.getHashMap();
-//		loadRoomID(map.get(direction));
-//	}
 
 	@Override
 	public void makeList(String gameFolder) {
@@ -52,76 +44,107 @@ public class RoomSubManager implements SubManagerInterface{
 	@Override
 	public void makeListObject(String filePath) {
 		//Get the name of the file one at a time, and make an object with them
-				try {
+		try {
 
-					//File Reader
-					BufferedReader bufferedReader = 
-							new BufferedReader(new FileReader(filePath));
+			//File Reader
+			BufferedReader bufferedReader = 
+					new BufferedReader(new FileReader(filePath));
 
-					String fileLine = null;
-					//Set Code is the title of the string ex: (Room Name, Room ID)
-					String setCode = null;
-					Rooms roomObject = new Rooms();
+			String fileLine = null;
+			//Set Code is the title of the string ex: (Room Name, Room ID)
+			String setCode = null;
+			Rooms roomObject = new Rooms();
 
-					while((fileLine = bufferedReader.readLine()) != null) {
-						//If fileLine reads a setCode, it get's replace it's current fileline with the next fileline and sets the setcode;
-						switch(fileLine) {
-						case "Room Name:":
-							setCode = "Room Name";
-							fileLine = bufferedReader.readLine();
+			while((fileLine = bufferedReader.readLine()) != null) {
+				//If fileLine reads a setCode, it get's replace it's current fileline with the next fileline and sets the setcode;
+				switch(fileLine) {
+				case "Room Name:":
+					setCode = "Room Name";
+					fileLine = bufferedReader.readLine();
+					break;
+				case "Room ID:":
+					setCode = "Room ID";
+					fileLine = bufferedReader.readLine();
+					break;
+				case "Room Description:":
+					setCode = "Room Description";
+					fileLine = bufferedReader.readLine();
+					break;
+				case "Room Connection:":
+					setCode = "Room Connection";
+					fileLine = bufferedReader.readLine();
+					break;	
+				case "Room Access:":
+					setCode = "Room Access";
+					fileLine = bufferedReader.readLine();
+					break;
+				case "Room Item:":
+					setCode = "Room Item";
+					fileLine = bufferedReader.readLine();
+					break;	
+				case "Room Enemy:":
+					setCode = "Room Enemy";
+					fileLine = bufferedReader.readLine();
+					break;	
+				}	
+				if(setCode != null) {
+					//Depending on the setcode, it'll set the infromation it got from flieLine
+					switch(setCode) {
+					case "Room Name":
+						roomObject.setRoomName(fileLine);
+						break;
+					case "Room ID":
+						roomObject.setRoomId(fileLine);
+						break;
+					case "Room Description":
+						roomObject.setRoomDescription(fileLine);
+						break;
+					case "Room Connection":
+						String[] RoomConnection = fileLine.split(":");
+						String roomID = RoomConnection[0];
+						String Direction = RoomConnection[1];
+						roomObject.setRoomConnection(Direction, roomID);
+						break;
+					case "Room Access:":
+						roomObject.setRoomAccess(fileLine);
+						break;
+					case "Room Item":
+						if(fileLine.equals("null")) {
+							roomObject.setHasItem(false);
 							break;
-						case "Room ID:":
-							setCode = "Room ID";
-							fileLine = bufferedReader.readLine();
+						}else {
+							ItemSubManager itemlist = new ItemSubManager();
+							itemlist.makeList("./res/Hydra Game File");
+							roomObject.setRoomItem(itemlist.getList().get(fileLine));
+							//System.out.println(itemlist.getList().get(fileLine).getItemDesc());
+							roomObject.setHasItem(true);
 							break;
-						case "Room Description:":
-							setCode = "Room Description";
-							fileLine = bufferedReader.readLine();
-							break;
-						case "Room Connection:":
-							setCode = "Room Connection";
-							fileLine = bufferedReader.readLine();
-							break;	
-						case "Room Access:":
-							setCode = "Room Access";
-							fileLine = bufferedReader.readLine();
-							break;	
-						}	
-						if(setCode != null) {
-							//Depending on the setcode, it'll set the infromation it got from flieLine
-							switch(setCode) {
-							case "Room Name":
-								roomObject.setRoomName(fileLine);
-								break;
-							case "Room ID":
-								roomObject.setRoomId(fileLine);
-								break;
-							case "Room Description":
-								roomObject.setRoomDescription(fileLine);
-								break;
-							case "Room Connection":
-								String[] RoomConnection = fileLine.split(":");
-								String roomID = RoomConnection[0];
-								String Direction = RoomConnection[1];
-								roomObject.setRoomConnection(Direction, roomID);
-								break;
-							case "Room Access:":
-								roomObject.setRoomAccess(fileLine);
-								break;
-							}	
 						}
-					}
-					//After it finish setting up object, object is then sent to a hashmap with room id as a key
-					roomList.put(roomObject.getRoomId(), roomObject);
-					bufferedReader.close();         
+					case "Room Enemy":
+						if(fileLine.equals("null")) {
+							roomObject.setHasMonster(false);
+							break;
+						}
+						else {
+							ItemSubManager monsterlist = new ItemSubManager();
+							roomObject.setRoomItem(monsterlist.getList().get(fileLine));
+							roomObject.setHasMonster(true);
+							break;
+						}
+					}	
 				}
-				catch(FileNotFoundException ex) {
-					System.out.println("Unable to open file '" + filePath + "'");                
-				}
-				catch(IOException ex) {
-					System.out.println("Error reading file '" + filePath+ "'");                  
-				}
-		
+			}
+			//After it finish setting up object, object is then sent to a hashmap with room id as a key
+			roomList.put(roomObject.getRoomId(), roomObject);
+			bufferedReader.close();         
+		}
+		catch(FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + filePath + "'");                
+		}
+		catch(IOException ex) {
+			System.out.println("Error reading file '" + filePath+ "'");                  
+		}
+
 	}
 
 	@Override
@@ -134,7 +157,7 @@ public class RoomSubManager implements SubManagerInterface{
 	public HashMap<String, Rooms> getList() {
 		return roomList;
 	}
-	
+
 }
 
 class Rooms implements Serializable{
@@ -142,6 +165,10 @@ class Rooms implements Serializable{
 	public String roomName;
 	public String roomDescription;
 	public boolean roomAccess;
+	public Items roomItem;
+	public Monsters roomMonster;
+	public boolean hasItem;
+	public boolean hasMonster;
 	HashMap<String, String> roomNavigationList = new HashMap<String, String>();
 
 	public Rooms(){
@@ -150,12 +177,46 @@ class Rooms implements Serializable{
 		this.roomDescription = "Invalid Description";
 		this.roomAccess = false;
 	}
-	public Rooms(String roomId, String roomName, String roomDescription, boolean roomAccess) {
+
+	public Rooms(String roomId, String roomName, String roomDescription, boolean roomAccess, Items roomItem,
+			Monsters roomMonster, HashMap<String, String> roomNavigationList) {
 		this.roomId = roomId;
 		this.roomName = roomName;
 		this.roomDescription = roomDescription;
 		this.roomAccess = roomAccess;
+		this.roomItem = roomItem;
+		this.roomMonster = roomMonster;
+		this.roomNavigationList = roomNavigationList;
 	}
+
+	public void setHasItem(boolean hasItem) {
+		this.hasItem = hasItem;
+	}
+	public void setHasMonster(boolean hasMonster) {
+		this.hasMonster = hasMonster;
+	}
+	public boolean getHasItem() {
+		return hasItem;
+	}
+	public boolean getHasMonster() {
+		return hasMonster;
+	}
+	public Items getRoomItem() {
+		return roomItem;
+	}
+
+	public void setRoomItem(Items roomItem) {
+		this.roomItem = roomItem;
+	}
+
+	public Monsters getRoomMonster() {
+		return roomMonster;
+	}
+
+	public void setRoomMonster(Monsters roomMonster) {
+		this.roomMonster = roomMonster;
+	}
+
 	public void setRoomId(String roomId){
 		this.roomId = roomId;
 	}
@@ -218,7 +279,7 @@ class Rooms implements Serializable{
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()) { 
 			Map.Entry mEntry = (Map.Entry)iterator.next();
-			int coordinate =   (int) mEntry.getValue();
+			String coordinate =   (String) mEntry.getValue();
 			RoomConnection += mEntry.getKey();
 			if(iterator.hasNext()) {
 				RoomConnection += ",";
@@ -242,7 +303,7 @@ class Rooms implements Serializable{
 		returnString += "Room Description:\n" + getRoomDescription() + "\n\n";
 
 		//Add Direction
-		returnString += "Choose Your Direction:\n" + getRoomConnection() + "\n";
+		returnString += "Direction:\n" + getRoomConnection() + "\n";
 
 		//Add Guide Line
 		returnString += "---------------------------------------";

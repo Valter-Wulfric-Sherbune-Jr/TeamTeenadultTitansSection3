@@ -10,3 +10,8 @@ Room Connection:
 03:Staircase
 Room Access:
 True
+Room Item:
+I01
+I04
+Room Enemy:
+null
