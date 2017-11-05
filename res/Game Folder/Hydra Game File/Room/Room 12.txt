@@ -1,0 +1,16 @@
+Room Floor:
+Second Floor
+Room ID:
+R12
+Room Description:
+This division holds the offices and work centers of employees who are part of this sectors engineering branch. Large assembly machines can be seen overhead along with the rail system used for movement. Black and yellow hazard lines mark which walkways are safe for movement, and what areas should be avoided.
+Room Connection:
+R15:West
+R13:North
+R9:Staircase
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+null

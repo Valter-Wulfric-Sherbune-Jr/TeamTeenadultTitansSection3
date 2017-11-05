@@ -1,0 +1,15 @@
+Room Floor:
+Third Floor
+Room ID:
+R05
+Room Description:
+Large ionization machines are lined up against the walls, and there are numerous metal pipes and tubing formations throughout the room. These systems manage the facilities environmental atmosphere, and the micro-climates that are present within different sectors.
+Room Connection:
+R04:South
+R06:North
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+E01

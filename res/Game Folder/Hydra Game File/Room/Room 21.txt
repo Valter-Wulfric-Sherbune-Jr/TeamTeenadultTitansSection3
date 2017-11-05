@@ -1,0 +1,15 @@
+Room Floor:
+First Floor
+Room ID:
+R21
+Room Description:
+A steel corridor that has fluorescent lights integrated into the ceiling. A damaged security droid is laying facedown, and a nearby wall is marked with bullet holes.
+Room Connection:
+R20:North
+R24:West
+Room Access:
+True
+Room Item:
+I07
+Room Monster:
+E05

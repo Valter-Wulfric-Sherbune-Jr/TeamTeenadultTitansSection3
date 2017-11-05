@@ -1,0 +1,16 @@
+Room Floor:
+Roof
+Room ID:
+R02
+Room Description:
+A room with maroon carpet and potted plastic plants in the cor-ner. There is an elevator with red stains on it. It doesn’t appear to be functional as the key scanner is broken.
+Room Connection:
+R01:West
+R03:South
+R00:Elevator
+Room Access:
+True
+Room Item:
+I10
+Room Monster:
+null

@@ -1,0 +1,16 @@
+Room Floor:
+Third Floor
+Room ID:
+R10
+Room Description:
+A circular security desk stands in the middle of a large room, and multiple hallway entrances can be seen nearby with colored lines on their sides designating which sub-sector they lead to. The main exits leading to other locations are pulsating their emergency lights to indicate that there has been test chamber breaches.
+Room Connection:
+R08:West
+R09:South
+R11:North
+Room Access:
+True
+Room Item:
+I15
+Room Monster:
+null

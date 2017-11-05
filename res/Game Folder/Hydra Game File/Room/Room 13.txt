@@ -1,0 +1,16 @@
+Room Floor:
+Second Floor
+Room ID:
+R13
+Room Description:
+The massive concrete and steel-plated room has a large portion of its floorspace dedicated to the industrial maglev docking station. Freight loading and unloading is performed in this location by wall and ceiling mounted cranes. Automated rail carts can be seen stationed with their cargo ready for delivery.
+Room Connection:
+R14:North
+R16:West
+R12:South
+Room Access:
+True
+Room Item:
+I13
+Room Monster:
+E02

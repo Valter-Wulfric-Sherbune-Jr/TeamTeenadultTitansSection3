@@ -1,0 +1,16 @@
+Room Floor:
+First Floor
+Room ID:
+R23
+Room Description:
+This room is the main entrance. There is a metal shield block-ing the front door. There are many bodies of people who tried to escape. 
+Room Connection:
+R28:West
+R24:North
+R22:East
+Room Access:
+True
+Room Item:
+I10
+Room Monster:
+E09

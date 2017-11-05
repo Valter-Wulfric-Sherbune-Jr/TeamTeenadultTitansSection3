@@ -1,0 +1,16 @@
+Room Floor:
+First Floor
+Room ID:
+R24
+Room Description:
+The center of the room has the EMPYREAN’s famous High-Energy Particle machine. There are many labs and detectors around it to test how particles react under certain conditions. There is a walkway going along the outer part of the room for employees and tour groups to get around the machine and stations.
+Room Connection:
+R21:East
+R23:South
+R25:North
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+null

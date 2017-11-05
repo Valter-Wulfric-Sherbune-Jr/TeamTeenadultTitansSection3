@@ -1,0 +1,16 @@
+Room Floor:
+Basement
+Room ID:
+R31
+Room Description:
+There are wires coming in and out of the walls to the North and South. The room edges are lined with old legacy technolo-gy. Modems and Routers and HUBs and switches are every-where. There is a large machine that looks like it tests projec-tiles and has a bin of old computers to test. The wall facing away from the machine has bits of technology debris every-where
+Room Connection:
+R29:North Left
+R30:North Right
+R32:South
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+null

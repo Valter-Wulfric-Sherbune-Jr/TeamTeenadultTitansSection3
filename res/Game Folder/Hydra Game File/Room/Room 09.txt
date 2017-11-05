@@ -1,0 +1,15 @@
+Room Floor:
+Third Floor
+Room ID:
+R09
+Room Description:
+This area is reserved for the study of organic materials. The sector in-cludes dedicated ecosystem observatories, specimen containment cells, and a gene-bank repository. Orange painted hazmat robots are stored in wall mounted cells in an offline state.
+Room Connection:
+R10:North
+R12:Staircase
+Room Access:
+True
+Room Item:
+I03
+Room Monster:
+E02

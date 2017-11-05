@@ -1,0 +1,16 @@
+Room Floor:
+First Floor
+Room ID:
+R25
+Room Description:
+The ceiling of this room is much higher than the ceilings of other rooms. There is glass below the ceiling. There are tem-perature regulation pipes and bright lights above the glass. The Floor is a sidewalk surrounded by dirt. The dirt has a wide variety of of small trees and other plants. Birds can be heard.
+Room Connection:
+R20:East
+R24:South
+R26:West
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+E09

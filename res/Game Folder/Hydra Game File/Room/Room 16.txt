@@ -1,0 +1,16 @@
+Room Floor:
+Second Floor
+Room ID:
+R16
+Room Description:
+This largely open space with high roof clearance is used for testing new technologies for ground based vehicles. Refitment platforms line one side of the area while vehicle frames and parts line the other. A few next generation APCs based on the militaries extended Stryker family of armored fighting vehicles are also present.
+Room Connection:
+R13:East
+R15:South
+R17:North
+Room Access:
+True
+Room Item:
+null
+Room Monster:
+null
