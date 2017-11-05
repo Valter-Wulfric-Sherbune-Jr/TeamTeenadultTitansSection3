@@ -28,17 +28,9 @@ public class Players implements Serializable{
 		this.weapon = weapon;
 		this.playerScore = playerScore;
 		this.currentRoom = currentRoom;
+		this.inventoryList = new ArrayList<Items>();
 	}
 
-	public Players(String playerName, int playerHealth, Items weapon, int playerScore,
-			ArrayList<Items> inventoryList,Rooms currentRoom) {
-		this.playerName = playerName;
-		this.playerHealth = playerHealth;
-		this.weapon = weapon;
-		this.playerScore = playerScore;
-		this.inventoryList = inventoryList;
-	}
-	
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
@@ -91,21 +83,18 @@ public class Players implements Serializable{
 		return inventoryList;
 	}
 
-	public void addItemToInventory(String itemId, HashMap<String, Items> ItemList) {
-		try{
-			inventoryList.add(ItemList.get(itemId));
-		}catch(Exception e) {
-			System.out.println("Error Adding Item to Inventory");
-		}
+	public void addItemToInventory(Items item) {
+		this.inventoryList.add(item);
 	}
 	
 	public void removeItemFromInventory(String itemId) {
 		boolean remove = false;
+		search:
 		for(int x = 0; x < inventoryList.size(); x++) {
 			if(inventoryList.get(x).getItemId() == itemId) {
 				inventoryList.remove(x);
 				remove = true;
-				break;
+				break search;
 			}
 		}
 		if(!remove) {
@@ -127,7 +116,7 @@ public class Players implements Serializable{
 	}
 	
 	public void unequipWeapon(HashMap<String, Items> ItemList) {		
-		addItemToInventory(getWeapon().getItemId(),ItemList);
+		addItemToInventory(getWeapon());
 		this.weapon = null;
 	}
 }

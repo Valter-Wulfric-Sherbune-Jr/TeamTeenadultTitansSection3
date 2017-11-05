@@ -94,11 +94,12 @@ public class Rooms implements Serializable{
 	public void removeRoomItemId(String roomItemId) {
 		boolean remove = false;
 		
+		search:
 		for(int x = 0; x < this.roomItemId.size(); x++) {
 			if(this.roomItemId.get(x).equalsIgnoreCase(roomItemId)) {
 				this.roomItemId.remove(x);
 				remove = true;
-				break;
+				break search;
 			}
 		}
 		
@@ -121,11 +122,12 @@ public class Rooms implements Serializable{
 	public void removeRoomMonsterId(String roomMonsterId) {
 		boolean remove = false;
 		
+		search:
 		for(int x = 0; x < this.roomMonsterId.size(); x++) {
 			if(this.roomMonsterId.get(x).equalsIgnoreCase(roomMonsterId)) {
 				this.roomMonsterId.remove(x);
 				remove = true;
-				break;
+				break search;
 			}
 		}
 		
