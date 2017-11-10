@@ -179,10 +179,7 @@ public class Rooms implements Serializable{
 		returnString += getRoomDescription() + "\n\n";
 
 		//Add Direction
-		returnString += "Exits: " + getRoomConnection() + "\n";
-
-		//Add Guide Line
-		returnString += "--------------------------------------------------";
+		returnString += "Exits: " + getRoomConnection();
 
 		return returnString;
 	}

@@ -267,23 +267,22 @@ public class GameManager{
 	}
 
 	public void action() {
+		System.out.println("--------------------------------------------------");
 		if(player.getCurrentRoom().getRoomMonsterId().isEmpty()) {
 			System.out.println("What will you do?\n");
 			System.out.println("1. Move");
 			System.out.println("2. Search Room");
 			System.out.println("3. Check Inventory");
-			System.out.println("4. Get Room Description");
 
 			String userInput = getUserInput();
 
 			switch(userInput.toLowerCase().trim()) {
-			case "move":  case  "1":
+			case "move": case "m": case  "1":
 				System.out.print("\nWhich direction do you want to move?\n");
 				System.out.println("Exits: " + player.getCurrentRoom().getRoomConnection());
 				String roomDirection = getUserInput();
 				if(player.getCurrentRoom().getRoomNavigationList().get(roomDirection) == null) {
 					System.out.println("\nYou can't go that way!");
-					System.out.println("--------------------------------------------------");
 					action();
 					break;
 				}
@@ -294,9 +293,9 @@ public class GameManager{
 					action();
 				}
 				break;
-			case "search room": case "search": case "2":
+			case "examine room": case "search room": case "examine": case "search": case "look": case "e": case "s": case "l": case "2":
+				System.out.println(player.getCurrentRoom().toString());
 				if(!player.getCurrentRoom().getRoomItemId().isEmpty()) {
-
 					for(Iterator<String> iterator = player.getCurrentRoom().getRoomItemId().iterator(); iterator.hasNext();) {
 						String itemId = iterator.next();
 						Items itemObject = itemList.get(itemId);
@@ -307,16 +306,18 @@ public class GameManager{
 						System.out.println("2. No");
 						String choice = getUserInput();
 						switch(choice.toLowerCase().trim()) {
-						case "yes": case "1":
+						case "yes": case "y": case "1":
 							iterator.remove();
 							System.out.println("\nYou picked up the " + itemObject.getItemName() + ".");
 							player.addItemToInventory(itemObject);
 							break;
-						case "no": case "2":
+						case "no": case "n": case "2":
+							System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
+							break;
+						default:
 							System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
 							break;
 						}
-
 					}
 				}
 				else if(player.getCurrentRoom().getRoomItemId().isEmpty()){
@@ -327,7 +328,7 @@ public class GameManager{
 				}
 				action();
 				break;
-			case "check inventory": case "check": case "inventory": case "3":
+			case "check inventory": case "check": case "c": case "inventory": case "i": case "3":
 				if(!player.getInventoryList().isEmpty()) {
 					inventoryMenu();
 				}
@@ -339,11 +340,7 @@ public class GameManager{
 				}
 				action();
 				break;
-			case "get room description": case "get": case "description": case "look": case "4":
-				System.out.println(player.getCurrentRoom().toString());
-				action();
-				break;
-			case "help":
+			case "help": case "h": case "commands":
 				action();
 				break;
 			default:
