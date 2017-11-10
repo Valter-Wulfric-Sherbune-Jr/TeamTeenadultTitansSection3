@@ -156,7 +156,7 @@ public class Rooms implements Serializable{
 			String coordinate =   (String) mEntry.getValue();
 			RoomConnection += mEntry.getKey();
 			if(iterator.hasNext()) {
-				RoomConnection += ",";
+				RoomConnection += ", ";
 			}
 		}
 		return RoomConnection;
@@ -170,19 +170,19 @@ public class Rooms implements Serializable{
 		String returnString = "";
 
 		//Add Guide Line
-		returnString += "---------------------------------------\n";
+		returnString += "--------------------------------------------------\n";
 
 		//Add Room Name
-		returnString += "Room Floor:\n" + getRoomFloor() + "\n\n";
+		returnString += "Floor: " + getRoomFloor() + "\n\n";
 
 		//Add Room Description
-		returnString += "Room Description:\n" + getRoomDescription() + "\n\n";
+		returnString += getRoomDescription() + "\n\n";
 
 		//Add Direction
-		returnString += "Direction:\n" + getRoomConnection() + "\n";
+		returnString += "Exits: " + getRoomConnection() + "\n";
 
 		//Add Guide Line
-		returnString += "---------------------------------------";
+		returnString += "--------------------------------------------------";
 
 		return returnString;
 	}

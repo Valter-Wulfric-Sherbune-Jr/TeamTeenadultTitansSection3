@@ -52,7 +52,7 @@ public class GameManager{
 		System.out.println("Choose the game folder that you want to use:");	
 
 		for(String gamefolder : gameList) {
-			System.out.println(gamefolder);
+			System.out.println(" - " + gamefolder);
 		}
 
 		String userFolderChoice = getUserInput();
@@ -67,8 +67,11 @@ public class GameManager{
 				}
 		}
 
-		if(vaildChoice == false) {
-			System.out.println("Invalid Game Folder");
+		if(vaildChoice == true) {
+			System.out.println("\nFolder \"" + userFolderChoice + "\" selected.\n" );
+		}
+		else {
+			System.out.println("\nInvalid game folder, please try again.\n");
 			setGameFolder();
 		}
 	}
@@ -236,16 +239,36 @@ public class GameManager{
 		//Debug Save later
 		//saveGame("S1",player);
 
-		System.out.println("New Game Created");
-		System.out.println("\nPrivate your mission is to investigate this building and clear out all enemy");
-		System.out.println("You jumped out of the plane and landed on the roof");
+		System.out.println("\nNew Game Created");
+		System.out.println("====================================================\n");
+		System.out.println("EMPYREAN, a multinational conglomerate, has recently"
+				+ "\nhad a major incident in one of their remote research"
+				+ "\nfacilities. A new iteration of their Incumbent-Class"
+				+ "\nA.I. systems used for information warfare has gone"
+				+ "\nagainst its protocols, and has done major damage"
+				+ "\nwithin the sector it resides in."
+				+ "\n\nSecurity protocols and countermeasures have been"
+				+ "\nenacted in order to quarantine the subject, and to"
+				+ "\nprevent its influence on sector systems. However,"
+				+ "\nmany machines/networks are still unresponsive, and"
+				+ "\nare considered to be highly dangerous given their"
+				+ "\nrogue nature."
+				+ "\n\nThe company doesn’t want to risk any unnecessary"
+				+ "\nresources or agents to get this issue resolved so"
+				+ "\nthey're sending you, one of their best arbitrators,"
+				+ "\nto fix this mess. You’ll be dropped off at the"
+				+ "\nlocation, and rendezvous with the superintendent"
+				+ "\nconstruct inside the facility. It’s been keeping"
+				+ "\nthe A.I. contained, and it’ll provide you with any"
+				+ "\nadditional information you may want to know.\n");
+		System.out.println("====================================================");
 		System.out.println(player.getCurrentRoom().toString());
 		action();
 	}
 
 	public void action() {
 		if(player.getCurrentRoom().getRoomMonsterId().isEmpty()) {
-			System.out.println("\nWhat will you do?");
+			System.out.println("What will you do?\n");
 			System.out.println("1. Move");
 			System.out.println("2. Search Room");
 			System.out.println("3. Check Inventory");
@@ -253,13 +276,14 @@ public class GameManager{
 
 			String userInput = getUserInput();
 
-			switch(userInput) {
-			case "Move":  case  "1":
-				System.out.print("\nWhat direction you wanna move?\n");
-				System.out.println(player.getCurrentRoom().getRoomConnection());
+			switch(userInput.toLowerCase().trim()) {
+			case "move":  case  "1":
+				System.out.print("\nWhich direction do you want to move?\n");
+				System.out.println("Exits: " + player.getCurrentRoom().getRoomConnection());
 				String roomDirection = getUserInput();
 				if(player.getCurrentRoom().getRoomNavigationList().get(roomDirection) == null) {
-					System.out.println("\nInvalid Input");
+					System.out.println("\nYou can't go that way!");
+					System.out.println("--------------------------------------------------");
 					action();
 					break;
 				}
@@ -270,57 +294,60 @@ public class GameManager{
 					action();
 				}
 				break;
-			case "Search Room":  case  "2":
+			case "search room": case "search": case "2":
 				if(!player.getCurrentRoom().getRoomItemId().isEmpty()) {
 
 					for(Iterator<String> iterator = player.getCurrentRoom().getRoomItemId().iterator(); iterator.hasNext();) {
 						String itemId = iterator.next();
 						Items itemObject = itemList.get(itemId);
 						itemObject = itemList.get(itemId);
-						System.out.println("\nYou found a " + itemObject.getItemName());
+						System.out.println("\nYou found a " + itemObject.getItemName() + ".");
 						System.out.println("Do you want to pick it up?");
-						System.out.println("1.Yes");
-						System.out.println("2.No");
+						System.out.println("1. Yes");
+						System.out.println("2. No");
 						String choice = getUserInput();
-						switch(choice) {
-						case "Yes": case "1":
+						switch(choice.toLowerCase().trim()) {
+						case "yes": case "1":
 							iterator.remove();
-							System.out.println("\nYou added it to your inventory");
+							System.out.println("\nYou picked up the " + itemObject.getItemName() + ".");
 							player.addItemToInventory(itemObject);
 							break;
-						case "No": case "2":
-							System.out.println("\nYou decided not to pick it up");
+						case "no": case "2":
+							System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
 							break;
 						}
 
 					}
 				}
 				else if(player.getCurrentRoom().getRoomItemId().isEmpty()){
-					System.out.println("\nYou search, but you found nothing in this room");
+					System.out.println("\nYou search the room, but find nothing of interest.");
 				}
 				else {
-					System.out.println("\nError Searching Room");
+					System.out.println("\nError searching room.");
 				}
 				action();
 				break;
-			case "Check Inventory" :  case  "3":
+			case "check inventory": case "check": case "inventory": case "3":
 				if(!player.getInventoryList().isEmpty()) {
 					inventoryMenu();
 				}
 				else if(player.getInventoryList().isEmpty()){
-					System.out.println("\nYou have nothing in your inventory");
+					System.out.println("\nYou have nothing in your inventory.");
 				}
 				else {
-					System.out.println("\nError Checking Item");
+					System.out.println("\nError checking inventory.");
 				}
 				action();
 				break;
-			case "Get Room Description" :  case  "4":
+			case "get room description": case "get": case "description": case "look": case "4":
 				System.out.println(player.getCurrentRoom().toString());
 				action();
 				break;
+			case "help":
+				action();
+				break;
 			default:
-				System.out.println("\nWrong Command inputed");
+				System.out.println("\nInvalid command: " + userInput);
 				action();
 				break;
 			}
@@ -329,7 +356,6 @@ public class GameManager{
 		}
 		else if(!player.getCurrentRoom().getRoomMonsterId().isEmpty()){
 			System.out.println("\nYou encounter a monster");
-			System.out.println("You enter combat with the monster");
 			System.out.println("You enter combat with the monster");
 			combatMenu();
 		}
@@ -345,7 +371,7 @@ public class GameManager{
 			System.out.println(item.getItemName());			
 		}
 
-		System.out.println("\nWhat will you do?");
+		System.out.println("What will you do?\n");
 		System.out.println("1. Examine Item");
 		System.out.println("2. Drop Item");
 		System.out.println("3. Use Item");
