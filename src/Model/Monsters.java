@@ -98,6 +98,26 @@ class Monsters implements Serializable{
 	public void takeDmg(int dmg) {
 		monsterHealth = (monsterHealth - dmg);
 	}
+	
+	public boolean attackHit() {
+		double chance = Math.random() * 100;
+		System.out.println("Monster has " + monsterHitPercentage + " percentage, chance -" + chance);
+		
+		if ((chance -= monsterHitPercentage*100) < 0) 
+			return true;
+		else 
+			return false;	
+	}
+	public int attackPlayer() {
+		if(attackHit() == true) {
+			System.out.println("The monster successfully hit you");
+			return monsterDamage;
+		}
+		else{
+			System.out.println("The monster attacked and missed you");
+			return 0;
+		}
+	}
 
 	public String toString() {
 		String returnString = "";
@@ -107,9 +127,6 @@ class Monsters implements Serializable{
 
 		//Add Monster Name
 		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
-
-		//Add Monster ID
-		returnString += "Monster ID:\n" + getMonsterId() + "\n\n";
 
 		//Add Monster Description
 		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
