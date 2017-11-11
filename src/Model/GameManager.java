@@ -1,8 +1,12 @@
 package Model;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +24,7 @@ public class GameManager{
 	private HashMap<String, Items> itemList = new HashMap<String, Items>();
 	private HashMap<String, Monsters> monsterList = new HashMap<String, Monsters>();
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
+	private HashMap<Integer, SaveData> saveList = new HashMap<Integer, SaveData>();
 	private Players player;
 
 	//Get User Input
@@ -227,17 +232,119 @@ public class GameManager{
 		}
 	}
 
+	public void setSaveList() {
+		String folderPath = gameFolder + "Save/";
+		try {	
+			File folder = new File(folderPath);
+			File[] listOfFiles = folder.listFiles();
+			String fileName = null;
+			for (File file : listOfFiles) {
+				if (file.isFile()) {
+					fileName = file.getName();
+					folderPath = gameFolder + "Save/" + fileName;
+					try(ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath)))
+					{
+						while(true) {
+							SaveData saveObj = (SaveData) (objInput.readObject());
+							System.out.println(saveObj.getSaveId());
+							if(saveList.get(saveObj.getSaveId()) == null) {
+								saveList.put(saveObj.getSaveId(), saveObj);
+							}else {
+								System.out.println("Error: Duplicate Save Data ID " + fileName + " with save id " + saveObj.getSaveId());
+							}
+						} 
+					}
+					catch(Exception e)
+					{
+						
+					}
+
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Error in "+ "Save folder" + ":/n" + e.toString());
+		}	
+	}
+
+	public void displaySaveList() {
+		System.out.println("\nSave Data:");
+		for(int x = 1; x <= 10;x++) {
+			if(saveList.get(x) != null) {
+				System.out.println(x + ". Name: " + saveList.get(x).getPlayerData().getPlayerName()
+						+ " Time: " + saveList.get(x).getPlayerData().getGameTime() + " Room: " + saveList.get(x).getPlayerData().getCurrentRoom().getRoomId());
+			}
+			else {
+				System.out.println(x + ". Empty");
+			}
+		}
+	}
+
+	public void save() {
+		boolean loop = true;
+		while(loop) {
+			displaySaveList();
+			System.out.println("\nChoose the slot you wanna save in or press e to exit");
+			String userInput = getUserInput();
+			if(userInput.equals("e")) {
+				loop = false;
+			}else {
+				try {
+
+					int userInputInt = Integer.parseInt(userInput);
+					SaveData data = new SaveData(userInputInt,player,itemList,monsterList,roomList);
+					if(userInputInt >= 1 && userInputInt <= 10) {
+						ObjectOutputStream out =new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ userInputInt +".dat"));
+						
+						if(saveList.get(userInputInt) == null) {
+							player.endGameTime();
+							saveList.put(userInputInt,data);
+							out.writeObject(data);
+							player.startGameTime();
+							System.out.println("Save Successful");
+						}else {
+							System.out.println("Do you wanna overwrite your existing data?");
+							System.out.println("1. Yes");
+							System.out.println("2. No");
+							switch(getUserInput().toLowerCase()) {
+							case "yes": case "1":
+								player.endGameTime();
+								saveList.remove(userInputInt);
+								saveList.put(userInputInt,data);
+								out.writeObject(data);
+								player.startGameTime();
+								System.out.println("Save Successful");
+								break;
+							case "no" : case "2":
+								System.out.println("Save Unsuccessful");
+								break;
+							default:
+								System.out.println("Invalid Input");
+								break;
+							}
+						}
+
+					}
+					else {
+						System.out.println("Invalid Input");
+					}
+				}catch(Exception e) {
+					System.out.println("Invalid Input");
+				}
+			}
+		}
+	}
+
 	public void newGame() {
 		setGameFolder();
 		makeListObject(gameFolder,"Item/");
 		makeListObject(gameFolder,"Monster/");
 		makeListObject(gameFolder,"Room/");
-
+		setSaveList();
 		System.out.println("Please choose your name:");
 		String playerName = getUserInput();
 		player = new Players(playerName,100,itemList.get("I01"),0,roomList.get("R01"));
-		//Debug Save later
-		//saveGame("S1",player);
+		player.startGameTime();
 
 		System.out.println("\nNew Game Created");
 		System.out.println("====================================================\n");
@@ -271,13 +378,15 @@ public class GameManager{
 		if(player.getCurrentRoom().getRoomMonsterId().isEmpty()) {
 			System.out.println("What will you do?\n");
 			System.out.println("1. Move");
-			System.out.println("2. Search Room");
+			System.out.println("2. Examine Room");
 			System.out.println("3. Check Inventory");
+			System.out.println("4. Save Game");
+			System.out.println("5. Exit Game");
 
 			String userInput = getUserInput();
 
 			switch(userInput.toLowerCase().trim()) {
-			case "move": case "m": case  "1":
+			case "move": case  "1":
 				System.out.print("\nWhich direction do you want to move?\n");
 				System.out.println("Exits: " + player.getCurrentRoom().getRoomConnection());
 				String roomDirection = getUserInput();
@@ -293,7 +402,7 @@ public class GameManager{
 					action();
 				}
 				break;
-			case "examine room": case "search room": case "examine": case "search": case "look": case "e": case "s": case "l": case "2":
+			case "examine room": case "2":
 				System.out.println(player.getCurrentRoom().toString());
 				if(!player.getCurrentRoom().getRoomItemId().isEmpty()) {
 					for(Iterator<String> iterator = player.getCurrentRoom().getRoomItemId().iterator(); iterator.hasNext();) {
@@ -328,7 +437,7 @@ public class GameManager{
 				}
 				action();
 				break;
-			case "check inventory": case "check": case "c": case "inventory": case "i": case "3":
+			case "check inventory": case "3":
 				if(!player.getInventoryList().isEmpty()) {
 					inventoryMenu();
 				}
@@ -340,9 +449,10 @@ public class GameManager{
 				}
 				action();
 				break;
-			case "help": case "h": case "commands":
+			case "save game": case "4":		
+				save();
 				action();
-				break;
+						break;
 			default:
 				System.out.println("\nInvalid command: " + userInput);
 				action();
@@ -492,7 +602,7 @@ public class GameManager{
 			action();
 			break;
 		}
-		
+
 	}
 
 }
