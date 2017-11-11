@@ -45,8 +45,8 @@ class Items implements Serializable{
 		return itemType;
 	}
 
-	public String getItemActionValue() {
-		return itemActionValue;
+	public int getItemActionValue() {
+		return Integer.parseInt(itemActionValue);
 	}
 
 	public int getItemUsageTime() {

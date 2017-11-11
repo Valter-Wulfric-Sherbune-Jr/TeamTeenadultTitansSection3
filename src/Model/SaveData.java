@@ -5,35 +5,37 @@ import java.util.HashMap;
 
 public class SaveData implements Serializable{
 
-	private String saveId;
-	private String gameFolder;
+	private int saveId;
 	private Players playerData;
 	private HashMap<String, Items> itemList;
 	private HashMap<String, Monsters> monsterList;
 	private HashMap<String, Rooms> roomList;
 
-	public SaveData() {
-	}
 
-	public SaveData(String saveId, String gameFolder, Players playerData, HashMap<String, Items> itemList,
+	public SaveData(int saveId, Players playerData, HashMap<String, Items> itemList,
 			HashMap<String, Monsters> monsterList, HashMap<String, Rooms> roomList) {
 		super();
 		this.saveId = saveId;
-		this.gameFolder = gameFolder;
 		this.playerData = playerData;
 		this.itemList = itemList;
 		this.monsterList = monsterList;
 		this.roomList = roomList;
 	}
 
-
-
-	public String getSaveId() {
+	public int getSaveId() {
 		return saveId;
 	}
 
-	public void setsaveId(String saveId) {
+	public void setSaveId(int saveId) {
 		this.saveId = saveId;
+	}
+
+	public Players getPlayerData() {
+		return playerData;
+	}
+
+	public void setPlayerData(Players playerData) {
+		this.playerData = playerData;
 	}
 
 	public HashMap<String, Items> getItemList() {
@@ -50,6 +52,14 @@ public class SaveData implements Serializable{
 
 	public void setMonsterList(HashMap<String, Monsters> monsterList) {
 		this.monsterList = monsterList;
+	}
+
+	public HashMap<String, Rooms> getRoomList() {
+		return roomList;
+	}
+
+	public void setRoomList(HashMap<String, Rooms> roomList) {
+		this.roomList = roomList;
 	}
 
 }

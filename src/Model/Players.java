@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,6 +13,9 @@ public class Players implements Serializable{
 	private int playerScore;
 	private ArrayList<Items> inventoryList;
 	private Rooms currentRoom;
+	private Rooms previousRoom;
+	private long time;
+	private long startTime;
 
 
 	public Players() {
@@ -29,6 +33,7 @@ public class Players implements Serializable{
 		this.playerScore = playerScore;
 		this.currentRoom = currentRoom;
 		this.inventoryList = new ArrayList<Items>();
+		this.time = 0;
 	}
 
 	public void setPlayerName(String playerName) {
@@ -76,7 +81,12 @@ public class Players implements Serializable{
 	}
 
 	public void setCurrentRoom(String roomId, HashMap<String, Rooms> RoomList) {
+		this.previousRoom = getCurrentRoom();
 		this.currentRoom = RoomList.get(roomId);
+	}
+	
+	public Rooms getPreviousRoom() {
+		return previousRoom;
 	}
 
 	public ArrayList<Items> getInventoryList() {
@@ -118,5 +128,16 @@ public class Players implements Serializable{
 	public void unequipWeapon(HashMap<String, Items> ItemList) {		
 		addItemToInventory(getWeapon());
 		this.weapon = null;
+	}
+	
+	public void startGameTime() {
+		startTime = System.currentTimeMillis();
+	}
+	public void endGameTime() {
+		this.time += (System.currentTimeMillis() - startTime) / 1000;
+	}
+	public String getGameTime() {
+		DecimalFormat form = new DecimalFormat("##.##");
+		return form.format(time);
 	}
 }
