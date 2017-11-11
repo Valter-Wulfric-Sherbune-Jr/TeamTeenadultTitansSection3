@@ -253,13 +253,13 @@ public class GameManager{
 				+ "\nmany machines/networks are still unresponsive, and"
 				+ "\nare considered to be highly dangerous given their"
 				+ "\nrogue nature."
-				+ "\n\nThe company doesn’t want to risk any unnecessary"
+				+ "\n\nThe company doesnâ€™t want to risk any unnecessary"
 				+ "\nresources or agents to get this issue resolved so"
 				+ "\nthey're sending you, one of their best arbitrators,"
-				+ "\nto fix this mess. You’ll be dropped off at the"
+				+ "\nto fix this mess. Youâ€™ll be dropped off at the"
 				+ "\nlocation, and rendezvous with the superintendent"
-				+ "\nconstruct inside the facility. It’s been keeping"
-				+ "\nthe A.I. contained, and it’ll provide you with any"
+				+ "\nconstruct inside the facility. Itâ€™s been keeping"
+				+ "\nthe A.I. contained, and itâ€™ll provide you with any"
 				+ "\nadditional information you may want to know.\n");
 		System.out.println("====================================================");
 		System.out.println(player.getCurrentRoom().toString());
@@ -440,20 +440,56 @@ public class GameManager{
 	}
 
 	public void combatMenu() {
+		Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonsterId().get(0));
 		System.out.println("\nWhat will you do?");
 		System.out.println("1. Attack");
 		System.out.println("2. Defend");
 		System.out.println("3. Examine Monster");
-		System.out.println("4. Run Away");
-		
+		System.out.println("4. View Inventory");
+		System.out.println("5. Run Away");
+
 		String userInput = getUserInput();
-		
+
 		switch(userInput) {
 		case "Attack" : case "1":
+			System.out.println("You attack the monster");
+			System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
+			System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
+			monster.takeDmg(player.getWeapon().getItemActionValue());
+
+
+			if(monster.getMonsterHealth() <= 0) {
+				System.out.println("You have slain the monster");
+				player.getCurrentRoom().removeRoomMonsterId(monster.getMonsterId());
+				action();
+				break;
+			}
+
+			System.out.println("The monster attack you");
+			System.out.println("You took " + monster.attackPlayer() + " damage");
+			combatMenu();
 			break;
 		case "Defend" : case "2":
+			System.out.println("You defended against the monster attack!");
+			combatMenu();
 			break;
-		case "Run Away" : case "3":
+		case "Examine Monster" : case "3":
+			System.out.println(monster.toString());
+			combatMenu();
+			break;
+		case "View Inventory" : case "4":
+			int previousHealth = player.getPlayerHealth();
+			inventoryMenu();
+			if(player.getPlayerHealth() > previousHealth) {
+				System.out.println("test");
+				break;
+			}
+			combatMenu();
+			break;
+		case "Run Away" : case "5":
+			System.out.println("You ran away from the monster");
+			player.setCurrentRoom(player.getPreviousRoom().getRoomId(), roomList);
+			action();
 			break;
 		}
 		
