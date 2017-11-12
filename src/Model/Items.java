@@ -81,7 +81,7 @@ class Items implements Serializable{
 		String returnString = "";
 
 		//Add Guide Line
-		returnString += "---------------------------------------\n";
+		returnString += "--------------------------------------------------\n";
 
 		//Add Item Name
 		returnString += "Item Name:\n" + getItemName() + "\n\n";
@@ -100,9 +100,6 @@ class Items implements Serializable{
 
 		//Add Item Hit Percentage
 		returnString += "Item Usage Time:\n" + getItemUsageTime() + "\n";
-
-		//Add Guide Line
-		returnString += "---------------------------------------";
 
 		return returnString;
 	}
