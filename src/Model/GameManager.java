@@ -246,7 +246,6 @@ public class GameManager{
 					{
 						while(true) {
 							SaveData saveObj = (SaveData) (objInput.readObject());
-							System.out.println(saveObj.getSaveId());
 							if(saveList.get(saveObj.getSaveId()) == null) {
 								saveList.put(saveObj.getSaveId(), saveObj);
 							}else {
@@ -256,7 +255,7 @@ public class GameManager{
 					}
 					catch(Exception e)
 					{
-						
+
 					}
 
 				}
@@ -280,9 +279,45 @@ public class GameManager{
 		}
 	}
 
+	public void load() {
+		boolean loop = true;
+		while(loop) {
+			saveList.clear();
+			setSaveList();
+			displaySaveList();
+			System.out.println("\nChoose the slot you wanna load or press e to exit");
+			String userInput = getUserInput();
+			if(userInput.equals("e")) {
+				loop = false;
+			}else {
+
+				int userInputInt = Integer.parseInt(userInput);
+				if(userInputInt >= 1 && userInputInt <= 10) {
+					if(saveList.get(userInputInt) != null) {
+						player = saveList.get(userInputInt).getPlayerData();
+						monsterList = saveList.get(userInputInt).getMonsterList();
+						roomList = saveList.get(userInputInt).getRoomList();
+						itemList = saveList.get(userInputInt).getItemList();
+						System.out.println("Load Successful");
+						action();
+					}else {
+						System.out.println("Pick a valid save");
+					}
+				}
+				else {
+					System.out.println("Invalid Input");
+				}
+
+			}
+
+		}
+	}
+
 	public void save() {
 		boolean loop = true;
 		while(loop) {
+			saveList.clear();
+			setSaveList();
 			displaySaveList();
 			System.out.println("\nChoose the slot you wanna save in or press e to exit");
 			String userInput = getUserInput();
@@ -295,7 +330,7 @@ public class GameManager{
 					SaveData data = new SaveData(userInputInt,player,itemList,monsterList,roomList);
 					if(userInputInt >= 1 && userInputInt <= 10) {
 						ObjectOutputStream out =new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ userInputInt +".dat"));
-						
+
 						if(saveList.get(userInputInt) == null) {
 							player.endGameTime();
 							saveList.put(userInputInt,data);
@@ -360,13 +395,13 @@ public class GameManager{
 				+ "\nmany machines/networks are still unresponsive, and"
 				+ "\nare considered to be highly dangerous given their"
 				+ "\nrogue nature."
-				+ "\n\nThe company doesn’t want to risk any unnecessary"
+				+ "\n\nThe company doesnâ€™t want to risk any unnecessary"
 				+ "\nresources or agents to get this issue resolved so"
 				+ "\nthey're sending you, one of their best arbitrators,"
-				+ "\nto fix this mess. You’ll be dropped off at the"
+				+ "\nto fix this mess. Youâ€™ll be dropped off at the"
 				+ "\nlocation, and rendezvous with the superintendent"
-				+ "\nconstruct inside the facility. It’s been keeping"
-				+ "\nthe A.I. contained, and it’ll provide you with any"
+				+ "\nconstruct inside the facility. Itâ€™s been keeping"
+				+ "\nthe A.I. contained, and itâ€™ll provide you with any"
 				+ "\nadditional information you may want to know.\n");
 		System.out.println("====================================================");
 		System.out.println(player.getCurrentRoom().toString());
@@ -452,7 +487,21 @@ public class GameManager{
 			case "save game": case "4":		
 				save();
 				action();
-						break;
+				break;
+			case "exit game": case "5":		
+				System.out.println("Are you sure you wanna quit?");
+				System.out.println("1. Yes");
+				System.out.println("2. No");
+				switch(getUserInput().toLowerCase()) {
+				case "yes": case "1":	
+					//Add code to get back to main menu
+					break;
+				case "no": case "2":
+					action();
+					break;
+				}
+
+				break;
 			default:
 				System.out.println("\nInvalid command: " + userInput);
 				action();
@@ -477,8 +526,8 @@ public class GameManager{
 		for(Items item: player.getInventoryList()) {
 			System.out.println(item.getItemName());			
 		}
-
-		System.out.println("What will you do?\n");
+		System.out.println(player.getWeapon().getItemName() + "(Currently Equipped Weapon)");
+		System.out.println("\nWhat will you do?");
 		System.out.println("1. Examine Item");
 		System.out.println("2. Drop Item");
 		System.out.println("3. Use Item");
@@ -538,6 +587,42 @@ public class GameManager{
 		case "Use Item" : case "3":
 			break;
 		case "Equip Item" : case "4":
+			ArrayList<Items> weaponList = new ArrayList<Items>();
+			for(Items item: player.getInventoryList()) {
+				if(item.getItemType().equals("Weapon")) {
+					weaponList.add(item);	
+				}
+			}
+			if(!weaponList.isEmpty()) {
+					System.out.println("Choose the weapon you wanna equip:");
+					for(Items item: player.getInventoryList()) {
+						if(item.getItemType().equals("Weapon")) {
+							System.out.println(item.getItemName());		
+						}
+					}
+					itemName = getUserInput();
+					foundItem = false;
+					search:
+						for(Iterator<Items> iterator = weaponList.iterator(); iterator.hasNext();) {
+							Items itemIterator = iterator.next();
+							String userWeapon = itemIterator.getItemName();
+							if(itemName.equalsIgnoreCase(userWeapon)) {
+								foundItem = true;
+								player.equipWeapon(itemIterator.getItemId(), itemList);
+								System.out.println("\nYou have equip the " + userWeapon);
+								inventoryMenu();
+								break search;
+							}
+						}
+					if(foundItem == false) {
+						System.out.println("\nInvalid Input");
+						inventoryMenu();
+					}
+			}
+			else {
+				System.out.println("There is no available weapon to equip");
+				inventoryMenu();
+			}
 			break;
 		case "Quit" : case "5":
 			break;
