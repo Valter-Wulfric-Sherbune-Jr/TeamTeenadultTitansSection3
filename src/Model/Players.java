@@ -99,9 +99,9 @@ public class Players implements Serializable{
 	
 	public void removeItemFromInventory(String itemId) {
 		boolean remove = false;
-		search:
+		search:		
 		for(int x = 0; x < inventoryList.size(); x++) {
-			if(inventoryList.get(x).getItemId() == itemId) {
+			if(inventoryList.get(x).getItemId().equalsIgnoreCase(itemId)) {
 				inventoryList.remove(x);
 				remove = true;
 				break search;
@@ -115,13 +115,11 @@ public class Players implements Serializable{
 	public void equipWeapon(String itemId, HashMap<String, Items> ItemList) {
 		if(weapon == null) {
 			setWeapon(itemId, ItemList);
-		}
-		else if(weapon != null) {
-			unequipWeapon(ItemList);
-		}
-		else {
 			removeItemFromInventory(itemId);
-			equipWeapon(itemId,ItemList);
+		}
+		else{
+			unequipWeapon(ItemList);
+			equipWeapon(itemId,ItemList);		
 		}
 	}
 	
@@ -131,7 +129,7 @@ public class Players implements Serializable{
 	}
 	
 	public void startGameTime() {
-		startTime = System.currentTimeMillis();
+		this.startTime = System.currentTimeMillis();
 	}
 	public void endGameTime() {
 		this.time += (System.currentTimeMillis() - startTime) / 1000;
