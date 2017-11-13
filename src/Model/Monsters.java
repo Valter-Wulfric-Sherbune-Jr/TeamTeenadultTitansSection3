@@ -101,20 +101,19 @@ class Monsters implements Serializable{
 	
 	public boolean attackHit() {
 		double chance = Math.random() * 100;
-		System.out.println("Monster has " + monsterHitPercentage + " percentage, chance -" + chance);
+		//System.out.println("Monster has " + monsterHitPercentage + " percentage, chance -" + chance);
 		
 		if ((chance -= monsterHitPercentage*100) < 0) 
 			return true;
 		else 
 			return false;	
 	}
+	
 	public int attackPlayer() {
 		if(attackHit() == true) {
-			System.out.println("The monster successfully hit you");
 			return monsterDamage;
 		}
 		else{
-			System.out.println("The monster attacked and missed you");
 			return 0;
 		}
 	}
@@ -123,25 +122,19 @@ class Monsters implements Serializable{
 		String returnString = "";
 
 		//Add Guide Line
-		returnString += "---------------------------------------\n";
+		returnString += "--------------------------------------------------\n";
 
 		//Add Monster Name
-		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
-
-		//Add Monster Description
-		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
+		returnString += getMonsterName() + " - ";
 
 		//Add Monster Health
-		returnString += "Monster Health:\n" + getMonsterHealth() + "\n\n";
+		returnString += "Health: " + getMonsterHealth() + " - ";
 
 		//Add Monster Damage
-		returnString += "Monster Damage:\n" + getMonsterDamage() + "\n\n";
+		returnString += "Damage: " + getMonsterDamage() + "\n\n";
 
-		//Add Monster Hit Percentage
-		returnString += "Monster Hit Percentage:\n" + getMonsterHitPercentage() + "\n";
-
-		//Add Guide Line
-		returnString += "---------------------------------------";
+		//Add Monster Description
+		returnString += getMonsterDesc();
 
 		return returnString;
 	}

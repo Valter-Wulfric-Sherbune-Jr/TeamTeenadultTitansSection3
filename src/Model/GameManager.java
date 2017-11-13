@@ -412,7 +412,7 @@ public class GameManager{
 	public void action() {
 		System.out.println("--------------------------------------------------");
 		if(player.getCurrentRoom().getRoomMonsterId().isEmpty()) {
-			System.out.println("What will you do?\n");
+			System.out.println("MENU - What will you do?\n");
 			System.out.println("1. Move");
 			System.out.println("2. Examine Room");
 			System.out.println("3. Check Inventory");
@@ -474,15 +474,7 @@ public class GameManager{
 				action();
 				break;
 			case "check inventory": case "check": case "inventory": case "3":
-				if(!player.getInventoryList().isEmpty()) {
-					inventoryMenu();
-				}
-				else if(player.getInventoryList().isEmpty()){
-					System.out.println("\nYou have nothing in your inventory.");
-				}
-				else {
-					System.out.println("\nError checking inventory.");
-				}
+				inventoryMenu();
 				action();
 				break;
 			case "save game": case "save": case "4":		
@@ -511,8 +503,8 @@ public class GameManager{
 
 		}
 		else if(!player.getCurrentRoom().getRoomMonsterId().isEmpty()){
-			System.out.println("\nYou encounter a monster");
-			System.out.println("You enter combat with the monster");
+			Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonsterId().get(0));
+			System.out.println("You encounter a " + monster.getMonsterName() + "!");
 			combatMenu();
 		}
 		else {
@@ -524,13 +516,11 @@ public class GameManager{
 		System.out.println("--------------------------------------------------");
 		System.out.println("Inventory:");
 
+		System.out.println(player.getWeapon().getItemName() + " (Equipped)");
 		for(Items item: player.getInventoryList()) {
-			if(item.getItemName() == player.getWeapon().getItemName()){
-				System.out.println(item.getItemName() + " (Equipped)");
-			}else {
 				System.out.println(item.getItemName());
-			}
 		}
+		
 		System.out.println("\nWhat will you do?\n");
 		System.out.println("1. Examine Item");
 		System.out.println("2. Drop Item");
@@ -556,6 +546,12 @@ public class GameManager{
 						break search;
 					}
 				}
+			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName())) {
+				foundItem = true;
+				System.out.println(player.getWeapon().toString());
+				inventoryMenu();
+				break;
+			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
@@ -573,16 +569,16 @@ public class GameManager{
 						iterator.remove();
 						player.getCurrentRoom().addRoomItemId(itemIterator.getItemId());
 						System.out.println("\nYou drop the " + itemIterator.getItemName());
-						if(player.getInventoryList().isEmpty()) {
-							System.out.println("Your inventory is empty.");
-							action();
-						}
-						else {
-							inventoryMenu();
-						}
+						inventoryMenu();
 						break search;
 					}
 				}
+			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName()))
+			{
+				foundItem = true;
+				System.out.println("\nYou can't drop your equipped weapon!");
+				inventoryMenu();
+			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
@@ -598,7 +594,7 @@ public class GameManager{
 				}
 			}
 			if(!weaponList.isEmpty()) {
-					System.out.println("Select the weapon you want to equip:");
+					System.out.println("\nSelect the weapon you want to equip:");
 					for(Items item: player.getInventoryList()) {
 						if(item.getItemType().equals("Weapon")) {
 							System.out.println(item.getItemName());		
@@ -624,7 +620,7 @@ public class GameManager{
 					}
 			}
 			else {
-				System.out.println("You don't have any weapons");
+				System.out.println("\nYou don't have any weapons");
 				inventoryMenu();
 			}
 			break;
@@ -640,58 +636,63 @@ public class GameManager{
 
 	public void combatMenu() {
 		Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonsterId().get(0));
-		System.out.println("\nWhat will you do?");
+		
+		System.out.println("--------------------------------------------------");
+		System.out.println("COMBAT - What will you do?\n");
 		System.out.println("1. Attack");
 		System.out.println("2. Defend");
 		System.out.println("3. Examine Monster");
-		System.out.println("4. View Inventory");
+		System.out.println("4. Check Inventory");
 		System.out.println("5. Run Away");
 
 		String userInput = getUserInput();
 
-		switch(userInput) {
-		case "Attack" : case "1":
-			System.out.println("You attack the monster");
-			System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
-			System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
+		switch(userInput.toLowerCase().trim()) {
+		case "attack": case "1":
+			System.out.println("\nYou attack the " + monster.getMonsterName() + "!");
+			System.out.println("The " + monster.getMonsterName() + " took " + player.getWeapon().getItemActionValue() + " damage!");
 			monster.takeDmg(player.getWeapon().getItemActionValue());
 
-
 			if(monster.getMonsterHealth() <= 0) {
-				System.out.println("You have slain the monster");
+				System.out.println("The " + monster.getMonsterName() + " slumps over, defeated.");
 				player.getCurrentRoom().removeRoomMonsterId(monster.getMonsterId());
 				action();
 				break;
 			}
 
-			System.out.println("The monster attack you");
-			System.out.println("You took " + monster.attackPlayer() + " damage");
+			System.out.println("The " + monster.getMonsterName() + " attacks you!");
+			if(monster.attackPlayer() > 0) {
+				System.out.println("You took " + monster.attackPlayer() + " damage!");
+			}
+			else
+			{
+				System.out.println("The attack missed!");
+			}
+
 			combatMenu();
 			break;
-		case "Defend" : case "2":
-			System.out.println("You defended against the monster attack!");
+		case "defend": case "2":
+			System.out.println("\nYou block the attack and take no damage!");
 			combatMenu();
 			break;
-		case "Examine Monster" : case "3":
+		case "examine monster": case "examine": case "3":
 			System.out.println(monster.toString());
 			combatMenu();
 			break;
-		case "View Inventory" : case "4":
-			int previousHealth = player.getPlayerHealth();
+		case "check inventory": case "check": case "inventory": case "4":
 			inventoryMenu();
-			if(player.getPlayerHealth() > previousHealth) {
-				System.out.println("test");
-				break;
-			}
 			combatMenu();
 			break;
-		case "Run Away" : case "5":
-			System.out.println("You ran away from the monster");
+		case "run away": case "run": case "5":
+			System.out.println("\nYou flee to the previous room.");
 			player.setCurrentRoom(player.getPreviousRoom().getRoomId(), roomList);
 			action();
 			break;
+		default:
+			System.out.println("\nInvalid command");
+			combatMenu();
+			break;	
 		}
-
 	}
 
 }
