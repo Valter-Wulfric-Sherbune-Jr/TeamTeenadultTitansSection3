@@ -262,7 +262,10 @@ public class GameManager{
 			}
 		}
 		catch(Exception e) {
-			System.out.println("Error in "+ "Save folder" + ":/n" + e.toString());
+			File dir = new File(folderPath);
+			dir.mkdir();
+			System.out.println("Error, Save folder do not exist" + e.toString());
+			System.out.println("Creating Save Folder");
 		}	
 	}
 
