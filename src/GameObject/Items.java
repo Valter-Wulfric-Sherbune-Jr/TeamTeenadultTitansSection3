@@ -136,22 +136,16 @@ public class Items implements Serializable{
 //		returnString += "--------------------------------------------------\n";
 //
 //		//Add Item Name
-//		returnString += "Item Name:\n" + getItemName() + "\n\n";
-//
-//		//Add Item ID
-//		returnString += "Item ID:\n" + getItemId() + "\n\n";
-//
-//		//Add Item Description
-//		returnString += "Item Description:\n" + getItemDesc() + "\n\n";
-//
+//		returnString += getItemName() + " - ";
+//	
 //		//Add Item Health
-//		returnString += "Item Type:\n" + getItemType() + "\n\n";
-//
+//		returnString += "Type: " + getItemType() + " - ";
+//		
 //		//Add Item Damage
-//		returnString += "Item Action Value:\n" + getItemActionValue() + "\n\n";
-//
-//		//Add Item Hit Percentage
-//		returnString += "Item Usage Time:\n" + getItemAmount() + "\n";
+//		returnString += "Damage:  " + getItemActionValue() + "\n\n";
+//		
+//		//Add Item Description
+//		returnString +=  getItemDesc();
 //
 //		return returnString;
 //	}
