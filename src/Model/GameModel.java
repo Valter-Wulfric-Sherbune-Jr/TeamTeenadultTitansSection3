@@ -452,7 +452,6 @@ public class GameModel{
 		String playerName = getUserInput();
 		player = new Players(playerName,100,itemList.get("I01"),0,roomList.get("R01"));
 		player.setPlayerName(playerName);
-		player.addItemToInventory(itemList.get("I01"));
 		player.addItemToInventory(itemList.get("I18"));
 		player.setCurrentRoom(roomList.get("R01"));
 		player.startGameTime();
@@ -596,12 +595,9 @@ public class GameModel{
 	}
 	
 	public void showInventoryItem() {
+		System.out.println(player.getWeapon().getItemName() + " (Equipped)");
 		for(Items item: player.getInventoryList()) {
-			if(item.getItemName() == player.getWeapon().getItemName()){
-				System.out.println(item.getItemName() + " (Equipped)");
-			}else {
-				System.out.println(item.getItemName());
-			}
+			System.out.println(item.getItemName());
 		}
 	}
 
@@ -635,6 +631,12 @@ public class GameModel{
 						break search;
 					}
 				}
+			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName())) {
+				foundItem = true;
+				System.out.println(player.getWeapon().toString());
+				inventoryMenu();
+				break;
+			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
@@ -652,16 +654,17 @@ public class GameModel{
 						iterator.remove();
 						player.getCurrentRoom().addRoomItem(itemList.get(itemIterator.getItemId()));
 						System.out.println("\nYou drop the " + itemIterator.getItemName());
-						if(player.getInventoryList().isEmpty()) {
-							System.out.println("Your inventory is empty.");
-							action();
-						}
-						else {
-							inventoryMenu();
-						}
+						inventoryMenu();
 						break search;
 					}
 				}
+			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName())&&foundItem == false)
+			{
+				foundItem = true;
+				System.out.println("\nYou can't drop your equipped weapon!");
+				inventoryMenu();
+				break;
+			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
@@ -686,7 +689,7 @@ public class GameModel{
 				}
 			}
 			if(!weaponList.isEmpty()) {
-				System.out.println("Select the weapon you want to equip:");
+				System.out.println("\nSelect the weapon you want to equip:");
 				for(Items item: player.getInventoryList()) {
 					if(item.getItemType().equals("Weapon")) {
 						System.out.println(item.getItemName());		
