@@ -175,19 +175,16 @@ public class Monsters implements Serializable{
 		String returnString = "";
 
 		//Add Guide Line
-		returnString += "---------------------------------------\n";
+		returnString += "--------------------------------------------------\n";
 
 		//Add Monster Name
-		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
-
-		//Add Monster Description
-		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
+		returnString += getMonsterName() + " - ";
 
 		//Add Monster Health
-		returnString += "Monster Health:\n" + getMonsterCurrentHealth() + "\n\n";
-
-		//Add Guide Line
-		returnString += "---------------------------------------";
+		returnString += "Health: " + getMonsterCurrentHealth() + "/" + getMonsterMaxHealth() + "\n\n";
+		
+		//Add Monster Description
+		returnString += getMonsterDesc();
 
 		return returnString;
 	}
