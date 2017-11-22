@@ -883,7 +883,6 @@ public class GameModel{
 							System.out.println("You don't have any ammo for your weapon");
 						}else {
 							System.out.println("You attack the monster");
-							System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
 							player.useWeaponAmmo(player.getWeapon());
 							System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
 							monsterIterator.takeDmg(player.getWeapon().getItemActionValue());
@@ -923,7 +922,7 @@ public class GameModel{
 			player.getCurrentRoom().getRoomMonster().get(x).setMonsterCurrentHealth(
 					player.getCurrentRoom().getRoomMonster().get(x).getMonsterMaxHealth());
 		}
-		player.setCurrentRoom(roomList.get(player.getPreviousRoom().getRoomId()));
+		player.setCurrentRoom(player.getPreviousRoom());
 	}
 
 	public void puzzleMenu(Rooms room) {
