@@ -3,10 +3,10 @@ RS15 KE-Rifle
 Item ID:
 I06
 Item Description:
-A large and weighty multistage linear motor rifle that fires highvelocity armourpiercing discarding sabot rounds.
+A large and weighty multistage linear motor rifle that fires high velocity armourpiercing discarding sabot rounds.
 Item Type:
 Weapon
 Item Action Value:
 40
-Item Usage Times:
-5
+Item Amount:
+1

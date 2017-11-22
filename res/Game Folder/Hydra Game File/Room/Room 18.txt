@@ -9,7 +9,7 @@ R15:South
 R19:North
 R27:Staircase
 Room Access:
-True
+null
 Room Item:
 I04
 Room Monster:

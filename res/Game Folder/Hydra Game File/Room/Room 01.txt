@@ -8,7 +8,7 @@ Room Connection:
 R02:East
 R03:South
 Room Access:
-True
+null
 Room Item:
 I01
 I04

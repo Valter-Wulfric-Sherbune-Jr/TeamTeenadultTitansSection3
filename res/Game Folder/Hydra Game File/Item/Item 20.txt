@@ -1,12 +1,12 @@
 Item Name:
-SIZ MCXE2 Ammunition
+VECTOR V5 Submachine Gun Ammunition
 Item ID:
 I20
 Item Description:
-Ammo for SIZ MCXE2
+Ammo for VECTOR V5
 Item Type:
-Ammo
+Ammo 
 Item Action Value:
-I04
-Item Usage Times:
-1
+I03
+Item Amount:
+10

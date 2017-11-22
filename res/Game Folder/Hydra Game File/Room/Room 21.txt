@@ -8,7 +8,7 @@ Room Connection:
 R20:North
 R24:West
 Room Access:
-True
+P07:R20
 Room Item:
 I07
 Room Monster:

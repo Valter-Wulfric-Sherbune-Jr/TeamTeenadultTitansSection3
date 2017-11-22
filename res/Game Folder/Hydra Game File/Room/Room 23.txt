@@ -9,7 +9,7 @@ R28:West
 R24:North
 R22:East
 Room Access:
-True
+null
 Room Item:
 I10
 Room Monster:

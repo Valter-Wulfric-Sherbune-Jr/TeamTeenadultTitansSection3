@@ -7,7 +7,7 @@ Localized computing clusters contained in large metal cases with tempered glass 
 Room Connection:
 R23:West
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

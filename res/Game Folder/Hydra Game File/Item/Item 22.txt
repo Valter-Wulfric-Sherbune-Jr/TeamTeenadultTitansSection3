@@ -1,12 +1,12 @@
 Item Name:
-RS15 KE-Rifle Ammunition
+T97 Energy Rifle Ammunition
 Item ID:
 I22
 Item Description:
-Ammo for RS15 KE-Rifle
+Ammo for T97 Energy Rifle
 Item Type:
 Ammo
 Item Action Value:
-I06
-Item Usage Times:
-1
+I05
+Item Amount:
+5

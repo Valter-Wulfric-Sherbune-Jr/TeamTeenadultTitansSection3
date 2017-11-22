@@ -1,0 +1,12 @@
+Puzzle ID:
+P07
+Puzzle Description:
+There is exposed door circuitry with an unfinished area, and the missing section can be translated into a logic gate format. An AND gate and a NOR gate both have inputs of 1 and 0. The outputs from those gates act as inputs for an OR gate, and that OR gates output is then recorded into a NOT gate. What is the final numerical output?
+Puzzle Type:
+Input
+Puzzle Solution:
+1
+Puzzle Hint:
+NOR gates only output 1 if both inputs are 0.
+Puzzle Damage:
+25

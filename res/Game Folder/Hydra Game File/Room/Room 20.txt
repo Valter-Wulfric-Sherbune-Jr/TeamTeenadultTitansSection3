@@ -9,7 +9,7 @@ R21:South
 R25:West
 R29:Staircase
 Room Access:
-True
+P07:R21
 Room Item:
 null
 Room Monster:

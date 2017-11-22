@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+Elevator Key
 Item ID:
-I01
+I13
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+An important looking authorization card. Used to access the underground level.
 Item Type:
-Weapon
+Utility
 Item Action Value:
-5
-Item Usage Times:
-30
+null
+Item Amount:
+1

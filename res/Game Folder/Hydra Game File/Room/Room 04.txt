@@ -9,7 +9,7 @@ R05:North
 R07:East
 R03:Staircase
 Room Access:
-True
+P01:R07
 Room Item:
 I01
 I04

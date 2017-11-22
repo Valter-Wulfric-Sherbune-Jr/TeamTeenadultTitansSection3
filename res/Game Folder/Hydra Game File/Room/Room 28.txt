@@ -8,7 +8,7 @@ Room Connection:
 R23:East
 R27:North
 Room Access:
-True
+null
 Room Item:
 I12
 Room Monster:

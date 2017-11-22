@@ -1,12 +1,12 @@
 Item Name:
-EMH1 Ammunition
+Basement Authorization Card
 Item ID:
 I17
 Item Description:
-Ammo for EMH1
+An important looking authorization card. Used to access the underground level.
 Item Type:
-Ammo
+Utility
 Item Action Value:
-I01
-Item Usage Times:
+null
+Item Amount:
 1

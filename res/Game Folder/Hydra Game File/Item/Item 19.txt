@@ -1,12 +1,12 @@
 Item Name:
-VECTOR V5 Submachine Gun Ammunition
+AAR250 Rail-gun Ammunition
 Item ID:
 I19
 Item Description:
-Ammo for VECTOR V5
+Ammo for AAR250
 Item Type:
-Ammo 
+Ammo
 Item Action Value:
-I03
-Item Usage Times:
-1
+I02
+Item Amount:
+3

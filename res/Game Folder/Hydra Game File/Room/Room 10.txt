@@ -9,7 +9,7 @@ R08:West
 R09:South
 R11:North
 Room Access:
-True
+P02:R09
 Room Item:
 I15
 Room Monster:

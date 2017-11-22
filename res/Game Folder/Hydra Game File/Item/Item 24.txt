@@ -1,12 +1,12 @@
 Item Name:
-LR-255 Missile Launcher Ammunition
+Z110 Light Machine Gun Ammunition
 Item ID:
 I24
 Item Description:
-Ammo for LR-255
+Ammo for Z110
 Item Type:
 Ammo
 Item Action Value:
-I09
-Item Usage Times:
-1
+I08
+Item Amount:
+6

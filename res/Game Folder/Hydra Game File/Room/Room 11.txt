@@ -9,7 +9,7 @@ R06:West
 R10:South
 R00:Elevator
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

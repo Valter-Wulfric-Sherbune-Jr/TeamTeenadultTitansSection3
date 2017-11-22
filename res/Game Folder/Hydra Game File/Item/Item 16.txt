@@ -1,12 +1,12 @@
 Item Name:
-Basement Authorization Card
+ID Card 477
 Item ID:
 I16
 Item Description:
-An important looking authorization card. Used to access the underground level.
+An ID Card to open a door of some sort.
 Item Type:
-Key
+Utility
 Item Action Value:
-29
-Item Usage Times:
+null
+Item Amount:
 1

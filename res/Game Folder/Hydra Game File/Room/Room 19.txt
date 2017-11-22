@@ -8,7 +8,7 @@ Room Connection:
 R17:East
 R18:South
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

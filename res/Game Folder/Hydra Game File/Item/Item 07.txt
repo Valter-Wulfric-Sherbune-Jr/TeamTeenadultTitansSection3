@@ -5,8 +5,8 @@ I07
 Item Description:
 Releases a short burst of electromag-netic energy that can disable smaller foes and hinder larger enemies.
 Item Type:
-Weapon
+Throwable
 Item Action Value:
 40
-Item Usage Times:
-5
+Item Amount:
+1

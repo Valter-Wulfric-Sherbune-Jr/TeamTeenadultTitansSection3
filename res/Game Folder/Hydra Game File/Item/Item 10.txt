@@ -5,8 +5,8 @@ I10
 Item Description:
 Initiates a repair sequences that restores some of your health.  
 Item Type:
-Health
+Healing
 Item Action Value:
 25
-Item Usage Times:
+Item Amount:
 1

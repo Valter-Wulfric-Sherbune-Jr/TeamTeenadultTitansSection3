@@ -9,7 +9,7 @@ R06:North
 R07:South
 R10:East
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

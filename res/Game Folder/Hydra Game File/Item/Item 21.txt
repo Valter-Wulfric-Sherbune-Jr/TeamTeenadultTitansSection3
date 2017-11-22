@@ -1,12 +1,12 @@
 Item Name:
-T97 Energy Rifle Ammunition
+SIZ MCXE2 Ammunition
 Item ID:
 I21
 Item Description:
-Ammo for T97 Energy Rifle
+Ammo for SIZ MCXE2
 Item Type:
 Ammo
 Item Action Value:
-I05
-Item Usage Times:
-1
+I04
+Item Amount:
+7

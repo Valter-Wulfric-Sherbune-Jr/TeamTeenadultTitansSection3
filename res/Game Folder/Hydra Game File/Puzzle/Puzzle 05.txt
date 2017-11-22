@@ -1,0 +1,12 @@
+Puzzle ID:
+P05
+Puzzle Description:
+There is exposed door circuitry with an incomplete area, and the missing section can be translated into a logic gate format. Two AND gates are present with one having inputs 1 and 0 while the other has inputs of 1 and 1. Both those AND gate outputs are then inputted into an OR gate. What is the final numerical output?
+Puzzle Type:
+Input
+Puzzle Solution:
+1
+Puzzle Hint:
+AND gates only output 1 if both inputs are also 1.
+Puzzle Damage:
+25

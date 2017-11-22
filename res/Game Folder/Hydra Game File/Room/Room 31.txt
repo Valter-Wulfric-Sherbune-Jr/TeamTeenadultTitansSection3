@@ -9,7 +9,7 @@ R29:North Left
 R30:North Right
 R32:South
 Room Access:
-True
+P08:R29
 Room Item:
 null
 Room Monster:

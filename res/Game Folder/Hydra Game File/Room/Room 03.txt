@@ -9,7 +9,7 @@ R01:North Left
 R02:North Right
 R04:Staircase
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

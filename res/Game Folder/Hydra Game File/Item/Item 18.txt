@@ -1,12 +1,12 @@
 Item Name:
-AAR250 Rail-gun Ammunition
+EMH1 Ammunition
 Item ID:
 I18
 Item Description:
-Ammo for AAR250
+Ammo for EMH1
 Item Type:
 Ammo
 Item Action Value:
-I02
-Item Usage Times:
-1
+I01
+Item Amount:
+30

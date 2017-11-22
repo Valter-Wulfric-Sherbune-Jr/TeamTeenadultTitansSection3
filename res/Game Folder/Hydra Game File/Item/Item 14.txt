@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+Blue Post-it Note
 Item ID:
-I01
+I14
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+A post-it posted onto a desk near the door. On the note reads passcode 1725
 Item Type:
-Weapon
+Utility
 Item Action Value:
-5
-Item Usage Times:
-30
+null
+Item Amount:
+1

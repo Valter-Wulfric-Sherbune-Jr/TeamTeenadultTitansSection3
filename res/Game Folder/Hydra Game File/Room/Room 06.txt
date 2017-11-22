@@ -9,7 +9,7 @@ R05:South
 R08:South
 R11:East
 Room Access:
-True
+null
 Room Item:
 I17
 Room Monster:

@@ -9,7 +9,7 @@ R13:East
 R15:South
 R17:North
 Room Access:
-True
+P03:R17
 Room Item:
 null
 Room Monster:

@@ -9,7 +9,7 @@ R30:East
 R31:South
 R20:Staircase
 Room Access:
-True
+P08:R31
 Room Item:
 null
 Room Monster:

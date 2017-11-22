@@ -8,7 +8,7 @@ Room Connection:
 R16:South
 R19:West
 Room Access:
-True
+P03:R16
 Room Item:
 I11
 Room Monster:

@@ -1,0 +1,12 @@
+Puzzle ID:
+P04
+Puzzle Description:
+The entrance to the underground level is locked, and it can only be unlocked with the proper authorization card.
+Puzzle Type:
+Item
+Puzzle Solution:
+I17
+Puzzle Hint:
+Card can be found in room 14
+Puzzle Damage:
+null

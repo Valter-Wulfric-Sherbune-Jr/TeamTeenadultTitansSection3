@@ -1,12 +1,12 @@
 Item Name:
-Z110 Light Machine Gun Ammunition
+RS15 KE-Rifle Ammunition
 Item ID:
 I23
 Item Description:
-Ammo for Z110
+Ammo for RS15 KE-Rifle
 Item Type:
 Ammo
 Item Action Value:
-I08
-Item Usage Times:
-1
+I06
+Item Amount:
+5

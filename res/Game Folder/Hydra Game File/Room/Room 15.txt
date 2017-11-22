@@ -9,7 +9,7 @@ R12:East
 R16:North Right
 R18:North Left
 Room Access:
-True
+P05:R12
 Room Item:
 I12
 Room Monster:

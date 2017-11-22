@@ -7,7 +7,7 @@ There is a single computer in this room on a desk. There is very few wires and a
 Room Connection:
 R32:East
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

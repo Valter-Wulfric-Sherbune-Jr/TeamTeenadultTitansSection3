@@ -1,12 +1,12 @@
 Item Name:
-EMH1
+Hacking Tool
 Item ID:
-I01
+I12
 Item Description:
-A semi-automatic energy pistol that is known for its ammunition conserva-tion.
+Allows the user to unlock a door. One-time use. 
 Item Type:
-Weapon
+Utility
 Item Action Value:
-5
-Item Usage Times:
-30
+null
+Item Amount:
+1

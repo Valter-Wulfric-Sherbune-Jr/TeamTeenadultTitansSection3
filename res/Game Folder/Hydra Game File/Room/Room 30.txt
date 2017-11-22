@@ -8,7 +8,7 @@ Room Connection:
 R29:West
 R31:South
 Room Access:
-True
+null
 Room Item:
 I06
 Room Monster:

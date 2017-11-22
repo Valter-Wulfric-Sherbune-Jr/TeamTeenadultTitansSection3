@@ -1,0 +1,12 @@
+Puzzle ID:
+P02
+Puzzle Description:
+The door is locked, and it requires a 6-digit numeric passcode to unlock.
+Puzzle Type:
+Input
+Puzzle Solution:
+975806
+Puzzle Hint:
+Last two digits are 06
+Puzzle Damage:
+5

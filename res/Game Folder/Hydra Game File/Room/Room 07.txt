@@ -8,7 +8,7 @@ Room Connection:
 R04:West
 R08:North
 Room Access:
-True
+P01:R04
 Room Item:
 null
 Room Monster:

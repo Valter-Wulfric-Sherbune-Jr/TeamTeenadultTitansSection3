@@ -8,5 +8,5 @@ Item Type:
 Weapon
 Item Action Value:
 80
-Item Usage Times:
+Item Amount:
 1

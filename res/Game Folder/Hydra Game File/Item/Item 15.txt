@@ -1,12 +1,12 @@
 Item Name:
-Post-it Note 2
+Red Post-it Note
 Item ID:
 I15
 Item Description:
 A post-it posted with a number 975806 on it
 Item Type:
-Note
+Utility
 Item Action Value:
-5
-Item Usage Times:
-0
+null
+Item Amount:
+1

@@ -9,7 +9,7 @@ R21:East
 R23:South
 R25:North
 Room Access:
-True
+null
 Room Item:
 null
 Room Monster:

@@ -1,0 +1,12 @@
+Puzzle ID:
+P03
+Puzzle Description:
+The door is locked, and it requires an ID card to unlock.
+Puzzle Type:
+Item
+Puzzle Solution:
+I16
+Puzzle Hint:
+Located in room 10
+Puzzle Damage:
+null

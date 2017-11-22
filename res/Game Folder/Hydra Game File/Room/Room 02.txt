@@ -9,7 +9,7 @@ R01:West
 R03:South
 R00:Elevator
 Room Access:
-True
+null
 Room Item:
 I10
 Room Monster:

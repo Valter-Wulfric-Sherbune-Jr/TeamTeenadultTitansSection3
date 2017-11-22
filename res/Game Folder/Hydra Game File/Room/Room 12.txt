@@ -9,7 +9,7 @@ R15:West
 R13:North
 R9:Staircase
 Room Access:
-True
+P05:R15
 Room Item:
 null
 Room Monster:

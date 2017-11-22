@@ -1,0 +1,189 @@
+package GameObject;
+
+import java.io.Serializable;
+
+public class Monsters implements Serializable{
+	private String monsterName;
+	private String monsterId;
+	private String monsterDesc;
+	private int monsterHealth;
+	private int monsterDamage;
+	private double monsterHitPercentage;
+
+	//Create Default Object
+	public Monsters() {
+		this.monsterId = "E00";
+		this.monsterName = "Invalid Monster Name";
+		this.monsterDesc = "Invalid Monster Description";
+		this.monsterHealth = 00;
+		this.monsterDamage = 00;
+		this.monsterHitPercentage = 0;
+	}
+
+	//Create Object with set parameter
+	public Monsters(String monsterID, String monsterName, String monsterDesc, int monsterHealth, int monsterDamage,
+			double monsterHitPercentage) {
+		this.monsterId = monsterID;
+		this.monsterName = monsterName;
+		this.monsterDesc = monsterDesc;
+		this.monsterHealth = monsterHealth;
+		this.monsterDamage = monsterDamage;
+		this.monsterHitPercentage = monsterHitPercentage;
+	}
+
+
+	//Set and get monster id
+	public void setMonsterId(String monsterID) {
+		this.monsterId = monsterID;
+	}
+	public String getMonsterId() {
+		return monsterId;
+	}
+
+
+	//Set and get monster name
+	public void setMonsterName(String monsterName) {
+		this.monsterName = monsterName;
+	}
+	public String getMonsterName() {
+		return monsterName;
+	}
+
+
+	//Set and get monster description
+	public void setMonsterDesc(String monsterDesc) {
+		/*If monster description is more then 50 character, then
+		  it'll format the description with a space break; */
+
+		if(monsterDesc.length() > 50) {
+			int totalCharacterLength = 0;
+			int descriptionLength = monsterDesc.length();
+			String outputString ="";
+
+			for (String word : monsterDesc.split(" ")) {
+				totalCharacterLength += word.length();
+				descriptionLength -= word.length()+1;
+				outputString += word + " ";
+
+				if(totalCharacterLength > 40 && descriptionLength > 0) {
+					totalCharacterLength = 0;
+					outputString += "\n";
+				}
+			}
+			monsterDesc = outputString;
+		}
+
+		this.monsterDesc = monsterDesc;
+	}
+	public String getMonsterDesc() {
+		return monsterDesc;
+	}
+
+
+	//Set and get the monster health
+	public void setMonsterHealth(int monsterHealth) {
+		this.monsterHealth = monsterHealth;
+	}
+	public int getMonsterHealth() {
+		return monsterHealth;
+	}
+
+
+	//Set and get monster damage
+	public void setMonsterDamage(int monsterDamage) {
+		this.monsterDamage = monsterDamage;
+	}
+	public int getMonsterDamage() {
+		return monsterDamage;
+	}
+
+
+	//Set and get monster hit percentage
+	public void setMonsterHitPercentage(double monsterHitPercentage) {
+		this.monsterHitPercentage = monsterHitPercentage;
+	}
+	public double getMonsterHitPercentage() {
+		return monsterHitPercentage;
+	}
+
+
+	/*Make the monster attack the player, use in 
+	 *conjection with player method takeDmg 
+	 *
+	 *Uses the method "attackHit"
+	 *
+	 *Function: If hit returns true, then the monster hit you
+	 *else it return 0 damage
+	 */
+	public int attackPlayer() {
+		if(attackHit() == true) {
+			System.out.println("The monster dealt " + monsterDamage + " damage to you");
+			return monsterDamage;
+		}
+		else{
+			System.out.println("The monster attacked and missed you");
+			System.out.println("You take 0 damage");
+			return 0;
+		}
+	}
+
+
+	/*Sub Method of "attackPlayer" 
+	 * 
+	 *YOU DO NOT CALL THIS METHOD ANYWHERE ELSE
+	 */
+	public boolean attackHit() {
+		//Creates a random value between 1 and 100
+		double chance = Math.random() * 100;
+		
+		//copy of monster hit percentage and multiply by a hundred to get a non decimal
+		double monsterHit = monsterHitPercentage*100;
+		
+		/*Minus mosnterHit value with chance
+		 * and if it's greater then or equal to zero
+		 * then the hit percentage falls within the bounds
+		 * and return true, else it return false 
+		 */
+		if ((monsterHit - chance) >= 0) 
+			return true;
+		else 
+			return false;	
+	}
+
+	
+	/*Use for player attack method
+	 *Parameter: Action value of weapon type item
+	 *Function: Gets the damage and subtract it from the monster health
+	 */
+	public void takeDmg(int dmg) {
+		this.monsterHealth = (monsterHealth - dmg);
+	}
+
+	
+//	public String toString() {
+//		String returnString = "";
+//
+//		//Add Guide Line
+//		returnString += "---------------------------------------\n";
+//
+//		//Add Monster Name
+//		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
+//
+//		//Add Monster Description
+//		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
+//
+//		//Add Monster Health
+//		returnString += "Monster Health:\n" + getMonsterHealth() + "\n\n";
+//
+//		//Add Monster Damage
+//		returnString += "Monster Damage:\n" + getMonsterDamage() + "\n\n";
+//
+//		//Add Monster Hit Percentage
+//		returnString += "Monster Hit Percentage:\n" + getMonsterHitPercentage() + "\n";
+//
+//		//Add Guide Line
+//		returnString += "---------------------------------------";
+//
+//		return returnString;
+//	}
+}

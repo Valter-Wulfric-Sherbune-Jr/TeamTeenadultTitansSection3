@@ -1,0 +1,12 @@
+Puzzle ID:
+P06
+Puzzle Description:
+There is an unprotected terminal connected to the door with in-complete circuitry, and the missing section can be translated into a logic gate format. A NAND gate has two inputs of 1. Its output is fed into a NOT gate, and that output is stored into another NOT gate. What is the final numerical output?
+Puzzle Type:
+Input
+Puzzle Solution:
+0
+Puzzle Hint:
+NAND gates only output 0 if both inputs are 1.
+Puzzle Damage:
+25

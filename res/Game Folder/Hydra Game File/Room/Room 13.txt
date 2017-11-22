@@ -9,7 +9,7 @@ R14:North
 R16:West
 R12:South
 Room Access:
-True
+null
 Room Item:
 I13
 Room Monster:

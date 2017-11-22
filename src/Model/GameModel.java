@@ -11,21 +11,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import GameObject.*;
 
-public class GameManager{
+public class GameModel{
 	private Scanner input = new Scanner(System.in);
 	private String gameFolder = "";
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
-			"Item Type:","Item Action Value:","Item Usuage Times:"};
+			"Item Type:","Item Action Value:","Item Amount:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
 			"Monster Health:","Monster Damage:","Monster Hit Percentage:"};
 	private String[] roomCode = {"Room Floor:","Room ID:","Room Description:",
 			"Room Connection:","Room Access:","Room Item:","Room Monster:"};
+	private String[] puzzleCode = {"Puzzle ID:","Puzzle Description:","Puzzle Type:",
+			"Puzzle Solution:","Puzzle Hint:","Puzzle Damage:"};
 	private HashMap<String, Items> itemList = new HashMap<String, Items>();
 	private HashMap<String, Monsters> monsterList = new HashMap<String, Monsters>();
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
+	private HashMap<String, Puzzles> puzzleList = new HashMap<String, Puzzles>();
 	private HashMap<Integer, SaveData> saveList = new HashMap<Integer, SaveData>();
 	private Players player;
+	private boolean doingPuzzle = false;
+
 
 	//Get User Input
 	public String getUserInput() {
@@ -33,7 +39,8 @@ public class GameManager{
 		return input.nextLine();
 	}
 
-	//Get an ArrayList of all the game in the game folder
+
+	//Search and return an ArrayList with all the game in the game folder
 	public ArrayList<String> getGameFolderList(){
 		try {
 			ArrayList<String> gameList = new ArrayList<String>();
@@ -51,18 +58,26 @@ public class GameManager{
 		return null;
 	}
 
-	//Set the game folder to point where to get all the asset from
-	public void setGameFolder() {
-		ArrayList<String> gameList = getGameFolderList();
+
+	/*Set the game folder directory, so game knows where to get all directory from
+	 *For the parameter, you would want to use getGameFolderList() method
+	 */
+	public void setGameFolder(ArrayList<String> gameList) {
 		System.out.println("Choose the game folder that you want to use:");	
 
+		//Print out all the game in the game folder
 		for(String gamefolder : gameList) {
 			System.out.println(" - " + gamefolder);
 		}
 
+		//Prompt for user input
 		String userFolderChoice = getUserInput();
 		boolean vaildChoice = false;
 
+		/*Check to see if user input is valid and set the game folder
+		 *if it finds the game folder then it sets the choice to valid true
+		 *else it stay false
+		 */
 		for(String folder : gameList) {
 			search:
 				if(userFolderChoice.equalsIgnoreCase(folder)) {
@@ -72,16 +87,24 @@ public class GameManager{
 				}
 		}
 
+		//If the userinput matches with game folder, then output what folder was selected
 		if(vaildChoice == true) {
 			System.out.println("\nFolder \"" + userFolderChoice + "\" selected.\n" );
 		}
+		//Call itself if no valid game was found for the user input
 		else {
 			System.out.println("\nInvalid game folder, please try again.\n");
-			setGameFolder();
+			setGameFolder(gameList);
 		}
 	}
 
-	//Make object list of all subfolder
+
+	/*Make object list of all subfolder
+	 *Parameter: require that you already set up the game folder, and a text
+	 *of what subFolder you want to make an object of
+	 *ex: "/Rooms","/Puzzle","/Monsters",/Items"
+	 *You should call it 4 Times to make puzzle, item, monster and room object
+	 */
 	public void makeListObject(String gameFolder, String gameSubFolder) {
 		String folderPath = gameFolder + gameSubFolder;
 		try {	
@@ -101,7 +124,12 @@ public class GameManager{
 		}	
 	}
 
-	//Make Object
+
+
+	/*Make Object then add it to the corresponding hashmap, with the key being
+	 *Parameter: Needs the path to the game folder object, and needs the name of 
+	 *the object you wanna create
+	 */
 	public void makeGameObject(String filePath, String object) {
 		try {
 			//File Reader
@@ -111,11 +139,17 @@ public class GameManager{
 			String fileLine = null;
 			String setCode = null;
 
+			//Make a default object
 			Items itemObject = new Items();
 			Monsters monsterObject = new Monsters();
 			Rooms roomObject = new Rooms();
+			Puzzles puzzleObject = new Puzzles();
 
 			while((fileLine = bufferedReader.readLine()) != null) {
+				/*For loop to check if the text file line matches one of the setcode
+				 *if it matches, the set code then it set it as such, otherwise setcode
+				 *stay the same
+				 * */
 				search:
 					for(String itemSetCode: itemCode) {
 						if(itemSetCode.equalsIgnoreCase(fileLine)) {
@@ -124,23 +158,32 @@ public class GameManager{
 							break search;
 						}
 					}
-			search2:
-				for(String monsterSetCode: monsterCode) {
-					if(monsterSetCode.equalsIgnoreCase(fileLine)) {
-						setCode = monsterSetCode;
-						fileLine = bufferedReader.readLine();
-						break search2;
-					}
-				}
-					search3:
-						for(String roomSetCode: roomCode) {
-							if(roomSetCode.equalsIgnoreCase(fileLine)) {
-								setCode = roomSetCode;
-								fileLine = bufferedReader.readLine();
-								break search3;
-							}
+				search2:
+					for(String monsterSetCode: monsterCode) {
+						if(monsterSetCode.equalsIgnoreCase(fileLine)) {
+							setCode = monsterSetCode;
+							fileLine = bufferedReader.readLine();
+							break search2;
 						}
-
+					}
+				search3:
+					for(String roomSetCode: roomCode) {
+						if(roomSetCode.equalsIgnoreCase(fileLine)) {
+							setCode = roomSetCode;
+							fileLine = bufferedReader.readLine();
+							break search3;
+						}
+					}
+				search4:
+					for(String puzzleSetCode: puzzleCode) {
+						if(puzzleSetCode.equalsIgnoreCase(fileLine)) {
+							setCode = puzzleSetCode;
+							fileLine = bufferedReader.readLine();
+							break search4;
+						}
+					}
+				
+				System.out.println(fileLine);
 				if(setCode != null) {
 					//Depending on the set code, it'll set the information it got from flieLine
 					switch(setCode) {
@@ -157,10 +200,15 @@ public class GameManager{
 						itemObject.setItemType(fileLine);
 						break;	
 					case "Item Action Value:":
-						itemObject.setItemActionValue(fileLine);
+						if(!fileLine.equalsIgnoreCase("null")) {
+							itemObject.setItemActionValue(fileLine);
+						}
+						else {
+							itemObject.setItemActionValue("null");
+						}
 						break;	
-					case "Item Usage Times:":
-						itemObject.setItemUsageTime(Integer.parseInt(fileLine));
+					case "Item Amount:":
+						itemObject.setItemAmount(Integer.parseInt(fileLine));
 						break;	
 					case "Monster Name:":
 						monsterObject.setMonsterName(fileLine);
@@ -196,26 +244,46 @@ public class GameManager{
 						roomObject.setRoomConnection(Direction, roomID);
 						break;
 					case "Room Access:":
-						boolean roomAccess = false;
-						if(fileLine.equalsIgnoreCase("True"))
-							roomAccess = true;
-						else if(fileLine.equalsIgnoreCase("False"))
-							roomAccess = false;
-						else 
-							System.out.println("Error setting room access at " + filePath);
-
-						roomObject.setRoomAccess(roomAccess);
+						if(fileLine.equals("null")) 
+							break;
+						else {
+							String[] RoomAccess = fileLine.split(":");
+							String puzzleID = RoomAccess[1];
+							String currentRoomID = RoomAccess[0];	
+							roomObject.setRoomAccess(currentRoomID, puzzleID);
+						}
 						break;
 					case "Room Item:":
 						if(!fileLine.equals("null")) {
-							roomObject.addRoomItemId(fileLine);
+							roomObject.addRoomItem(itemList.get(fileLine));
 							break;
 						}
 					case "Room Monster:":
 						if(!fileLine.equals("null")) {
-							roomObject.addRoomMonsterId(fileLine);
+							roomObject.addRoomMonster(monsterList.get(fileLine));
 							break;
 						}
+					case "Puzzle ID:":
+						puzzleObject.setPuzzleId(fileLine);
+						break;
+					case "Puzzle Description:":
+						puzzleObject.setPuzzleDesc(fileLine);
+						break;
+					case "Puzzle Type:":
+						puzzleObject.setPuzzleType(fileLine);
+						break;
+					case "Puzzle Solution:":
+						puzzleObject.setPuzzleSolution(fileLine);
+						break;
+					case "Puzzle Hint:":
+						puzzleObject.setPuzzleHint(fileLine);
+						break;
+					case "Puzzle Damage:":
+						if(fileLine.equals("null"))
+							puzzleObject.setPuzzleDamage(0);
+						else
+							puzzleObject.setPuzzleDamage(Integer.parseInt(fileLine));
+						break;
 					}	
 				}
 			}
@@ -226,8 +294,10 @@ public class GameManager{
 				monsterList.put(monsterObject.getMonsterId(), monsterObject);
 			else if(object.equals("Room/"))
 				roomList.put(roomObject.getRoomId(), roomObject);
+			else if(object.equals("Puzzle/"))
+				puzzleList.put(puzzleObject.getPuzzleId(), puzzleObject);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -372,14 +442,19 @@ public class GameManager{
 	}
 
 	public void newGame() {
-		setGameFolder();
+		setGameFolder(getGameFolderList());
 		makeListObject(gameFolder,"Item/");
 		makeListObject(gameFolder,"Monster/");
-		makeListObject(gameFolder,"Room/");
+		makeListObject(gameFolder,"Puzzle/");
+		makeListObject(gameFolder,"Room/");	
 		setSaveList();
 		System.out.println("Please choose your name:");
 		String playerName = getUserInput();
 		player = new Players(playerName,100,itemList.get("I01"),0,roomList.get("R01"));
+		player.setPlayerName(playerName);
+		player.addItemToInventory(itemList.get("I01"));
+		player.addItemToInventory(itemList.get("I18"));
+		player.setCurrentRoom(roomList.get("R01"));
 		player.startGameTime();
 
 		System.out.println("\nNew Game Created");
@@ -411,8 +486,8 @@ public class GameManager{
 
 	public void action() {
 		System.out.println("--------------------------------------------------");
-		if(player.getCurrentRoom().getRoomMonsterId().isEmpty()) {
-			System.out.println("MENU - What will you do?\n");
+		if(player.getCurrentRoom().getRoomMonster().isEmpty()) {
+			System.out.println("What will you do?\n");
 			System.out.println("1. Move");
 			System.out.println("2. Examine Room");
 			System.out.println("3. Check Inventory");
@@ -432,17 +507,17 @@ public class GameManager{
 					break;
 				}
 				else {
-					player.setCurrentRoom(player.getCurrentRoom().getRoomNavigationList().get(roomDirection),roomList);
-					if(player.getCurrentRoom().getRoomMonsterId().isEmpty())
+					player.setCurrentRoom(roomList.get(player.getCurrentRoom().getRoomNavigationList().get(roomDirection)));
+					if(player.getCurrentRoom().getRoomMonster().isEmpty())
 						System.out.println(player.getCurrentRoom().toString());
 					action();
 				}
 				break;
 			case "examine room": case "examine": case "search": case "look": case "2":
 				System.out.println(player.getCurrentRoom().toString());
-				if(!player.getCurrentRoom().getRoomItemId().isEmpty()) {
-					for(Iterator<String> iterator = player.getCurrentRoom().getRoomItemId().iterator(); iterator.hasNext();) {
-						String itemId = iterator.next();
+				if(!player.getCurrentRoom().getRoomItem().isEmpty()) {
+					for(Iterator<Items> iterator = player.getCurrentRoom().getRoomItem().iterator(); iterator.hasNext();) {
+						String itemId = iterator.next().getItemId();
 						Items itemObject = itemList.get(itemId);
 						itemObject = itemList.get(itemId);
 						System.out.println("\nYou found a " + itemObject.getItemName() + ".");
@@ -465,7 +540,7 @@ public class GameManager{
 						}
 					}
 				}
-				else if(player.getCurrentRoom().getRoomItemId().isEmpty()){
+				else if(player.getCurrentRoom().getRoomItem().isEmpty()){
 					System.out.println("\nYou search the room, but find nothing of interest.");
 				}
 				else {
@@ -474,7 +549,15 @@ public class GameManager{
 				action();
 				break;
 			case "check inventory": case "check": case "inventory": case "3":
-				inventoryMenu();
+				if(!player.getInventoryList().isEmpty()) {
+					inventoryMenu();
+				}
+				else if(player.getInventoryList().isEmpty()){
+					System.out.println("\nYou have nothing in your inventory.");
+				}
+				else {
+					System.out.println("\nError checking inventory.");
+				}
 				action();
 				break;
 			case "save game": case "save": case "4":		
@@ -502,24 +585,30 @@ public class GameManager{
 
 
 		}
-		else if(!player.getCurrentRoom().getRoomMonsterId().isEmpty()){
-			Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonsterId().get(0));
-			System.out.println("You encounter a " + monster.getMonsterName() + "!");
+		else if(!player.getCurrentRoom().getRoomMonster().isEmpty()){
+			System.out.println("\nYou encounter a monster");
+			System.out.println("You enter combat with the monster");
 			combatMenu();
 		}
 		else {
 			System.out.println("Error with action");
 		}
 	}
+	
+	public void showInventoryItem() {
+		for(Items item: player.getInventoryList()) {
+			if(item.getItemName() == player.getWeapon().getItemName()){
+				System.out.println(item.getItemName() + " (Equipped)");
+			}else {
+				System.out.println(item.getItemName());
+			}
+		}
+	}
 
 	public void inventoryMenu() {
 		System.out.println("--------------------------------------------------");
 		System.out.println("Inventory:");
-
-		System.out.println(player.getWeapon().getItemName() + " (Equipped)");
-		for(Items item: player.getInventoryList()) {
-				System.out.println(item.getItemName());
-		}
+		showInventoryItem();
 		
 		System.out.println("\nWhat will you do?\n");
 		System.out.println("1. Examine Item");
@@ -546,12 +635,6 @@ public class GameManager{
 						break search;
 					}
 				}
-			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName())) {
-				foundItem = true;
-				System.out.println(player.getWeapon().toString());
-				inventoryMenu();
-				break;
-			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
@@ -567,24 +650,33 @@ public class GameManager{
 					if(itemName.equalsIgnoreCase(itemIterator.getItemName())) {
 						foundItem = true;
 						iterator.remove();
-						player.getCurrentRoom().addRoomItemId(itemIterator.getItemId());
+						player.getCurrentRoom().addRoomItem(itemList.get(itemIterator.getItemId()));
 						System.out.println("\nYou drop the " + itemIterator.getItemName());
-						inventoryMenu();
+						if(player.getInventoryList().isEmpty()) {
+							System.out.println("Your inventory is empty.");
+							action();
+						}
+						else {
+							inventoryMenu();
+						}
 						break search;
 					}
 				}
-			if(itemName.equalsIgnoreCase(player.getWeapon().getItemName()))
-			{
-				foundItem = true;
-				System.out.println("\nYou can't drop your equipped weapon!");
-				inventoryMenu();
-			}
 			if(foundItem == false) {
 				System.out.println("\nYou don't have that item.");
 				inventoryMenu();
 			}
 			break;
 		case "use item": case "use": case "3":
+			if(doingPuzzle == true) {
+				System.out.println("\nWhat item do you want to use?");
+				itemName = getUserInput();
+//				if(itemName.) {
+//					
+//				}
+			}else {
+				
+			}
 			break;
 		case "equip item": case "equip": case "4":
 			ArrayList<Items> weaponList = new ArrayList<Items>();
@@ -594,33 +686,33 @@ public class GameManager{
 				}
 			}
 			if(!weaponList.isEmpty()) {
-					System.out.println("\nSelect the weapon you want to equip:");
-					for(Items item: player.getInventoryList()) {
-						if(item.getItemType().equals("Weapon")) {
-							System.out.println(item.getItemName());		
+				System.out.println("Select the weapon you want to equip:");
+				for(Items item: player.getInventoryList()) {
+					if(item.getItemType().equals("Weapon")) {
+						System.out.println(item.getItemName());		
+					}
+				}
+				itemName = getUserInput();
+				foundItem = false;
+				search:
+					for(Iterator<Items> iterator = weaponList.iterator(); iterator.hasNext();) {
+						Items itemIterator = iterator.next();
+						String userWeapon = itemIterator.getItemName();
+						if(itemName.equalsIgnoreCase(userWeapon)) {
+							foundItem = true;
+							player.equipWeapon(itemList.get(itemIterator.getItemId()));
+							System.out.println("\nYou equipped the " + userWeapon);
+							inventoryMenu();
+							break search;
 						}
 					}
-					itemName = getUserInput();
-					foundItem = false;
-					search:
-						for(Iterator<Items> iterator = weaponList.iterator(); iterator.hasNext();) {
-							Items itemIterator = iterator.next();
-							String userWeapon = itemIterator.getItemName();
-							if(itemName.equalsIgnoreCase(userWeapon)) {
-								foundItem = true;
-								player.equipWeapon(itemIterator.getItemId(), itemList);
-								System.out.println("\nYou equipped the " + userWeapon);
-								inventoryMenu();
-								break search;
-							}
-						}
-					if(foundItem == false) {
-						System.out.println("\nYou don't have that item.");
-						inventoryMenu();
-					}
+				if(foundItem == false) {
+					System.out.println("\nYou don't have that item.");
+					inventoryMenu();
+				}
 			}
 			else {
-				System.out.println("\nYou don't have any weapons");
+				System.out.println("You don't have any weapons");
 				inventoryMenu();
 			}
 			break;
@@ -635,63 +727,88 @@ public class GameManager{
 	}
 
 	public void combatMenu() {
-		Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonsterId().get(0));
-		
-		System.out.println("--------------------------------------------------");
-		System.out.println("COMBAT - What will you do?\n");
+		Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonster().get(0));
+		System.out.println("\nWhat will you do?");
 		System.out.println("1. Attack");
 		System.out.println("2. Defend");
 		System.out.println("3. Examine Monster");
-		System.out.println("4. Check Inventory");
+		System.out.println("4. View Inventory");
 		System.out.println("5. Run Away");
 
 		String userInput = getUserInput();
 
-		switch(userInput.toLowerCase().trim()) {
-		case "attack": case "1":
-			System.out.println("\nYou attack the " + monster.getMonsterName() + "!");
-			System.out.println("The " + monster.getMonsterName() + " took " + player.getWeapon().getItemActionValue() + " damage!");
+		switch(userInput) {
+		case "Attack" : case "1":
+			System.out.println("You attack the monster");
+			System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
+			System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
 			monster.takeDmg(player.getWeapon().getItemActionValue());
 
+
 			if(monster.getMonsterHealth() <= 0) {
-				System.out.println("The " + monster.getMonsterName() + " slumps over, defeated.");
-				player.getCurrentRoom().removeRoomMonsterId(monster.getMonsterId());
+				System.out.println("You have slain the monster");
+				player.getCurrentRoom().removeRoomMonster(monsterList.get(monster.getMonsterId()));
 				action();
 				break;
 			}
 
-			System.out.println("The " + monster.getMonsterName() + " attacks you!");
-			if(monster.attackPlayer() > 0) {
-				System.out.println("You took " + monster.attackPlayer() + " damage!");
-			}
-			else
-			{
-				System.out.println("The attack missed!");
-			}
-
+			System.out.println("The monster attack you");
+			System.out.println("You took " + monster.attackPlayer() + " damage");
 			combatMenu();
 			break;
-		case "defend": case "2":
-			System.out.println("\nYou block the attack and take no damage!");
+		case "Defend" : case "2":
+			System.out.println("You defended against the monster attack!");
 			combatMenu();
 			break;
-		case "examine monster": case "examine": case "3":
+		case "Examine Monster" : case "3":
 			System.out.println(monster.toString());
 			combatMenu();
 			break;
-		case "check inventory": case "check": case "inventory": case "4":
+		case "View Inventory" : case "4":
+			int previousHealth = player.getPlayerHealth();
 			inventoryMenu();
+			if(player.getPlayerHealth() > previousHealth) {
+				System.out.println("test");
+				break;
+			}
 			combatMenu();
 			break;
-		case "run away": case "run": case "5":
-			System.out.println("\nYou flee to the previous room.");
-			player.setCurrentRoom(player.getPreviousRoom().getRoomId(), roomList);
+		case "Run Away" : case "5":
+			System.out.println("You ran away from the monster");
+			player.setCurrentRoom(roomList.get(player.getPreviousRoom().getRoomId()));
 			action();
 			break;
-		default:
-			System.out.println("\nInvalid command");
-			combatMenu();
-			break;	
+		}
+
+	}
+	
+	public void puzzleMenu(Rooms room) {
+		doingPuzzle = true;
+		Puzzles puzzle = puzzleList.get(room);
+		System.out.println(puzzle.getPuzzleDesc());
+		System.out.println("\nWhat will you do?");
+		System.out.println("1. Input Number");
+		System.out.println("2. Item");
+		System.out.println("3. Hint");
+		System.out.println("4. Leave");
+
+		String userInput = getUserInput();
+
+		switch(userInput.toLowerCase()) {
+		case "input number" : case "1":
+			
+			break;
+		case "item" : case "2":
+			inventoryMenu();
+			break;
+		case "hint" : case "3":
+			System.out.print(puzzle.getPuzzleHint());
+//			checkOut
+//			puzzleMenu(room);
+			break;
+		case "leave" : case "4":
+			action();
+			break;
 		}
 	}
 
