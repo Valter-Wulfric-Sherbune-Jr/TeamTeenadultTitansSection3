@@ -6,7 +6,8 @@ public class Monsters implements Serializable{
 	private String monsterName;
 	private String monsterId;
 	private String monsterDesc;
-	private int monsterHealth;
+	private int monsterMaxHealth;
+	private int monsterCurrentHealth;
 	private int monsterDamage;
 	private double monsterHitPercentage;
 
@@ -15,18 +16,20 @@ public class Monsters implements Serializable{
 		this.monsterId = "E00";
 		this.monsterName = "Invalid Monster Name";
 		this.monsterDesc = "Invalid Monster Description";
-		this.monsterHealth = 00;
+		this.monsterMaxHealth = 00;
+		this.monsterCurrentHealth = monsterMaxHealth;
 		this.monsterDamage = 00;
 		this.monsterHitPercentage = 0;
 	}
 
 	//Create Object with set parameter
-	public Monsters(String monsterID, String monsterName, String monsterDesc, int monsterHealth, int monsterDamage,
+	public Monsters(String monsterID, String monsterName, String monsterDesc, int monsterMaxHealth, int monsterDamage,
 			double monsterHitPercentage) {
 		this.monsterId = monsterID;
 		this.monsterName = monsterName;
 		this.monsterDesc = monsterDesc;
-		this.monsterHealth = monsterHealth;
+		this.monsterMaxHealth = monsterMaxHealth;
+		this.monsterCurrentHealth = monsterMaxHealth;
 		this.monsterDamage = monsterDamage;
 		this.monsterHitPercentage = monsterHitPercentage;
 	}
@@ -79,14 +82,33 @@ public class Monsters implements Serializable{
 		return monsterDesc;
 	}
 
+	
+	
+	/*Use for player attack method
+	 *Parameter: Action value of weapon type item
+	 *Function: Gets the damage and subtract it from the monster health
+	 */
+	public void setMonsterMaxHealth(int monsterMaxHealth) {
+		this.monsterMaxHealth = monsterMaxHealth;
+	}
+	public int getMonsterMaxHealth() {
+		return monsterMaxHealth;
+	}
+	public void setMonsterCurrentHealth(int monsterCurrentHealth) {
+		this.monsterCurrentHealth = monsterCurrentHealth;
+	}
+	public int getMonsterCurrentHealth() {
+		return monsterCurrentHealth;
+	}
+	public void takeDmg(int dmg) {
+		if((monsterCurrentHealth - dmg) <= 0) {
+			this.monsterCurrentHealth = 0;
+		}else {
+			this.monsterCurrentHealth -= dmg;
+		}
+	}
 
-	//Set and get the monster health
-	public void setMonsterHealth(int monsterHealth) {
-		this.monsterHealth = monsterHealth;
-	}
-	public int getMonsterHealth() {
-		return monsterHealth;
-	}
+	
 
 
 	//Set and get monster damage
@@ -117,12 +139,9 @@ public class Monsters implements Serializable{
 	 */
 	public int attackPlayer() {
 		if(attackHit() == true) {
-			System.out.println("The monster dealt " + monsterDamage + " damage to you");
 			return monsterDamage;
 		}
 		else{
-			System.out.println("The monster attacked and missed you");
-			System.out.println("You take 0 damage");
 			return 0;
 		}
 	}
@@ -150,40 +169,26 @@ public class Monsters implements Serializable{
 			return false;	
 	}
 
-	
-	/*Use for player attack method
-	 *Parameter: Action value of weapon type item
-	 *Function: Gets the damage and subtract it from the monster health
-	 */
-	public void takeDmg(int dmg) {
-		this.monsterHealth = (monsterHealth - dmg);
-	}
 
 	
-//	public String toString() {
-//		String returnString = "";
-//
-//		//Add Guide Line
-//		returnString += "---------------------------------------\n";
-//
-//		//Add Monster Name
-//		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
-//
-//		//Add Monster Description
-//		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
-//
-//		//Add Monster Health
-//		returnString += "Monster Health:\n" + getMonsterHealth() + "\n\n";
-//
-//		//Add Monster Damage
-//		returnString += "Monster Damage:\n" + getMonsterDamage() + "\n\n";
-//
-//		//Add Monster Hit Percentage
-//		returnString += "Monster Hit Percentage:\n" + getMonsterHitPercentage() + "\n";
-//
-//		//Add Guide Line
-//		returnString += "---------------------------------------";
-//
-//		return returnString;
-//	}
+	public String toString() {
+		String returnString = "";
+
+		//Add Guide Line
+		returnString += "---------------------------------------\n";
+
+		//Add Monster Name
+		returnString += "Monster Name:\n" + getMonsterName() + "\n\n";
+
+		//Add Monster Description
+		returnString += "Monster Description:\n" + getMonsterDesc() + "\n\n";
+
+		//Add Monster Health
+		returnString += "Monster Health:\n" + getMonsterCurrentHealth() + "\n\n";
+
+		//Add Guide Line
+		returnString += "---------------------------------------";
+
+		return returnString;
+	}
 }

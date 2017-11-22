@@ -101,7 +101,7 @@ public class Items implements Serializable{
 		case "utility":
 			return 0;
 		case "ammo":
-			return Integer.parseInt(itemActionValue.substring(itemActionValue.indexOf("W")+1));
+			return Integer.parseInt(itemActionValue.substring(itemActionValue.indexOf("I")+1));
 		case "healing":
 			return Integer.parseInt(itemActionValue);
 		case "throwable":
@@ -129,31 +129,32 @@ public class Items implements Serializable{
 
 
 
-//	public String toString() {
-//		String returnString = "";
-//
-//		//Add Guide Line
-//		returnString += "--------------------------------------------------\n";
-//
-//		//Add Item Name
-//		returnString += "Item Name:\n" + getItemName() + "\n\n";
-//
-//		//Add Item ID
-//		returnString += "Item ID:\n" + getItemId() + "\n\n";
-//
-//		//Add Item Description
-//		returnString += "Item Description:\n" + getItemDesc() + "\n\n";
-//
-//		//Add Item Health
-//		returnString += "Item Type:\n" + getItemType() + "\n\n";
-//
-//		//Add Item Damage
-//		returnString += "Item Action Value:\n" + getItemActionValue() + "\n\n";
-//
-//		//Add Item Hit Percentage
-//		returnString += "Item Usage Time:\n" + getItemAmount() + "\n";
-//
-//		return returnString;
-//	}
+	public String toString() {
+		String returnString = "";
+
+		//Add Guide Line
+		returnString += "--------------------------------------------------\n";
+
+		//Add Item Name
+		returnString += "Item Name:\n" + getItemName() + "\n\n";
+
+		//Add Item Description
+		returnString += "Item Description:\n" + getItemDesc() + "\n\n";
+
+		//Add Item Health
+		returnString += "Item Type:\n" + getItemType() + "\n\n";
+
+		if(getItemType().equalsIgnoreCase("weapon") || getItemType().equalsIgnoreCase("throwable")){
+			returnString += "Item Damage:\n" + getItemActionValue() + "\n\n";
+		}
+		else if(getItemType().equalsIgnoreCase("healing")){
+			returnString += "Item Heal Value:\n" + getItemActionValue() + "\n\n";
+		}
+
+		//Add Item Amount
+		returnString += "Item Amount:\n" + getItemAmount() + "\n";
+
+		return returnString;
+	}
 
 }

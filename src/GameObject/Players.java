@@ -8,7 +8,8 @@ import java.util.HashMap;
 public class Players implements Serializable{
 
 	private String playerName;
-	private int playerHealth;
+	private int playerMaxHealth;
+	private int playerCurrentHealth;
 	private Items weapon;
 	private double playerScore;
 	private ArrayList<Items> inventoryList;
@@ -17,19 +18,22 @@ public class Players implements Serializable{
 	private long time;
 	private long startTime;
 
+
 	//Create Default Object
 	public Players() {
 		this.playerName = "Default Player Name";
-		this.playerHealth = 00;
+		this.playerMaxHealth = 00;
+		this.playerCurrentHealth = playerMaxHealth;
 		this.weapon = null;
 		this.playerScore = 00;
 		this.inventoryList = new ArrayList<Items>();
 	}
 
 	//Create Object with set parameter
-	public Players(String playerName, int playerHealth, Items weapon, int playerScore,Rooms currentRoom) {
+	public Players(String playerName, int playerMaxHealth, Items weapon, int playerScore,Rooms currentRoom) {
 		this.playerName = playerName;
-		this.playerHealth = playerHealth;
+		this.playerMaxHealth = playerMaxHealth;
+		this.playerCurrentHealth = playerMaxHealth;
 		this.weapon = weapon;
 		this.playerScore = playerScore;
 		this.currentRoom = currentRoom;
@@ -48,11 +52,31 @@ public class Players implements Serializable{
 
 
 	//Set and get player health
-	public void setPlayerHealth(int playerHealth) {
-		this.playerHealth = playerHealth;
+	public void setPlayerMaxHealth(int playerMaxHealth) {
+		this.playerMaxHealth = playerMaxHealth;
 	}
-	public int getPlayerHealth() {
-		return playerHealth;
+	public int getPlayerMaxHealth() {
+		return playerMaxHealth;
+	}
+	public void setPlayerCurrentHealth(int playerCurrentHealth) {
+		this.playerCurrentHealth = playerCurrentHealth;
+	}
+	public int getPlayerCurrentHealth() {
+		return playerCurrentHealth;
+	}
+	public void takeDmg(int dmg) {
+		if((playerCurrentHealth - dmg) <= 0) {
+			this.playerCurrentHealth = 0;
+		}else {
+			this.playerCurrentHealth -= dmg;
+		}
+	}
+	public void healHealth(int health) {
+		if((playerCurrentHealth + health) <= playerMaxHealth) {
+			this.playerCurrentHealth = playerMaxHealth;
+		}else {
+			this.playerCurrentHealth += health;
+		}
 	}
 
 
@@ -94,6 +118,9 @@ public class Players implements Serializable{
 	}
 	public Rooms getCurrentRoom() {
 		return currentRoom;
+	}
+	public void setPreviousRoom(Rooms room) {
+		this.previousRoom = room;
 	}
 	public Rooms getPreviousRoom() {
 		return previousRoom;
@@ -149,6 +176,7 @@ public class Players implements Serializable{
 					}
 					else {
 						inventoryList.remove(x);
+						remove = true;
 					}
 					break search;
 				}
@@ -192,58 +220,46 @@ public class Players implements Serializable{
 	public Items getWeapon() {
 		return weapon;
 	}
-	
 
 
-	/* Check if weapon has ammo
-	 * 
-	 * Get the amount of ammo a weapon has
-	 */
-	public boolean weaponHasAmmo() {
-		String currentEquipWeaponId = weapon.getItemId();
 
-		boolean foundAmmo = false;
-		search:		
-			for(int x = 0; x < inventoryList.size(); x++) {
-				Items item = inventoryList.get(x);
-				if(item.getItemType().equalsIgnoreCase("ammo")) {
-					String itemAmmoId = "I" + item.getItemActionValue();
-					if(itemAmmoId.equalsIgnoreCase(currentEquipWeaponId)) {
-						foundAmmo = true;
-						break search;
-					}
-				}
-			}
-
-		if(!foundAmmo) {
-			return false;
-		}else {
-			return true;
-		}
-	}
-	public int getWeaponAmmo() {
-		String currentEquipWeaponId = weapon.getItemId();
-
+	//Return the amount of ammo a weapon has
+	public int getWeaponAmmo(Items weapon) {
 		for(int x = 0; x < inventoryList.size(); x++) {
 			Items item = inventoryList.get(x);
 			if(item.getItemType().equalsIgnoreCase("ammo")) {
-				String itemAmmoId = "I" + item.getItemActionValue();
-				if(itemAmmoId.equalsIgnoreCase(currentEquipWeaponId)) {
+				String itemAmmoId = "I";
+				if(item.getItemActionValue() < 10) {
+					itemAmmoId += ("0" + item.getItemActionValue());
+				}
+				else {
+					itemAmmoId += item.getItemActionValue();
+				}
+				if(itemAmmoId.equalsIgnoreCase(weapon.getItemId())) {
 					return item.getItemAmount();
 				}
 			}
 		}
 		return 0;
 	}
-
-
-	//Increase or decrease health depending on 
-	public void takeDmg(int dmg) {
-		this.playerHealth = (playerHealth - dmg);
+	public void useWeaponAmmo(Items weapon) {
+		for(int x = 0; x < inventoryList.size(); x++) {
+			Items item = inventoryList.get(x);
+			if(item.getItemType().equalsIgnoreCase("ammo")) {
+				String itemAmmoId = "I";
+				if(item.getItemActionValue() < 10) {
+					itemAmmoId += ("0" + item.getItemActionValue());
+				}
+				else {
+					itemAmmoId += item.getItemActionValue();
+				}
+				if(itemAmmoId.equalsIgnoreCase(weapon.getItemId())) {
+					item.decreaseItemAmount();
+				}
+			}
+		}
 	}
-	public void healHealth(int health) {
-		this.playerHealth = (playerHealth + health);
-	}
+
 
 	/*Set the start time when the game begin or resume
 	 *then after it end or when saving, the end game time is 

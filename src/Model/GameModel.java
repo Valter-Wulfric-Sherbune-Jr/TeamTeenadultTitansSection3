@@ -158,22 +158,22 @@ public class GameModel{
 							break search;
 						}
 					}
-				search2:
-					for(String monsterSetCode: monsterCode) {
-						if(monsterSetCode.equalsIgnoreCase(fileLine)) {
-							setCode = monsterSetCode;
-							fileLine = bufferedReader.readLine();
-							break search2;
-						}
+			search2:
+				for(String monsterSetCode: monsterCode) {
+					if(monsterSetCode.equalsIgnoreCase(fileLine)) {
+						setCode = monsterSetCode;
+						fileLine = bufferedReader.readLine();
+						break search2;
 					}
-				search3:
-					for(String roomSetCode: roomCode) {
-						if(roomSetCode.equalsIgnoreCase(fileLine)) {
-							setCode = roomSetCode;
-							fileLine = bufferedReader.readLine();
-							break search3;
+				}
+					search3:
+						for(String roomSetCode: roomCode) {
+							if(roomSetCode.equalsIgnoreCase(fileLine)) {
+								setCode = roomSetCode;
+								fileLine = bufferedReader.readLine();
+								break search3;
+							}
 						}
-					}
 				search4:
 					for(String puzzleSetCode: puzzleCode) {
 						if(puzzleSetCode.equalsIgnoreCase(fileLine)) {
@@ -182,110 +182,110 @@ public class GameModel{
 							break search4;
 						}
 					}
-				
-				System.out.println(fileLine);
-				if(setCode != null) {
-					//Depending on the set code, it'll set the information it got from flieLine
-					switch(setCode) {
-					case "Item Name:":
-						itemObject.setItemName(fileLine);
-						break;
-					case "Item ID:":
-						itemObject.setItemId(fileLine);
-						break;
-					case "Item Description:":
-						itemObject.setItemDesc(fileLine);
-						break;
-					case "Item Type:":
-						itemObject.setItemType(fileLine);
-						break;	
-					case "Item Action Value:":
-						if(!fileLine.equalsIgnoreCase("null")) {
-							itemObject.setItemActionValue(fileLine);
+
+						if(setCode != null) {
+							//Depending on the set code, it'll set the information it got from flieLine
+							switch(setCode) {
+							case "Item Name:":
+								itemObject.setItemName(fileLine);
+								break;
+							case "Item ID:":
+								itemObject.setItemId(fileLine);
+								break;
+							case "Item Description:":
+								itemObject.setItemDesc(fileLine);
+								break;
+							case "Item Type:":
+								itemObject.setItemType(fileLine);
+								break;	
+							case "Item Action Value:":
+								if(!fileLine.equalsIgnoreCase("null")) {
+									itemObject.setItemActionValue(fileLine);
+								}
+								else {
+									itemObject.setItemActionValue("null");
+								}
+								break;	
+							case "Item Amount:":
+								itemObject.setItemAmount(Integer.parseInt(fileLine));
+								break;	
+							case "Monster Name:":
+								monsterObject.setMonsterName(fileLine);
+								break;
+							case "Monster ID:":
+								monsterObject.setMonsterId(fileLine);
+								break;
+							case "Monster Description:":
+								monsterObject.setMonsterDesc(fileLine);
+								break;
+							case "Monster Health:":
+								monsterObject.setMonsterMaxHealth(Integer.parseInt(fileLine));
+								monsterObject.setMonsterCurrentHealth(Integer.parseInt(fileLine));
+								break;	
+							case "Monster Damage:":
+								monsterObject.setMonsterDamage(Integer.parseInt(fileLine));
+								break;	
+							case "Monster Hit Percentage:":
+								monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
+								break;	
+							case "Room Floor:":
+								roomObject.setRoomFloor(fileLine);
+								break;
+							case "Room ID:":
+								roomObject.setRoomId(fileLine);
+								break;
+							case "Room Description:":
+								roomObject.setRoomDescription(fileLine);
+								break;
+							case "Room Connection:":
+								String[] RoomConnection = fileLine.split(":");
+								String Direction = RoomConnection[1];
+								String roomID = RoomConnection[0];	
+								roomObject.setRoomConnection(Direction, roomID);
+								break;
+							case "Room Access:":
+								if(fileLine.equals("null")) 
+									break;
+								else {
+									String[] RoomAccess = fileLine.split(":");
+									String puzzleID = RoomAccess[1];
+									String currentRoomID = RoomAccess[0];	
+									roomObject.setRoomAccess(currentRoomID, puzzleID);
+								}
+								break;
+							case "Room Item:":
+								if(!fileLine.equals("null")) {
+									roomObject.addRoomItem(itemList.get(fileLine));
+									break;
+								}
+							case "Room Monster:":
+								if(!fileLine.equals("null")) {
+									roomObject.addRoomMonster(monsterList.get(fileLine));
+									break;
+								}
+							case "Puzzle ID:":
+								puzzleObject.setPuzzleId(fileLine);
+								break;
+							case "Puzzle Description:":
+								puzzleObject.setPuzzleDesc(fileLine);
+								break;
+							case "Puzzle Type:":
+								puzzleObject.setPuzzleType(fileLine);
+								break;
+							case "Puzzle Solution:":
+								puzzleObject.setPuzzleSolution(fileLine);
+								break;
+							case "Puzzle Hint:":
+								puzzleObject.setPuzzleHint(fileLine);
+								break;
+							case "Puzzle Damage:":
+								if(fileLine.equals("null"))
+									puzzleObject.setPuzzleDamage(0);
+								else
+									puzzleObject.setPuzzleDamage(Integer.parseInt(fileLine));
+								break;
+							}	
 						}
-						else {
-							itemObject.setItemActionValue("null");
-						}
-						break;	
-					case "Item Amount:":
-						itemObject.setItemAmount(Integer.parseInt(fileLine));
-						break;	
-					case "Monster Name:":
-						monsterObject.setMonsterName(fileLine);
-						break;
-					case "Monster ID:":
-						monsterObject.setMonsterId(fileLine);
-						break;
-					case "Monster Description:":
-						monsterObject.setMonsterDesc(fileLine);
-						break;
-					case "Monster Health:":
-						monsterObject.setMonsterHealth(Integer.parseInt(fileLine));
-						break;	
-					case "Monster Damage:":
-						monsterObject.setMonsterDamage(Integer.parseInt(fileLine));
-						break;	
-					case "Monster Hit Percentage:":
-						monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
-						break;	
-					case "Room Floor:":
-						roomObject.setRoomFloor(fileLine);
-						break;
-					case "Room ID:":
-						roomObject.setRoomId(fileLine);
-						break;
-					case "Room Description:":
-						roomObject.setRoomDescription(fileLine);
-						break;
-					case "Room Connection:":
-						String[] RoomConnection = fileLine.split(":");
-						String Direction = RoomConnection[1];
-						String roomID = RoomConnection[0];	
-						roomObject.setRoomConnection(Direction, roomID);
-						break;
-					case "Room Access:":
-						if(fileLine.equals("null")) 
-							break;
-						else {
-							String[] RoomAccess = fileLine.split(":");
-							String puzzleID = RoomAccess[1];
-							String currentRoomID = RoomAccess[0];	
-							roomObject.setRoomAccess(currentRoomID, puzzleID);
-						}
-						break;
-					case "Room Item:":
-						if(!fileLine.equals("null")) {
-							roomObject.addRoomItem(itemList.get(fileLine));
-							break;
-						}
-					case "Room Monster:":
-						if(!fileLine.equals("null")) {
-							roomObject.addRoomMonster(monsterList.get(fileLine));
-							break;
-						}
-					case "Puzzle ID:":
-						puzzleObject.setPuzzleId(fileLine);
-						break;
-					case "Puzzle Description:":
-						puzzleObject.setPuzzleDesc(fileLine);
-						break;
-					case "Puzzle Type:":
-						puzzleObject.setPuzzleType(fileLine);
-						break;
-					case "Puzzle Solution:":
-						puzzleObject.setPuzzleSolution(fileLine);
-						break;
-					case "Puzzle Hint:":
-						puzzleObject.setPuzzleHint(fileLine);
-						break;
-					case "Puzzle Damage:":
-						if(fileLine.equals("null"))
-							puzzleObject.setPuzzleDamage(0);
-						else
-							puzzleObject.setPuzzleDamage(Integer.parseInt(fileLine));
-						break;
-					}	
-				}
 			}
 
 			if(object.equals("Item/"))
@@ -384,63 +384,6 @@ public class GameModel{
 		}
 	}
 
-	public void save() {
-		boolean loop = true;
-		while(loop) {
-			saveList.clear();
-			setSaveList();
-			displaySaveList();
-			System.out.println("\nSelect a slot to save, or type \"Exit\" to cancel");
-			String userInput = getUserInput();
-			if(userInput.equalsIgnoreCase("e") || userInput.equalsIgnoreCase("exit")) {
-				loop = false;
-			}else {
-				try {
-					int userInputInt = Integer.parseInt(userInput);
-					SaveData data = new SaveData(userInputInt,player,itemList,monsterList,roomList);
-					if(userInputInt >= 1 && userInputInt <= 10) {
-						ObjectOutputStream out =new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ userInputInt +".dat"));
-
-						if(saveList.get(userInputInt) == null) {
-							player.endGameTime();
-							saveList.put(userInputInt,data);
-							out.writeObject(data);
-							player.startGameTime();
-							System.out.println("\nSuccessfully saved in Slot " + userInputInt);
-							loop = false;
-						}else {
-							System.out.println("\nA save file in Slot " + userInputInt + " already exists; Overwrite save data?");
-							System.out.println("1. Yes");
-							System.out.println("2. No");
-							switch(getUserInput().toLowerCase()) {
-							case "yes": case "y": case "1":
-								player.endGameTime();
-								saveList.remove(userInputInt);
-								saveList.put(userInputInt,data);
-								out.writeObject(data);
-								player.startGameTime();
-								System.out.println("\nSuccessfully saved in Slot " + userInputInt);
-								loop = false;
-								break;
-							case "no": case "n": case "2":
-								System.out.println("\nOverwrite cancelled");
-								break;
-							default:
-								System.out.println("\nInvalid command, overwrite cancelled");
-								break;
-							}
-						}
-					}
-					else {
-						System.out.println("\nInvalid command");
-					}
-				}catch(Exception e) {
-					System.out.println("\nInvalid command");
-				}
-			}
-		}
-	}
-
 	public void newGame() {
 		setGameFolder(getGameFolderList());
 		makeListObject(gameFolder,"Item/");
@@ -484,6 +427,8 @@ public class GameModel{
 		action();
 	}
 
+
+	//------------------------------------------------------------------------------------------------------
 	public void action() {
 		System.out.println("--------------------------------------------------");
 		if(player.getCurrentRoom().getRoomMonster().isEmpty()) {
@@ -498,70 +443,19 @@ public class GameModel{
 
 			switch(userInput.toLowerCase().trim()) {
 			case "move": case  "1":
-				System.out.print("\nWhich direction do you want to move?\n");
-				System.out.println("Exits: " + player.getCurrentRoom().getRoomConnection());
-				String roomDirection = getUserInput();
-				if(player.getCurrentRoom().getRoomNavigationList().get(roomDirection) == null) {
-					System.out.println("\nYou can't go that way!");
-					action();
-					break;
-				}
-				else {
-					player.setCurrentRoom(roomList.get(player.getCurrentRoom().getRoomNavigationList().get(roomDirection)));
-					if(player.getCurrentRoom().getRoomMonster().isEmpty())
-						System.out.println(player.getCurrentRoom().toString());
-					action();
-				}
+				moveRoomCommand();
+				action();
 				break;
-			case "examine room": case "examine": case "search": case "look": case "2":
-				System.out.println(player.getCurrentRoom().toString());
-				if(!player.getCurrentRoom().getRoomItem().isEmpty()) {
-					for(Iterator<Items> iterator = player.getCurrentRoom().getRoomItem().iterator(); iterator.hasNext();) {
-						String itemId = iterator.next().getItemId();
-						Items itemObject = itemList.get(itemId);
-						itemObject = itemList.get(itemId);
-						System.out.println("\nYou found a " + itemObject.getItemName() + ".");
-						System.out.println("Do you want to pick it up?");
-						System.out.println("1. Yes");
-						System.out.println("2. No");
-						String choice = getUserInput();
-						switch(choice.toLowerCase().trim()) {
-						case "yes": case "y": case "1":
-							iterator.remove();
-							System.out.println("\nYou picked up the " + itemObject.getItemName() + ".");
-							player.addItemToInventory(itemObject);
-							break;
-						case "no": case "n": case "2":
-							System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
-							break;
-						default:
-							System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
-							break;
-						}
-					}
-				}
-				else if(player.getCurrentRoom().getRoomItem().isEmpty()){
-					System.out.println("\nYou search the room, but find nothing of interest.");
-				}
-				else {
-					System.out.println("\nError searching room.");
-				}
+			case "examine room": case "2":
+				examineRoom();
 				action();
 				break;
 			case "check inventory": case "check": case "inventory": case "3":
-				if(!player.getInventoryList().isEmpty()) {
-					inventoryMenu();
-				}
-				else if(player.getInventoryList().isEmpty()){
-					System.out.println("\nYou have nothing in your inventory.");
-				}
-				else {
-					System.out.println("\nError checking inventory.");
-				}
+				checkInventoryCommand();
 				action();
 				break;
 			case "save game": case "save": case "4":		
-				save();
+				saveGameCommand();
 				action();
 				break;
 			case "quit game": case "quit": case "exit": case "5":		
@@ -594,22 +488,152 @@ public class GameModel{
 			System.out.println("Error with action");
 		}
 	}
-	
-	public void showInventoryItem() {
-		for(Items item: player.getInventoryList()) {
-			if(item.getItemName() == player.getWeapon().getItemName()){
-				System.out.println(item.getItemName() + " (Equipped)");
-			}else {
-				System.out.println(item.getItemName());
-			}
+
+	/*Fuction: Move the player from one room to another
+	 *If invalid room direction is typed, then it call itself
+	 *else it move the player to that room, then call back to action()
+	 * */
+	public void moveRoomCommand(){
+		System.out.print("\nWhich direction do you want to move?");
+		System.out.print("(Type Q to quit)\n");
+		System.out.println("Exits: " + player.getCurrentRoom().getRoomConnection());
+		String roomDirection = getUserInput();
+		if(roomDirection.equalsIgnoreCase("q")) {
+			action();
+		}
+		else if(player.getCurrentRoom().getRoomNavigationList().get(roomDirection) == null) {
+			System.out.println("\nYou can't go that way!");
+			moveRoomCommand();
+		}
+		else {
+			player.setCurrentRoom(roomList.get(player.getCurrentRoom().getRoomNavigationList().get(roomDirection)));
+			if(player.getCurrentRoom().getRoomMonster().isEmpty())
+				System.out.println(player.getCurrentRoom().toString());
+			action();
 		}
 	}
 
+
+	/*Function: Print out the room description and search the room for any item
+	 *
+	 *Method Called: foundItemOption (Prompt yes or no to picking up the item)
+	 * */
+	public void examineRoom() {
+		System.out.println(player.getCurrentRoom().toString());
+		if(!player.getCurrentRoom().getRoomItem().isEmpty()) {
+			foundItemOption();
+		}
+		else{
+			System.out.println("\nYou search the room, but find nothing of interest.");
+		}
+		action();
+	}	
+	public void foundItemOption() {
+		search:
+			for(Iterator<Items> iterator = player.getCurrentRoom().getRoomItem().iterator(); iterator.hasNext();) {
+				String itemId = iterator.next().getItemId();
+				Items itemObject = itemList.get(itemId);
+				itemObject = itemList.get(itemId);
+				System.out.println("\nYou found a " + itemObject.getItemName() + ".");
+				System.out.println("Do you want to pick it up?");
+				System.out.println("1. Yes");
+				System.out.println("2. No");
+				String choice = getUserInput();
+				switch(choice.toLowerCase().trim()) {
+				case "yes": case "1":
+					iterator.remove();
+					player.addItemToInventory(itemObject);
+					System.out.println("\nYou picked up the " + itemObject.getItemName() + ".");	
+					break;
+				case "no": case "2":
+					System.out.println("\nYou decided to leave the " + itemObject.getItemName() + ".");
+					break;
+				default:
+					System.out.println("\nInvalid Command");
+					foundItemOption();
+					break search;
+				}
+			}
+	}
+
+	/*Function: Check if your inventory is empty, if not then it direct you
+	 *to the inventory menu
+	 * */
+	public void checkInventoryCommand() {
+		if(player.getInventoryList().isEmpty())
+			System.out.println("\nYou have nothing in your inventory.");
+		else
+			inventoryMenu();
+		action();
+		
+	}
+
+
+	public void saveGameCommand() {
+		try {
+			saveList.clear();
+			setSaveList();
+			displaySaveList();
+
+			System.out.println("\nSelect a slot to save, or type \"Exit\" to cancel");
+			String userInput = getUserInput();
+			if((userInput.equalsIgnoreCase("e") || userInput.equalsIgnoreCase("exit"))) {
+
+			}
+			else if(Integer.parseInt(userInput) >= 1 && Integer.parseInt(userInput) <= 10) {
+				int userInputInt = Integer.parseInt(userInput);
+				SaveData data = new SaveData(userInputInt,player,itemList,monsterList,roomList);
+				ObjectOutputStream out = 
+						new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ userInputInt +".dat"));
+				if(saveList.get(userInputInt) == null) {
+				}else {
+					System.out.println("\nA save file in Slot " + userInputInt + " already exists; Overwrite save data?");
+					System.out.println("1. Yes");
+					System.out.println("2. No");
+					switch(getUserInput().toLowerCase()) {
+					case "yes": case "y": case "1":
+						player.endGameTime();
+						saveList.remove(userInputInt);
+						saveList.put(userInputInt,data);
+						out.writeObject(data);
+						player.startGameTime();
+						System.out.println("\nSuccessfully saved in Slot " + userInputInt);
+						break;
+					case "no": case "n": case "2":
+						System.out.println("\nOverwrite cancelled");
+						saveGameCommand();
+						break;
+					default:
+						System.out.println("\nInvalid command, overwrite cancelled");
+						saveGameCommand();
+						break;
+					}
+				}
+
+			}
+			else {
+				System.out.println("\nInvalid command");
+				saveGameCommand();
+			}
+
+		}
+		catch(NumberFormatException e) {
+			System.out.println("\nInvalid command");
+			saveGameCommand();
+		}catch(Exception e) {
+			System.out.print("Error Saving");
+			saveGameCommand();
+		}
+
+	}
+
+
+	//------------------------------------------------------------------------------------------------------
 	public void inventoryMenu() {
 		System.out.println("--------------------------------------------------");
 		System.out.println("Inventory:");
 		showInventoryItem();
-		
+
 		System.out.println("\nWhat will you do?\n");
 		System.out.println("1. Examine Item");
 		System.out.println("2. Drop Item");
@@ -618,103 +642,23 @@ public class GameModel{
 		System.out.println("5. Exit");
 
 		String userInput = getUserInput();
-		String itemName = "";
-		boolean foundItem = false;
 
 		switch(userInput.toLowerCase().trim()) {
 		case "examine item": case "examine": case "1":
-			System.out.println("\nWhat item do you want to examine?");
-			itemName = getUserInput();
-			foundItem = false;
-			search:
-				for(Items item:player.getInventoryList()) {
-					if(itemName.equalsIgnoreCase(item.getItemName())) {
-						foundItem = true;
-						System.out.println(item.toString());
-						inventoryMenu();
-						break search;
-					}
-				}
-			if(foundItem == false) {
-				System.out.println("\nYou don't have that item.");
-				inventoryMenu();
-			}
+			examineItemCommand();
+			inventoryMenu();
 			break;
 		case "drop item": case "drop": case "2":
-			System.out.println("\nWhat item do you want to drop?");
-			itemName = getUserInput();
-			foundItem = false;
-			search:
-				for(Iterator<Items> iterator = player.getInventoryList().iterator(); iterator.hasNext();) {
-					Items itemIterator = iterator.next();
-					if(itemName.equalsIgnoreCase(itemIterator.getItemName())) {
-						foundItem = true;
-						iterator.remove();
-						player.getCurrentRoom().addRoomItem(itemList.get(itemIterator.getItemId()));
-						System.out.println("\nYou drop the " + itemIterator.getItemName());
-						if(player.getInventoryList().isEmpty()) {
-							System.out.println("Your inventory is empty.");
-							action();
-						}
-						else {
-							inventoryMenu();
-						}
-						break search;
-					}
-				}
-			if(foundItem == false) {
-				System.out.println("\nYou don't have that item.");
-				inventoryMenu();
-			}
+			dropItemCommand();
+			inventoryMenu();
 			break;
 		case "use item": case "use": case "3":
-			if(doingPuzzle == true) {
-				System.out.println("\nWhat item do you want to use?");
-				itemName = getUserInput();
-//				if(itemName.) {
-//					
-//				}
-			}else {
-				
-			}
+			useItemCommand();
+			inventoryMenu();
 			break;
 		case "equip item": case "equip": case "4":
-			ArrayList<Items> weaponList = new ArrayList<Items>();
-			for(Items item: player.getInventoryList()) {
-				if(item.getItemType().equals("Weapon")) {
-					weaponList.add(item);	
-				}
-			}
-			if(!weaponList.isEmpty()) {
-				System.out.println("Select the weapon you want to equip:");
-				for(Items item: player.getInventoryList()) {
-					if(item.getItemType().equals("Weapon")) {
-						System.out.println(item.getItemName());		
-					}
-				}
-				itemName = getUserInput();
-				foundItem = false;
-				search:
-					for(Iterator<Items> iterator = weaponList.iterator(); iterator.hasNext();) {
-						Items itemIterator = iterator.next();
-						String userWeapon = itemIterator.getItemName();
-						if(itemName.equalsIgnoreCase(userWeapon)) {
-							foundItem = true;
-							player.equipWeapon(itemList.get(itemIterator.getItemId()));
-							System.out.println("\nYou equipped the " + userWeapon);
-							inventoryMenu();
-							break search;
-						}
-					}
-				if(foundItem == false) {
-					System.out.println("\nYou don't have that item.");
-					inventoryMenu();
-				}
-			}
-			else {
-				System.out.println("You don't have any weapons");
-				inventoryMenu();
-			}
+			equipItemCommand();
+			inventoryMenu();
 			break;
 		case "exit": case "5":
 			break;
@@ -726,62 +670,262 @@ public class GameModel{
 
 	}
 
+	public void showInventoryItem() {
+		for(Items item: player.getInventoryList()) {
+			if(item.getItemName() == player.getWeapon().getItemName()){
+				System.out.println(item.getItemName() + " (Equipped)");
+			}else {
+				System.out.println(item.getItemName() + " x" + item.getItemAmount());
+			}
+		}
+	}
+
+	/*Function: Prompt you 
+	 * */
+	public void examineItemCommand() {
+		System.out.println("\nWhat item do you want to examine?");
+		System.out.print("(Type Q to quit)\n");
+		showInventoryItem();
+
+		String itemName = getUserInput();
+
+		boolean foundItem = false;
+		if(itemName.equalsIgnoreCase("q")) {
+			
+		}
+		else{
+			search:
+				for(Items item:player.getInventoryList()) {
+					if(itemName.equalsIgnoreCase(item.getItemName())) {
+						foundItem = true;
+						System.out.println(item.toString());
+						if(item.getItemType().equals("Weapons")) {
+							System.out.println("Ammo x"+ player.getWeaponAmmo(item));
+						}
+						break search;
+					}
+				}
+		if(foundItem == false) {
+			System.out.println("\nYou don't have that item.");
+			examineItemCommand();
+		}
+		}
+	}
+
+
+	//
+	public void dropItemCommand() {
+		System.out.println("\nWhat item do you want to drop?");
+		System.out.print("(Type Q to quit)\n");
+		showInventoryItem();
+
+		String itemName = getUserInput();
+		if(itemName.equalsIgnoreCase("q")) {
+			
+		}
+		else {
+			boolean foundItem = false;
+			search:
+				for(Iterator<Items> iterator = player.getInventoryList().iterator(); iterator.hasNext();) {
+					Items itemIterator = iterator.next();
+					if(itemName.equalsIgnoreCase(itemIterator.getItemName())) {
+						foundItem = true;
+						player.getCurrentRoom().addRoomItem(itemIterator);
+						iterator.remove();
+						System.out.println("\nYou drop the " + itemIterator.getItemName());
+						if(player.getInventoryList().isEmpty()) {
+							System.out.println("Your inventory is empty.");
+						}
+						break search;
+					}
+				}
+			if(foundItem == false) {
+				System.out.println("\nYou don't have that item.");
+				dropItemCommand();
+			}
+		}
+	}
+
+	public void useItemCommand(){
+		System.out.println("\nWhat item do you want to use?");
+		System.out.print("(Type Q to quit)\n");
+		showInventoryItem();
+
+
+		String itemName = getUserInput();
+		if(itemName.equalsIgnoreCase("q")) {
+
+		}else {
+			boolean foundItem = false;
+			search:
+				for(Iterator<Items> iterator = player.getInventoryList().iterator(); iterator.hasNext();) {
+					Items itemIterator = iterator.next();
+					if(itemName.equalsIgnoreCase(itemIterator.getItemName())) {
+						foundItem = true;
+						if(itemIterator.getItemType().equalsIgnoreCase("healing")) {
+							if(!(player.getPlayerCurrentHealth() == player.getPlayerMaxHealth())) {
+								player.healHealth(itemIterator.getItemActionValue());
+								System.out.println("You consume that item and heal for " + itemIterator.getItemActionValue());
+								iterator.remove();
+							}else {
+								System.out.println("You are already full health");
+							}
+						}else {
+							System.out.println("Nothing happen");
+						}		
+						break search;
+					}
+				}
+			if(foundItem == false) {
+				System.out.println("\nYou don't have that item.");
+				dropItemCommand();
+			}
+		}
+	}
+
+	public void equipItemCommand() {
+		ArrayList<Items> weaponList = new ArrayList<Items>();
+		for(Items item: player.getInventoryList()) {
+			if(item.getItemType().equals("Weapon")) {
+				weaponList.add(item);	
+			}
+		}
+		if(!weaponList.isEmpty()) {
+			System.out.println("Select the weapon you want to equip:");
+			for(Items item: player.getInventoryList()) {
+				if(item.getItemType().equals("Weapon")) {
+					System.out.println(item.getItemName());		
+				}
+			}
+			String itemName = getUserInput();
+			boolean foundItem = false;
+			search:
+				for(Iterator<Items> iterator = weaponList.iterator(); iterator.hasNext();) {
+					Items itemIterator = iterator.next();
+					String userWeapon = itemIterator.getItemName();
+					if(itemName.equalsIgnoreCase(userWeapon)) {
+						foundItem = true;
+						player.equipWeapon(itemList.get(itemIterator.getItemId()));
+						System.out.println("\nYou equipped the " + userWeapon);
+						inventoryMenu();
+						break search;
+					}
+				}
+			if(foundItem == false) {
+				System.out.println("\nYou don't have that item.");
+				inventoryMenu();
+			}
+		}
+		else {
+			System.out.println("You don't have any weapons");
+			inventoryMenu();
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------------
 	public void combatMenu() {
-		Monsters monster = monsterList.get(player.getCurrentRoom().getRoomMonster().get(0));
+		showMonsterInBattle();
+
 		System.out.println("\nWhat will you do?");
 		System.out.println("1. Attack");
 		System.out.println("2. Defend");
-		System.out.println("3. Examine Monster");
-		System.out.println("4. View Inventory");
-		System.out.println("5. Run Away");
+		System.out.println("3. View Inventory");
+		System.out.println("4. Run Away");
 
 		String userInput = getUserInput();
 
 		switch(userInput) {
 		case "Attack" : case "1":
-			System.out.println("You attack the monster");
-			System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
-			System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
-			monster.takeDmg(player.getWeapon().getItemActionValue());
-
-
-			if(monster.getMonsterHealth() <= 0) {
-				System.out.println("You have slain the monster");
-				player.getCurrentRoom().removeRoomMonster(monsterList.get(monster.getMonsterId()));
+			attackMonsterCommand();
+			if(player.getCurrentRoom().getRoomMonster().isEmpty()) {
 				action();
-				break;
-			}
-
-			System.out.println("The monster attack you");
-			System.out.println("You took " + monster.attackPlayer() + " damage");
+			}else {
 			combatMenu();
+			}
 			break;
 		case "Defend" : case "2":
 			System.out.println("You defended against the monster attack!");
 			combatMenu();
 			break;
-		case "Examine Monster" : case "3":
-			System.out.println(monster.toString());
-			combatMenu();
-			break;
-		case "View Inventory" : case "4":
-			int previousHealth = player.getPlayerHealth();
+		case "View Inventory" : case "3":
 			inventoryMenu();
-			if(player.getPlayerHealth() > previousHealth) {
-				System.out.println("test");
-				break;
-			}
 			combatMenu();
 			break;
-		case "Run Away" : case "5":
-			System.out.println("You ran away from the monster");
-			player.setCurrentRoom(roomList.get(player.getPreviousRoom().getRoomId()));
+		case "Run Away" : case "4":
 			action();
 			break;
 		}
 
 	}
-	
+
+	public void showMonsterInBattle() {
+		for(int x = 0; x < player.getCurrentRoom().getRoomMonster().size(); x++) {
+			System.out.println(player.getCurrentRoom().getRoomMonster().get(x).toString());
+		}
+	}
+
+	public void attackMonsterCommand() {
+		showMonsterInBattle();
+		System.out.println("\nWhat monster do you want to attack");
+		System.out.print("(Type Q to go back)\n");
+
+		String monsterInput = getUserInput();
+
+		if(monsterInput.equalsIgnoreCase("q")) {
+
+		}else {
+			boolean foundMonster = false;
+				for(Iterator<Monsters> iterator = player.getCurrentRoom().getRoomMonster().iterator(); iterator.hasNext();) {
+					Monsters monsterIterator = iterator.next();
+					if(monsterIterator.getMonsterName().equalsIgnoreCase(monsterInput)) {
+						foundMonster = true;
+						if(player.getWeaponAmmo(player.getWeapon()) == 0) {
+							System.out.println("You don't have any ammo for your weapon");
+						}else {
+							System.out.println("You attack the monster");
+							System.out.println(player.getWeapon().getItemActionValue() + " " + player.getWeapon().getItemId());
+							player.useWeaponAmmo(player.getWeapon());
+							System.out.println("Monster took " + player.getWeapon().getItemActionValue() + " damage");
+							monsterIterator.takeDmg(player.getWeapon().getItemActionValue());
+
+							if(monsterIterator.getMonsterCurrentHealth() == 0) {
+								System.out.println("You have slain the" + monsterIterator.getMonsterName());
+								iterator.remove();
+							}
+						}
+						if(!player.getCurrentRoom().getRoomMonster().isEmpty()) {
+							monsterTurn(monsterIterator);	
+						}		
+					}
+				}
+			if(foundMonster == false) {
+				System.out.println("\nNot a valid monster.");
+				attackMonsterCommand();
+			}
+			
+		}
+	}
+	public void monsterTurn(Monsters monster) {
+		if(monster.attackPlayer() == 0) {
+			System.out.println("The monster attacked and missed you");
+			System.out.println("You take 0 damage");
+		}else {
+			System.out.println("The monster dealt " + monster.attackPlayer() + " damage to you");
+			player.takeDmg(monster.attackPlayer());
+			if(player.getPlayerCurrentHealth() == 0) {
+				System.out.println("Game Over");
+				System.exit(0); // insert code to exit to main menu here instead
+			}
+		}	
+	}
+	public void runAwayCommand() {
+		for(int x = 0; x < player.getCurrentRoom().getRoomMonster().size(); x++) {
+			player.getCurrentRoom().getRoomMonster().get(x).setMonsterCurrentHealth(
+					player.getCurrentRoom().getRoomMonster().get(x).getMonsterMaxHealth());
+		}
+		player.setCurrentRoom(roomList.get(player.getPreviousRoom().getRoomId()));
+	}
+
 	public void puzzleMenu(Rooms room) {
 		doingPuzzle = true;
 		Puzzles puzzle = puzzleList.get(room);
@@ -796,15 +940,15 @@ public class GameModel{
 
 		switch(userInput.toLowerCase()) {
 		case "input number" : case "1":
-			
+
 			break;
 		case "item" : case "2":
 			inventoryMenu();
 			break;
 		case "hint" : case "3":
 			System.out.print(puzzle.getPuzzleHint());
-//			checkOut
-//			puzzleMenu(room);
+			//			checkOut
+			//			puzzleMenu(room);
 			break;
 		case "leave" : case "4":
 			action();
