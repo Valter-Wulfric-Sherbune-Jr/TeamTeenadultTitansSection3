@@ -1,10 +1,14 @@
 package Other;
 
+import Controller.GameController;
 import Model.GameModel;
 
 public class GameStarter {
 	public static void main(String args[]) {
-		GameModel game = new GameModel();
-		game.newGame();
+		GameController run = new GameController();
+		run.initializeGame();
+		while (true) {
+			run.readUserInput();
+		}
 	}
 }
