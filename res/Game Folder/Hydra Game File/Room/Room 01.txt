@@ -13,4 +13,4 @@ Room Item:
 I01
 I04
 Room Monster:
-E01
+null

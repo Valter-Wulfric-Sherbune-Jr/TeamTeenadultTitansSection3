@@ -6,7 +6,7 @@ Room Description:
 An elevator that lets you navigate through the building
 Room Connection:
 R02:Roof
-R11:Floor 3 5454
+R11:Floor 3
 R14:Floor 2
 R20:Floor 1
 Room Access:

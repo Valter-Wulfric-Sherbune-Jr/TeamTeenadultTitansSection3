@@ -3,10 +3,10 @@ P09
 Puzzle Description:
 The door is locked, and it requires an Elevator Key to unlock it
 Puzzle Type:
-Input
+Item
 Puzzle Solution:
 I13
 Puzzle Hint:
 Card can be found in room 13
 Puzzle Damage:
-null
+20

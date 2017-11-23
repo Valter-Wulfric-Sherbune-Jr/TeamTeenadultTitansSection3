@@ -110,6 +110,9 @@ public class Rooms implements Serializable{
 		}
 		return RoomAccess;
 	}
+	public HashMap<String, String> getRoomAccessList() {
+		return roomAccessList;
+	}
 	
 	
 	/*Add or remove an item in the room by needing an input
