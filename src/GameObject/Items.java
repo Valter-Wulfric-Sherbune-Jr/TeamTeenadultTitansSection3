@@ -141,24 +141,24 @@ public class Items implements Serializable{
 		returnString += "--------------------------------------------------\n";
 
 		//Add Item Name
-		returnString += getItemName() + " - ";
+		returnString += itemName + " - ";
 
 		//Add Item Type
 		returnString += "Type: " + getItemType() + " - ";
 		
 		//Add Item Function
-		if(getItemType().equalsIgnoreCase("weapon") || getItemType().equalsIgnoreCase("throwable")){
-			returnString += "Inflicts " + getItemActionValue() + " damage\n\n";
+		if(itemType.equalsIgnoreCase("weapon") || itemType.equalsIgnoreCase("throwable")){
+			returnString += "Inflicts " + itemActionValue + " damage\n\n";
 		}
-		else if(getItemType().equalsIgnoreCase("healing")){
-			returnString += "Recovers " + getItemActionValue() + " health\n\n";
+		else if(itemType.equalsIgnoreCase("healing")){
+			returnString += "Recovers " + itemActionValue + " health\n\n";
 		}
 		
 		//Add Item Description
-		returnString += getItemDesc() + "\n\n";
+		returnString += itemDesc + "\n\n";
 
 		//Add Item Amount
-		returnString += "Amount: " + getItemAmount();
+		returnString += "Amount: " + itemAmount;
 
 		return returnString;
 	}

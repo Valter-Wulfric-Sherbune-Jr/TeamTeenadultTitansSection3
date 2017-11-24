@@ -88,23 +88,22 @@ public class GameController {
 			output +=  "4. Equip Item\n";
 			output +=  "5. Exit\n";
 			break;
-
 		case "Select Item":
 			output += "Inventory:\n";
 			output += model.getPlayer().getInventoryListString();
 			output += "\nSelect an item to ";
 			switch(model.getStoredState()) {
 			case"Examine Item":
-				output += "examine ";
+				output += "examine";
 				break;
 			case"Drop Item":
-				output += "drop ";
+				output += "drop";
 				break;
 			case"Use Item":
-				output += "use ";
+				output += "use";
 				break;
 			case"Equip Item":
-				output += "equip ";
+				output += "equip";
 				break;
 			}
 
@@ -160,6 +159,7 @@ public class GameController {
 			break;
 		case "Select Item":
 			checkUserItem(userInput);
+			break;
 		default:
 			System.out.println("Error: Not Valid State (Method readuserInput())");
 			System.out.println(model.getState());
@@ -177,6 +177,11 @@ public class GameController {
 			}
 		}
 		else if(model.checkValidItem(userInput)) {
+			for(int x = 0; x < model.getPlayer().getInventoryList().size(); x++) {
+				if(model.getPlayer().getInventoryList().get(x).getItemName().equals(userInput)) {
+					model.getPlayer().setSelectedItem(model.getPlayer().getInventoryList().get(x));
+				}
+			}
 			
 			switch(model.getStoredState()) {
 			case"Examine Item":
@@ -198,28 +203,48 @@ public class GameController {
 	}
 
 	private void equipItem(String userInput) {
-
+		if(model.getPlayer().getSelectedItem().equals(model.getPlayer().getWeapon())) {
+			view.println("You're already holding that weapon!");
+			model.setState("Action Menu");
+		}else {
+			model.getPlayer().equipWeapon(model.getPlayer().getSelectedItem());
+			view.println("You equipped the " + model.getPlayer().getWeapon().getItemName());
+			model.setState("Action Menu");
+		}
 
 	}
 
 	private void useItem(String userInput) {
-		// TODO Auto-generated method stub
-
+		if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("healing")) {
+			if(!(model.getPlayer().getPlayerCurrentHealth() == model.getPlayer().getPlayerMaxHealth())) {
+				model.getPlayer().healHealth(model.getPlayer().getSelectedItem().getItemActionValue());
+				view.println("You recover " + model.getPlayer().getSelectedItem().getItemActionValue() + " health.");
+				model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
+				model.setState("Action Menu");
+			}else {
+				System.out.println("You are already at full health.");
+				model.setState("Action Menu");
+			}
+		}else {
+			view.println("Nothing Interesting Happened");
+			model.setState("Action Menu");
+		}	
 	}
 
 	private void dropItem(String userInput) {
-		// TODO Auto-generated method stub
+		model.getPlayer().getCurrentRoom().addRoomItem(model.getPlayer().getSelectedItem());
+		model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
+		view.println("You drop the " + model.getPlayer().getSelectedItem().getItemName());
+		model.setState("Action Menu");
 
 	}
 
 	private void examineItem(String userInput) {
-		if(userInput.equalsIgnoreCase("exit")) {
-
-		}else if(checkValidItem(userInput)){
-
-		}else {
-			System.out.println("Invalid Input");
+		view.println(model.getPlayer().getSelectedItem().toString());
+		if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("weapon")) {
+			view.println("\nAmmo x " + model.getPlayer().getWeaponAmmo(model.getPlayer().getSelectedItem()));
 		}
+		model.setState("Action Menu");
 	}
 
 	/*Main Menu that set the state depending on the
@@ -259,7 +284,8 @@ public class GameController {
 			model.setState("Move Player");
 			break;
 		case "examine room" : case "2":
-			view.println("Not Implemented Yet");
+			model.getPlayer().getCurrentRoom().toString();
+			model.setState("Action Menu");
 			break;
 		case "check inventory" : case "3":
 			model.setState("Inventory Menu");
