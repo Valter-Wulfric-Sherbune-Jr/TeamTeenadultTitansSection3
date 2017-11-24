@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 public class SaveData implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1539034718245633359L;
 	private int saveId;
 	private Players playerData;
 	private HashMap<String, Items> itemList;

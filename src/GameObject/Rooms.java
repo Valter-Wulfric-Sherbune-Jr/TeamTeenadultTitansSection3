@@ -9,6 +9,10 @@ import java.util.Set;
 
 public class Rooms implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3774932443351106622L;
 	private String roomId;
 	private String roomFloor;
 	private String roomDescription;

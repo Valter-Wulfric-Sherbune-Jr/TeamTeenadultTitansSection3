@@ -3,6 +3,10 @@ package GameObject;
 import java.io.Serializable;
 
 public class Monsters implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 747669969230458693L;
 	private String monsterName;
 	private String monsterId;
 	private String monsterDesc;

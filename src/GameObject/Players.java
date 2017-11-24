@@ -7,6 +7,10 @@ import java.util.HashMap;
 
 public class Players implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4732377618852013083L;
 	private String playerName;
 	private int playerMaxHealth;
 	private int playerCurrentHealth;
@@ -17,6 +21,7 @@ public class Players implements Serializable{
 	private Rooms previousRoom;
 	private long time;
 	private long startTime;
+	private Items selectedItem;
 
 
 	//Create Default Object
@@ -258,6 +263,16 @@ public class Players implements Serializable{
 				}
 			}
 		}
+	}
+	
+	/*After selecting an item from the pick item state
+	 *it holds the item for player to later recall back
+	 */
+	public void setSelectedItem(Items selectedItem) {
+		this.selectedItem = selectedItem;
+	}
+	public Items getSelectedItem() {
+		return selectedItem;
 	}
 
 

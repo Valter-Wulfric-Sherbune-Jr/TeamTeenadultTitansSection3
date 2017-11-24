@@ -4,18 +4,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import GameObject.*;
+import GameObject.Items;
+import GameObject.Monsters;
+import GameObject.Rooms;
+import GameObject.SaveData;
+import GameObject.Puzzles;
+import GameObject.Players;
 
 public class GameModel{
 	private String gameFolder = "";
-	private String[] validState = {"Main Menu","New game","Select Game Folder","Player Creation",
-			"Load Menu","Action Menu", "Move Player","Save Menu"};
+	private String[] validState = {"Main Menu","New game","Player Creation",
+			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
+			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
@@ -30,10 +38,14 @@ public class GameModel{
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
 	private HashMap<String, Puzzles> puzzleList = new HashMap<String, Puzzles>();
 	private HashMap<Integer, SaveData> saveList = new HashMap<Integer, SaveData>();
+	private SaveData save;
 	private Players player;
+	private String storedState = "";
 	private String state = "";
 
-
+	
+	
+	
 	/*Set the state of the game, if error then exit game
 	 *Used in method: readUserInput()
 	 */
@@ -47,11 +59,31 @@ public class GameModel{
 			System.exit(0);
 		}
 	}
+	
+	/*Save a state you want to switch to late
+	 */
+	public void setStoredState(String storedState) {
+		if(checkIfValidState(storedState)) {
+			this.storedState = storedState;
+		}
+		else {
+			System.out.println("Error: Not Valid State (Method setStoredState())");
+			System.out.println(state);
+			System.exit(0);
+		}
+	}
+	
 
 	/*Get the state of the game
 	 */
 	public String getState() {
 		return state;
+	}
+	
+	/*Get the previous state of the game
+	 */
+	public String getStoredState(){
+		return storedState;
 	}
 
 	/*Return true of false on whether the state is valid or not
@@ -380,12 +412,16 @@ public class GameModel{
 	public Rooms getNextRoom(String userInput) {
 		return roomList.get(player.getCurrentRoom().getRoomNavigationList().get(userInput));
 	}
-
+	
+	/*Search the save folder of the game folder and add all
+	 *files to the saveList hashmap, with the save id as the key
+	 *Use in Method: 
+	 */
 	public void setSaveList() {
 		saveList.clear();
+
 		String folderPath = gameFolder + "Save/";
-		
-		try {
+		try {	
 			File folder = new File(folderPath);
 			File[] listOfFiles = folder.listFiles();
 			String fileName = null;
@@ -393,34 +429,77 @@ public class GameModel{
 				if (file.isFile()) {
 					fileName = file.getName();
 					folderPath = gameFolder + "Save/" + fileName;
-					ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath));
-					while(true) {
-						SaveData saveObj = (SaveData) (objInput.readObject());
-						if(saveList.get(saveObj.getSaveId()) == null) {
-							saveList.put(saveObj.getSaveId(), saveObj);
-						}else {
-							System.out.println("Error: Duplicate Save Data ID " + fileName + " with save id " + saveObj.getSaveId());
-						}
-					} 
+					try(ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath)))
+					{
+						while(true) {
+							SaveData saveObj = (SaveData) (objInput.readObject());
+							if(saveList.get(saveObj.getSaveId()) == null) {
+								saveList.put(saveObj.getSaveId(), saveObj);
+							}else {
+								System.out.println("Error: Duplicate Save Data ID " + fileName + " with save id " + saveObj.getSaveId());
+							}
+						} 
+					}
+					catch(Exception e)
+					{
+						//Nothing here
+					}
 
 				}
 			}
-		}catch(FileNotFoundException e) {
-			System.out.println("Error: File Not Found (Method setSaveList())");
-			System.out.println(e);
-		}catch (IOException e) {
-			System.out.println("Error: Reading File Error (Method setSaveList())");
-			System.out.println(e);
-		} catch (ClassNotFoundException e) {
-			System.out.println("Error: Object Error (Method setSaveList())");
-			System.out.println(e);
 		}
-
+		catch(Exception e) {
+			File dir = new File(folderPath);
+			dir.mkdir();
+			System.out.println("Error, Save folder do not exist" + e.toString());
+			System.out.println("Creating Save Folder");
+		}
 	}
-	
+
+	/*Get the saveList hashmap
+	 */
 	public HashMap<Integer, SaveData> getSaveList() {
 		return saveList;
 	}
+
+	/*Initalize the saveData, but does not save the object yet
+	 */
+	public void setSaveData(int userInputInt){
+		player.endGameTime();
+		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList);
+		player.startGameTime();
+	}
+	
+	/*Get the saveData that was initalize
+	 */
+	public SaveData getSaveData(){
+		return save;
+	}
+	
+	/*Save the gameData and create a binary test file of it in
+	 *the save folder
+	 */
+	public void saveGameData(SaveData data) {
+		try {
+			ObjectOutputStream out = 
+					new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ data.getSaveId() +".dat"));
+			out.writeObject(data);
+		} catch (FileNotFoundException e) {
+			System.out.println("Error: File Not Found (Method saveGameData())");
+		} catch (IOException e) {
+			System.out.println("Error: Reading File Error (Method saveGameData())");
+		}
+	}
+	
+	public boolean checkValidItem(String itemName) {
+		for(Items item: player.getInventoryList()) {
+			if(item.getItemName().equalsIgnoreCase(itemName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 
 

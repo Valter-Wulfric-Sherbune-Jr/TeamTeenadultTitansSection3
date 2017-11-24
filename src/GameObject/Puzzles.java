@@ -3,6 +3,10 @@ package GameObject;
 import java.io.Serializable;
 
 public class Puzzles implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7983065870395608398L;
 	private String puzzleId;
 	private String puzzleDesc;
 	private String puzzleType;

@@ -3,6 +3,10 @@ package GameObject;
 import java.io.Serializable;
 
 public class Items implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4261580717789598655L;
 	private String itemName;
 	private String itemId;
 	private String itemDesc;
