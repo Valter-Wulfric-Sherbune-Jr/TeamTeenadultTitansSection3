@@ -519,6 +519,7 @@ public class GameController {
 							model.removeLoot();
 						}
 					}
+					model.decreaseMonsterAlive();
 
 				}
 			}
@@ -526,12 +527,21 @@ public class GameController {
 				attackPlayer();
 			}else {
 				model.setState("Action Menu");
+				checkWinCondition();
 			}
 		}else {
 			model.setState("Multiple Monster");
 		}
 	}
 	
+	/*If there is more then one monster in a room, then it gets the 
+	 *user input and check if what the user entered was valid then
+	 *precede to attack like normal. All monster will attack you
+	 *if there is multiple monster in a room
+	 *Parent Method: combatMenu()
+	 *Child Method: attackPlayer()
+	 *Related State Affliction: Combat Menu, Action Menu, Multiple Monster, Combat Menu
+	 */
 	private void attackMultipleMonster(String userInput) {
 		if(model.checkValidMonster(userInput)) {
 			if(checkWeaponAmmo()) {
@@ -561,6 +571,7 @@ public class GameController {
 							model.removeLoot();
 						}
 					}
+					model.decreaseMonsterAlive();
 
 				}
 			}
@@ -572,9 +583,11 @@ public class GameController {
 				model.setState("Combat Menu");
 			}else {
 				model.setState("Action Menu");
+				checkWinCondition();
 			}
 		}else{
 			view.println("Invalid Input");
+			
 		}
 	}
 
@@ -655,6 +668,23 @@ public class GameController {
 			view.println("\n\n--------------------------------------------------");
 			view.println("||||||||||||||||||||||||||||||||||||||||||||||||||");
 			view.println("=====        YOU DIED   -   GAME OVER        =====");
+			view.println("||||||||||||||||||||||||||||||||||||||||||||||||||");
+			view.println("--------------------------------------------------\n\n\n");
+			model.setState("Main Menu");
+		}
+	}
+	
+	/*Check to see if the win condition is met and
+	 *if there is zero enemy alive then the you win
+	 *and sent to back to the main menu
+	 *Parent Method: attackMonster(), attackMultipleMonster()
+	 *Related State Affliction: Main Menu, Combat Menu, Multiple Monster
+	 */
+	private void checkWinCondition() {
+		if(model.getMonsterAlive() == 0) {	
+			view.println("\n\n--------------------------------------------------");
+			view.println("||||||||||||||||||||||||||||||||||||||||||||||||||");
+			view.println("=====        You Win   -    Vicotry        =====");
 			view.println("||||||||||||||||||||||||||||||||||||||||||||||||||");
 			view.println("--------------------------------------------------\n\n\n");
 			model.setState("Main Menu");

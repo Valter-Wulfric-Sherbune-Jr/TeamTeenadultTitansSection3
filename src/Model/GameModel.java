@@ -52,6 +52,7 @@ public class GameModel{
 	private Rooms nextRoom;
 	private Monsters currentMonster;
 	private ArrayList<Items> lootList;
+	private int monsterAlive = 0;
 
 	/*Set the state of the game, if error then exit game
 	 *Used in method: readUserInput()
@@ -270,7 +271,7 @@ public class GameModel{
 							}else {
 								itemObject.setItemDropRate(0);
 							}
-							
+
 							break;	
 						case "Monster Name:":
 							monsterObject.setMonsterName(fileLine);
@@ -326,6 +327,7 @@ public class GameModel{
 							if(!fileLine.equals("null")) {
 								Monsters newMonster = (Monsters) clone(monsterList.get(fileLine));
 								roomObject.addRoomMonster(newMonster);
+								monsterAlive++;
 								break;
 							}
 						case "Puzzle ID:":
@@ -606,6 +608,10 @@ public class GameModel{
 		return lootList.get(0);
 	}
 
+	/*Get an arraylist of item that has been
+	 *add by drop rate.
+	 *Use in Method: printChoice(), lootItem()
+	 */
 	public ArrayList<Items> getMonsterLootList() {
 		ArrayList<Items> validDrop = new ArrayList<Items>();
 		ArrayList<String> itemIdList = new ArrayList<String>();
@@ -615,28 +621,32 @@ public class GameModel{
 			Map.Entry mEntry = (Map.Entry)iterator.next();
 			itemIdList.add((String) mEntry.getKey());
 		}
-		
-		
+
+
 		for(int x = 0; x < itemList.size(); x++) {
 			//Creates a random value between 1 and 100
 			double chance = Math.random() * 100;
 			double itemDropPercent = 0 ;
 			if(itemList.get(itemIdList.get(x)).getItemDropRate() != 0) {
-			//copy of percentage and multiply by a hundred to get a non decimal
-			itemDropPercent = itemList.get(itemIdList.get(x)).getItemDropRate()*100;
-			
+				//copy of percentage and multiply by a hundred to get a non decimal
+				itemDropPercent = itemList.get(itemIdList.get(x)).getItemDropRate()*100;
+
 			}
-			
-			
+
+
 			Items newItem = (Items) clone(itemList.get(itemIdList.get(x)));
-			
+
 			if ((itemDropPercent - chance) >= 0) {
 				validDrop.add(newItem);
 			}
 		}
 		return validDrop;
 	}
-	
+
+	/*Check if the user input matches a valid
+	 *monster in the room
+	 *Use in Method: attackMultipleMonster()
+	 */
 	public boolean checkValidMonster(String userInput) {
 		for(int x = 0; x < player.getCurrentRoom().getRoomMonster().size(); x++) {
 			if(player.getCurrentRoom().getRoomMonster().get(x).getMonsterName().equalsIgnoreCase(userInput)) {
@@ -645,6 +655,21 @@ public class GameModel{
 		}
 		return false;
 	}
+	
+	/*Get the amount of monster alive
+	 *Use in Method: checkWinCondition()
+	 */
+	public int getMonsterAlive() {
+		return monsterAlive;
+	}
+	
+	/*Decrease the amount of monster alive
+	 *Use in Method: attackMonster(), attackMultipleMonster()
+	 */
+	public void decreaseMonsterAlive() {
+		monsterAlive--;
+	}
+
 
 
 }
