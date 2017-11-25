@@ -186,7 +186,7 @@ public class Monsters implements Serializable{
 		
 		//Add Monster Description
 		returnString += getMonsterDesc();
-
+		
 		return returnString;
 	}
 

@@ -215,14 +215,14 @@ public class Rooms implements Serializable{
 	public String toString() {
 		String returnString = "";
 
-		//Add Guide Line
-		returnString += "--------------------------------------------------\n";
-
 		//Add Room Name
 		returnString += "Floor: " + getRoomFloor() + "\n\n";
 
 		//Add Room Description
 		returnString += getRoomDescription();
+		
+		//Add Guide Line
+		returnString += "\n--------------------------------------------------";
 		
 		return returnString;
 	}
