@@ -55,8 +55,28 @@ public class Items implements Serializable{
 
 	//Set and get item description
 	public void setItemDesc(String itemDesc) {
+		/*If there are more then 50 character in a line, 
+		it'll make a new line*/
+		if(itemDesc.length() > 50) {
+			int totalCharacterLength = 0;
+			int descriptionLength = itemDesc.length();
+			String outputString ="";
+
+			for (String word : itemDesc.split(" ")) {
+				totalCharacterLength += word.length();
+				descriptionLength -= word.length()+1;
+				outputString += word + " ";
+
+				if(totalCharacterLength > 40 && descriptionLength > 0) {
+					totalCharacterLength = 0;
+					outputString += "\n";
+				}
+			}
+			itemDesc = outputString;
+		}
 		this.itemDesc = itemDesc;
 	}
+	
 	public String getItemDesc() {
 		return itemDesc;
 	}

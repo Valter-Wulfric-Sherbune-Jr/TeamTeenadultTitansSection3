@@ -50,7 +50,26 @@ public class Puzzles implements Serializable{
 		return puzzleDesc;
 	}
 	public void setPuzzleDesc(String puzzleDesc) {
-		this.puzzleDesc = puzzleDesc;
+			/*If there are more then 50 character in a line, 
+			it'll make a new line*/
+			if(puzzleDesc.length() > 50) {
+				int totalCharacterLength = 0;
+				int descriptionLength = puzzleDesc.length();
+				String outputString ="";
+
+				for (String word : puzzleDesc.split(" ")) {
+					totalCharacterLength += word.length();
+					descriptionLength -= word.length()+1;
+					outputString += word + " ";
+
+					if(totalCharacterLength > 40 && descriptionLength > 0) {
+						totalCharacterLength = 0;
+						outputString += "\n";
+					}
+				}
+				puzzleDesc = outputString;
+			}
+			this.puzzleDesc = puzzleDesc;
 	}
 
 	

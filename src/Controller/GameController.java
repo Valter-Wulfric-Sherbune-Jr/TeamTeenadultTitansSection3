@@ -142,7 +142,6 @@ public class GameController {
 			output += "Do you want to pick it up?\n";
 			output += "1. Yes\n";
 			output += "2. No\n";
-			System.out.println(model.getLoot().getItemName());
 			break;
 		default:
 			System.out.println("Error: Not Valid State (Method printChoice())");
@@ -221,7 +220,6 @@ public class GameController {
 	private void lootItem(String userInput) {
 		switch(userInput.toLowerCase()) {
 		case "yes": case "y": case "1":
-			System.out.println(model.getLoot().getItemName());
 			
 			if(model.getStoredState().equalsIgnoreCase("Room")) {
 				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomItem().size(); x++) {
@@ -232,7 +230,7 @@ public class GameController {
 			}
 			
 			model.getPlayer().addItemToInventory(model.getLoot());
-			System.out.println("\nYou picked up the " + model.getLoot().getItemName() + ".");
+			view.println("\nYou picked up the " + model.getLoot().getItemName() + ".");
 			model.removeLoot();
 			
 			
@@ -241,7 +239,7 @@ public class GameController {
 			}
 			break;
 		case "no": case "n": case "2":
-			System.out.println("\nYou decided to leave the " + model.getLoot().getItemName() + ".");
+			view.println("\nYou decided to leave the " + model.getLoot().getItemName() + ".");
 			model.removeLoot();
 			if(model.getLootList().isEmpty()) {
 				model.setState("Action Menu");
@@ -270,7 +268,7 @@ public class GameController {
 			runAway();
 			break;
 		default:
-			System.out.println("Invalid command");
+			view.println("Invalid command");
 		}
 
 	}
