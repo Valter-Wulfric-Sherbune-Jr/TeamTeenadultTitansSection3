@@ -44,7 +44,7 @@ public class GameController {
 			output += "                  5. Exit Game\n";
 			break;
 		case "Player Creation":
-			output += "Please Choose your name:";
+			output += "Please enter your:";
 			break;
 		case "Action Menu":
 			output += ">>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<\n";
@@ -123,7 +123,7 @@ public class GameController {
 		case "Use Item Puzzle":
 			output += "Inventory:\n";
 			output += model.getPlayer().getInventoryListString();
-			output += "\nSelect an item to use? Type \"Exit\" to cancel.";
+			output += "\nWhich item do you want to use? Type \"Exit\" to cancel.";
 			break;	
 		default:
 			System.out.println("Error: Not Valid State (Method readuserInput())");
@@ -195,8 +195,7 @@ public class GameController {
 
 	private void usePuzzleItem() {
 		if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(model.getPlayer().getSelectedItem().getItemId())) {
-			view.println("You used the item");
-			view.println("The door open");
+			view.println("You used the " + model.getPlayer().getSelectedItem().getItemId() + ", and the door opens!");
 			if(model.getNextRoom().getRoomMonster().isEmpty()) {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				view.println(model.getPlayer().getCurrentRoom().toString());
@@ -207,7 +206,7 @@ public class GameController {
 				model.setState("Combat Menu");
 			}
 		}else {
-			view.println("Nothing Happened");
+			view.println("Nothing interesting happens.");
 			model.setState("Puzzle Menu");
 		}
 
@@ -219,7 +218,7 @@ public class GameController {
 			if(model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("input"))
 				model.setState("Input Number");
 			else if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item"))
-				view.println("There's nothing to input");
+				view.println("There's nothing to input.");
 			else {
 				System.out.println("Error with Puzzle Type " + model.getNextRoomPuzzle().getPuzzleType());
 				System.exit(0);
@@ -244,8 +243,7 @@ public class GameController {
 
 	private void inputNumber(String userInput) {
 		if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(userInput)) {
-			view.println("You input the right number");
-			view.println("The door open");
+			view.println("You enter the number, and the door opens!");
 			if(model.getNextRoom().getRoomMonster().isEmpty()) {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				view.println(model.getPlayer().getCurrentRoom().toString());
@@ -257,9 +255,8 @@ public class GameController {
 			}
 
 		}else {
-			view.print("Invalid Input");
+			view.println("You input the wrong number and get shocked for" + model.getNextRoomPuzzle().getPuzzleDamage() + " damage!");
 			model.getPlayer().takeDmg(model.getNextRoomPuzzle().getPuzzleDamage());
-			view.println("You got zap for " + model.getNextRoomPuzzle().getPuzzleDamage() + " damage");
 			showPlayerHealth();
 			checkPlayerDeath();
 		}

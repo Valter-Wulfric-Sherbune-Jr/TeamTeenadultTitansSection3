@@ -463,10 +463,10 @@ public class GameModel{
 			}
 		}
 		catch(Exception e) {
+			System.out.println("Error; Save folder does not exist" + e.toString());
+			System.out.println("Creating save folder...");
 			File dir = new File(folderPath);
 			dir.mkdir();
-			System.out.println("Error, Save folder do not exist" + e.toString());
-			System.out.println("Creating Save Folder");
 		}
 	}
 
