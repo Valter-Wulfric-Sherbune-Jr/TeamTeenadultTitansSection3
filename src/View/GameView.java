@@ -10,5 +10,16 @@ public class GameView {
 	{
 		System.out.println(str);
 	}
+	public void delayPrint(String str) {
+		try {
+			for(String string : str.split(" ")) {
+				System.out.print(string);
+				Thread.sleep(100);
+			}
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

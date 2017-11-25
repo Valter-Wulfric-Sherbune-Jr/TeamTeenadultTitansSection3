@@ -109,6 +109,22 @@ public class GameController {
 
 			output += "? Type \"Exit\" to cancel.";
 			break;
+		case "Puzzle Menu":
+			output += "\nThe door is locked!\n";
+			output += "What will you do?\n";
+			output += "1. Input Number\n";
+			output += "2. Use Item\n";
+			output += "3. Hint\n";
+			output += "4. Exit\n";
+			break;
+		case "Input Number":
+			output += "Type in a number. Type \"Exit\" to cancel.\n";
+			break;	
+		case "Use Item Puzzle":
+			output += "Inventory:\n";
+			output += model.getPlayer().getInventoryListString();
+			output += "\nSelect an item to use? Type \"Exit\" to cancel.";
+			break;	
 		default:
 			System.out.println("Error: Not Valid State (Method readuserInput())");
 			System.out.println(model.getState());
@@ -160,6 +176,15 @@ public class GameController {
 		case "Select Item":
 			checkUserItem(userInput);
 			break;
+		case "Puzzle Menu":
+			puzzleMenu(userInput);
+			break;
+		case "Input Number":
+			inputNumber(userInput);
+			break;
+		case "Use Item Puzzle":
+			checkUserItem(userInput);
+			break;
 		default:
 			System.out.println("Error: Not Valid State (Method readuserInput())");
 			System.out.println(model.getState());
@@ -167,6 +192,89 @@ public class GameController {
 		}
 	}	
 
+
+	private void usePuzzleItem() {
+		if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(model.getPlayer().getSelectedItem().getItemId())) {
+			view.println("You used the item");
+			view.println("The door open");
+			if(model.getNextRoom().getRoomMonster().isEmpty()) {
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
+				view.println(model.getPlayer().getCurrentRoom().toString());
+				model.setState("Action Menu");
+			}
+			else {
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
+				model.setState("Combat Menu");
+			}
+		}else {
+			view.println("Nothing Happened");
+			model.setState("Puzzle Menu");
+		}
+
+	}
+
+	private void puzzleMenu(String userInput) {
+		switch(userInput.toLowerCase()) {
+		case "input number" : case "1":
+			if(model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("input"))
+				model.setState("Input Number");
+			else if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item"))
+				view.println("There's nothing to input");
+			else {
+				System.out.println("Error with Puzzle Type " + model.getNextRoomPuzzle().getPuzzleType());
+				System.exit(0);
+			}
+			break;
+		case "inventory" : case "2":
+			model.setStoredState("Puzzle");
+			model.setState("Use Item Puzzle");
+			break;
+		case "hint" : case "3":
+			view.println(model.getNextRoomPuzzle().getPuzzleHint());
+			view.println(model.getNextRoomPuzzle().getPuzzleDesc());
+			break;
+		case "leave" : case "4":
+			model.setState("Action Menu");
+			break;
+		default:
+			view.print("Invalid Input");
+		}
+
+	}
+
+	private void inputNumber(String userInput) {
+		if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(userInput)) {
+			view.println("You input the right number");
+			view.println("The door open");
+			if(model.getNextRoom().getRoomMonster().isEmpty()) {
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
+				view.println(model.getPlayer().getCurrentRoom().toString());
+				model.setState("Action Menu");
+			}
+			else {
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
+				model.setState("Combat Menu");
+			}
+
+		}else {
+			view.print("Invalid Input");
+			model.getPlayer().takeDmg(model.getNextRoomPuzzle().getPuzzleDamage());
+			view.println("You got zap for " + model.getNextRoomPuzzle().getPuzzleDamage() + " damage");
+			showPlayerHealth();
+			checkPlayerDeath();
+		}
+
+	}
+
+	private void showPlayerHealth() {
+		view.println(model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth());
+	}
+	private void checkPlayerDeath() {
+		if(model.getPlayer().getPlayerCurrentHealth() <= 0) {
+			view.println("Game Over");
+			model.setState("Main Menu");
+		}
+	}
 
 	private void checkUserItem(String userInput) {
 		if(userInput.equalsIgnoreCase("exit")) {
@@ -182,27 +290,29 @@ public class GameController {
 					model.getPlayer().setSelectedItem(model.getPlayer().getInventoryList().get(x));
 				}
 			}
-			
 			switch(model.getStoredState()) {
 			case"Examine Item":
-				examineItem(userInput);
+				examineItem();
 				break;
 			case"Drop Item":
-				dropItem(userInput);
+				dropItem();
 				break;
 			case"Use Item":
-				useItem(userInput);
+				useItem();
 				break;
 			case"Equip Item":
-				equipItem(userInput);
+				equipItem();
 				break;	
+			case"Puzzle":
+				usePuzzleItem();
+				break;
 			}
 		}else {
-			System.out.println("Invalid Input");
+			view.print("Invalid Input");
 		}		
 	}
 
-	private void equipItem(String userInput) {
+	private void equipItem() {
 		if(model.getPlayer().getSelectedItem().equals(model.getPlayer().getWeapon())) {
 			view.println("You're already holding that weapon!");
 			model.setState("Action Menu");
@@ -214,7 +324,7 @@ public class GameController {
 
 	}
 
-	private void useItem(String userInput) {
+	private void useItem() {
 		if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("healing")) {
 			if(!(model.getPlayer().getPlayerCurrentHealth() == model.getPlayer().getPlayerMaxHealth())) {
 				model.getPlayer().healHealth(model.getPlayer().getSelectedItem().getItemActionValue());
@@ -222,7 +332,7 @@ public class GameController {
 				model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
 				model.setState("Action Menu");
 			}else {
-				System.out.println("You are already at full health.");
+				view.println("You are already at full health.");
 				model.setState("Action Menu");
 			}
 		}else {
@@ -231,7 +341,7 @@ public class GameController {
 		}	
 	}
 
-	private void dropItem(String userInput) {
+	private void dropItem() {
 		model.getPlayer().getCurrentRoom().addRoomItem(model.getPlayer().getSelectedItem());
 		model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
 		view.println("You drop the " + model.getPlayer().getSelectedItem().getItemName());
@@ -239,7 +349,7 @@ public class GameController {
 
 	}
 
-	private void examineItem(String userInput) {
+	private void examineItem() {
 		view.println(model.getPlayer().getSelectedItem().toString());
 		if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("weapon")) {
 			view.println("\nAmmo x " + model.getPlayer().getWeaponAmmo(model.getPlayer().getSelectedItem()));
@@ -284,7 +394,7 @@ public class GameController {
 			model.setState("Move Player");
 			break;
 		case "examine room" : case "2":
-			model.getPlayer().getCurrentRoom().toString();
+			view.println(model.getPlayer().getCurrentRoom().toString());
 			model.setState("Action Menu");
 			break;
 		case "check inventory" : case "3":
@@ -328,7 +438,7 @@ public class GameController {
 			model.setState("Action Menu");
 			break;
 		default:
-			System.out.println("\nInvalid Input.");
+			view.println("\nInvalid Input.");
 			break;
 		}
 	}
@@ -372,7 +482,8 @@ public class GameController {
 		if(userInput.equals("Exit")) {
 			model.setState("Action Menu");
 		}else if(model.checkValidDirection(userInput)) {
-			if(model.getNextRoom(userInput).getRoomAccessList().get(model.getPlayer().getCurrentRoom().getRoomId()) != null) {
+			model.setNextRoom(userInput);
+			if(model.getNextRoomPuzzle() != null) {
 				//				Puzzles puzzle = puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
 				//				if(puzzleMenu(puzzle)) {
 				//					if(player.getCurrentRoom().getRoomMonster().isEmpty()) {
@@ -380,14 +491,15 @@ public class GameController {
 				//						System.out.println(player.getCurrentRoom().toString());			
 				//					}
 				//				}
+				model.setState("Puzzle Menu");
 			}
 			else if(model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
-				model.getPlayer().setCurrentRoom(model.getNextRoom(userInput));
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				view.println(model.getPlayer().getCurrentRoom().toString());	
 				model.setState("Action Menu");		
 			}
 			else{
-				model.getPlayer().setCurrentRoom(model.getNextRoom(userInput));
+				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				model.setState("Combat Menu");
 			}
 		}
@@ -438,7 +550,7 @@ public class GameController {
 			model.setState("Action Menu");
 			break;
 		default:
-			System.out.println("\nInvalid command");
+			view.println("\nInvalid command");
 			break;
 		}
 	}

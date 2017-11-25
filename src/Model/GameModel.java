@@ -23,7 +23,8 @@ public class GameModel{
 	private String gameFolder = "";
 	private String[] validState = {"Main Menu","New game","Player Creation",
 			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
-			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu"};
+			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
+			"Puzzle", "Use Item Puzzle"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
@@ -42,6 +43,7 @@ public class GameModel{
 	private Players player;
 	private String storedState = "";
 	private String state = "";
+	private Rooms nextRoom;
 
 	
 	
@@ -68,7 +70,7 @@ public class GameModel{
 		}
 		else {
 			System.out.println("Error: Not Valid State (Method setStoredState())");
-			System.out.println(state);
+			System.out.println(storedState);
 			System.exit(0);
 		}
 	}
@@ -409,8 +411,20 @@ public class GameModel{
 	/*Return the player object
 	 *Use in method: playerCreation(), printChoice()
 	 */
-	public Rooms getNextRoom(String userInput) {
-		return roomList.get(player.getCurrentRoom().getRoomNavigationList().get(userInput));
+	public void setNextRoom(String userInput) {
+		this.nextRoom = roomList.get(player.getCurrentRoom().getRoomNavigationList().get(userInput));
+	}
+	
+	/*Return the player object
+	 *Use in method: playerCreation(), printChoice()
+	 */
+	public Rooms getNextRoom() {
+		return nextRoom;
+	}
+	
+	
+	public Puzzles getNextRoomPuzzle() {
+		return puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
 	}
 	
 	/*Search the save folder of the game folder and add all
