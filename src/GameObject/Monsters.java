@@ -178,9 +178,6 @@ public class Monsters implements Serializable{
 	public String toString() {
 		String returnString = "";
 
-		//Add Guide Line
-		returnString += "--------------------------------------------------\n";
-
 		//Add Monster Name
 		returnString += getMonsterName() + " - ";
 

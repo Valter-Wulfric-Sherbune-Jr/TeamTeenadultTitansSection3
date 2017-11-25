@@ -222,7 +222,7 @@ public class Rooms implements Serializable{
 		returnString += "Floor: " + getRoomFloor() + "\n\n";
 
 		//Add Room Description
-		returnString += getRoomDescription() + "\n\n";
+		returnString += getRoomDescription();
 		
 		return returnString;
 	}
