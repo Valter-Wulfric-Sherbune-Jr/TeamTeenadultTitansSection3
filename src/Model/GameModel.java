@@ -24,7 +24,7 @@ public class GameModel{
 	private String[] validState = {"Main Menu","New game","Player Creation",
 			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
 			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
-			"Puzzle", "Use Item Puzzle"};
+			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
@@ -44,6 +44,8 @@ public class GameModel{
 	private String storedState = "";
 	private String state = "";
 	private Rooms nextRoom;
+	private Monsters currentMonster;
+	private ArrayList<Items> lootList;
 
 	
 	
@@ -512,6 +514,26 @@ public class GameModel{
 			}
 		}
 		return false;
+	}
+	
+	public void setCurrentMonster(Monsters monster) {
+		this.currentMonster = monster;
+	}
+	public Monsters getCurrentMonster() {
+		return currentMonster;
+	}
+	
+	public void setLootList(ArrayList<Items> lootList) {
+		this.lootList = new ArrayList<Items>(lootList);
+	}
+	public ArrayList<Items> getLootList() {
+		return lootList;
+	}
+	public void removeLoot() {
+		lootList.remove(0);
+	}
+	public Items getLoot() {
+		return lootList.get(0);
 	}
 
 

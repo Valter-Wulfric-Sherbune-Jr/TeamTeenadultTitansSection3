@@ -124,9 +124,28 @@ public class GameController {
 			output += "Inventory:\n";
 			output += model.getPlayer().getInventoryListString();
 			output += "\nWhich item do you want to use? Type \"Exit\" to cancel.";
-			break;	
+			break;
+		case "Combat Menu":
+			for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+				output += model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
+			}
+
+			output += "--------------------------------------------------\n";
+			output += "COMBAT - What will you do?\n";
+			output += "1. Attack\n";
+			output += "2. Defend\n";
+			output += "3. View Inventory\n";
+			output += "4. Run Away\n";
+			break;
+		case "Loot Item":
+			output += "\nYou found a " + model.getLoot().getItemName() + ".\n";
+			output += "Do you want to pick it up?\n";
+			output += "1. Yes\n";
+			output += "2. No\n";
+			System.out.println(model.getLoot().getItemName());
+			break;
 		default:
-			System.out.println("Error: Not Valid State (Method readuserInput())");
+			System.out.println("Error: Not Valid State (Method printChoice())");
 			System.out.println(model.getState());
 			System.exit(0);
 			break;
@@ -185,12 +204,146 @@ public class GameController {
 		case "Use Item Puzzle":
 			checkUserItem(userInput);
 			break;
+		case "Combat Menu":
+			combatMenu(userInput);
+			break;
+		case "Loot Item":
+			lootItem(userInput);
+			break;
 		default:
 			System.out.println("Error: Not Valid State (Method readuserInput())");
 			System.out.println(model.getState());
 			System.exit(0);
 		}
 	}	
+
+
+	private void lootItem(String userInput) {
+		switch(userInput.toLowerCase()) {
+		case "yes": case "y": case "1":
+			System.out.println(model.getLoot().getItemName());
+			
+			if(model.getStoredState().equalsIgnoreCase("Room")) {
+				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomItem().size(); x++) {
+					if(model.getLoot().equals(model.getPlayer().getCurrentRoom().getRoomItem().get(x))) {
+						model.getPlayer().getCurrentRoom().removeRoomItemId(model.getLoot());
+					}
+				}
+			}
+			
+			model.getPlayer().addItemToInventory(model.getLoot());
+			System.out.println("\nYou picked up the " + model.getLoot().getItemName() + ".");
+			model.removeLoot();
+			
+			
+			if(model.getLootList().isEmpty()) {
+				model.setState("Action Menu");
+			}
+			break;
+		case "no": case "n": case "2":
+			System.out.println("\nYou decided to leave the " + model.getLoot().getItemName() + ".");
+			model.removeLoot();
+			if(model.getLootList().isEmpty()) {
+				model.setState("Action Menu");
+			}
+			break;
+		default:
+			view.println("\nInvalid Command");
+			break;
+		}
+		
+	}
+
+	private void combatMenu(String userInput) {
+		switch(userInput.toLowerCase()) {
+		case "attack" : case "1":
+			attackMonster();
+			break;
+		case "defend" : case "2":
+			view.println("You block all attacks, and take no damage!");
+			break;
+		case "check Inventory": case "check": case "inventory": case "3":
+			model.setState("Inventory Menu");
+			model.setStoredState("Combat");
+			break;
+		case "run away": case "run": case "4":
+			runAway();
+			break;
+		default:
+			System.out.println("Invalid command");
+		}
+
+	}
+
+	private void runAway() {
+		view.println("You ran away from the monster");		
+		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+			model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+			model.getCurrentMonster().setMonsterCurrentHealth(model.getCurrentMonster().getMonsterMaxHealth());
+		}
+		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
+		model.setState("Action Menu");
+	}
+
+	private void attackMonster() {
+		if(model.getPlayer().getCurrentRoom().getRoomMonster().size() == 1) {
+			model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(0));
+
+			if(checkWeaponAmmo()) {
+				view.println("You don't have any ammo for your weapon");
+			}else {
+
+				view.println("\nYou attack the " + model.getCurrentMonster().getMonsterName() + "!");
+				model.getCurrentMonster().takeDmg(model.getPlayer().getWeapon().getItemActionValue());
+				model.getPlayer().useWeaponAmmo(model.getPlayer().getWeapon());
+				view.println("The " + model.getCurrentMonster().getMonsterName() + " took " + 
+						model.getPlayer().getWeapon().getItemActionValue() + " damage!\n");
+
+				if(checkMonsterDeath()) {
+					view.println("The " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
+					model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+
+				}
+			}
+			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+				attackPlayer();
+			}else {
+				model.setState("Action Menu");
+			}
+		}else {
+			model.setState("Multiple Monster");
+		}
+	}
+
+	public boolean checkWeaponAmmo() {
+		if(model.getPlayer().getWeaponAmmo(model.getPlayer().getWeapon()) == 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public boolean checkMonsterDeath() {
+		if(model.getCurrentMonster().getMonsterCurrentHealth() <= 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public void attackPlayer() {
+		view.println("The " + model.getCurrentMonster().getMonsterName() + " attacks!");
+		int mosnterDamage = model.getCurrentMonster().attackPlayer();
+		if(mosnterDamage == 0) {
+			view.println("The attack missed!");
+		}else {
+			view.println("You took " + mosnterDamage + " damage!");
+			model.getPlayer().takeDmg(mosnterDamage);
+			showPlayerHealth();
+			checkPlayerDeath();
+		}
+
+	}
 
 
 	private void usePuzzleItem() {
@@ -311,12 +464,18 @@ public class GameController {
 
 	private void equipItem() {
 		if(model.getPlayer().getSelectedItem().equals(model.getPlayer().getWeapon())) {
-			view.println("You're already holding that weapon!");
+			view.println("You're already holding a weapon like that!");
 			model.setState("Action Menu");
 		}else {
-			model.getPlayer().equipWeapon(model.getPlayer().getSelectedItem());
-			view.println("You equipped the " + model.getPlayer().getWeapon().getItemName());
-			model.setState("Action Menu");
+			if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("Weapon")) {
+				model.getPlayer().equipWeapon(model.getPlayer().getSelectedItem());
+				view.println("You equipped the " + model.getPlayer().getWeapon().getItemName());
+				model.setState("Action Menu");
+			}else {
+				view.println("This isn't a weapon!");
+				model.setState("Action Menu");
+			}
+			
 		}
 
 	}
@@ -392,7 +551,14 @@ public class GameController {
 			break;
 		case "examine room" : case "2":
 			view.println(model.getPlayer().getCurrentRoom().toString());
-			model.setState("Action Menu");
+			if(model.getPlayer().getCurrentRoom().getRoomItem().isEmpty()) {
+				view.println("You Found nothing in the room");
+				model.setState("Action Menu");
+			}else {
+				model.setLootList(model.getPlayer().getCurrentRoom().getRoomItem());
+				model.setStoredState("Room");
+				model.setState("Loot Item");
+			}
 			break;
 		case "check inventory" : case "3":
 			model.setState("Inventory Menu");
@@ -409,6 +575,7 @@ public class GameController {
 			break;
 		}
 	}
+
 
 	/*Action Menu that set the state depending on the
 	 *player input
@@ -432,7 +599,11 @@ public class GameController {
 			model.setStoredState("Equip Item");
 			break;
 		case "exit": case "5":
+			if(model.getStoredState().equalsIgnoreCase("Combat")) {
+				model.setState("Combat Menu");
+			}else {
 			model.setState("Action Menu");
+			}
 			break;
 		default:
 			view.println("\nInvalid Input.");
@@ -481,16 +652,9 @@ public class GameController {
 		}else if(model.checkValidDirection(userInput)) {
 			model.setNextRoom(userInput);
 			if(model.getNextRoomPuzzle() != null) {
-				//				Puzzles puzzle = puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
-				//				if(puzzleMenu(puzzle)) {
-				//					if(player.getCurrentRoom().getRoomMonster().isEmpty()) {
-				//						player.setCurrentRoom(nextRoom);
-				//						System.out.println(player.getCurrentRoom().toString());			
-				//					}
-				//				}
 				model.setState("Puzzle Menu");
 			}
-			else if(model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+			else if(model.getNextRoom().getRoomMonster().isEmpty()) {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				view.println(model.getPlayer().getCurrentRoom().toString());	
 				model.setState("Action Menu");		
