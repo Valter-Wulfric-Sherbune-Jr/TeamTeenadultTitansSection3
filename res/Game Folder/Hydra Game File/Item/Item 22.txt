@@ -10,3 +10,5 @@ Item Action Value:
 I05
 Item Amount:
 5
+Item Drop Rate:
+.25

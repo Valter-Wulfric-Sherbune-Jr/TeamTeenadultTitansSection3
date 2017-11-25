@@ -13,6 +13,7 @@ public class Items implements Serializable{
 	private String itemType;
 	private String itemActionValue;
 	private int itemAmount;
+	private double itemDropRate;
 
 	//Create Default Object
 	public Items() {
@@ -22,17 +23,19 @@ public class Items implements Serializable{
 		this.itemType = "Invalid";
 		this.itemActionValue = "Invalid Item Action Value";
 		this.itemAmount = 0;
+		this.itemDropRate = 0;
 	}
 
 	//Create Object with set parameter
 	public Items(String itemName, String itemId, String itemDesc, String itemType, String itemActionValue,
-			String itemAmount) {
+			String itemAmount, double itemDropRate) {
 		this.itemName = itemName;
 		this.itemId = itemId;
 		this.itemDesc = itemDesc;
 		this.itemType = itemType;
 		this.itemActionValue = itemActionValue;
 		this.itemAmount = 1;
+		this.itemDropRate = itemDropRate;
 	}
 
 	//Set and get item name
@@ -150,8 +153,15 @@ public class Items implements Serializable{
 	public void decreaseItemAmount() {
 		this.itemAmount--;
 	}
-
-
+	
+	/*Get and set the drop rate of item
+	 */
+	public void setItemDropRate(double itemDropRate) {
+		this.itemDropRate = itemDropRate;
+	}
+	public double getItemDropRate() {
+		return itemDropRate;
+	}
 
 
 	public String toString() {
@@ -177,8 +187,6 @@ public class Items implements Serializable{
 		//Add Item Amount
 		returnString += "Amount: " + itemAmount;
 
-		//Add Guide Line
-		returnString += "\n--------------------------------------------------";
 		
 		return returnString;
 	}

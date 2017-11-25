@@ -10,3 +10,5 @@ Item Action Value:
 I09
 Item Amount:
 1
+Item Drop Rate:
+.10

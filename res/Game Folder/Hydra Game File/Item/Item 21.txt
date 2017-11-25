@@ -10,3 +10,5 @@ Item Action Value:
 I04
 Item Amount:
 7
+Item Drop Rate:
+.30

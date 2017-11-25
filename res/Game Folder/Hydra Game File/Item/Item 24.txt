@@ -10,3 +10,5 @@ Item Action Value:
 I08
 Item Amount:
 6
+Item Drop Rate:
+.13

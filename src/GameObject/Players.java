@@ -77,7 +77,7 @@ public class Players implements Serializable{
 		}
 	}
 	public void healHealth(int health) {
-		if((playerCurrentHealth + health) <= playerMaxHealth) {
+		if((playerCurrentHealth + health) >= playerMaxHealth) {
 			this.playerCurrentHealth = playerMaxHealth;
 		}else {
 			this.playerCurrentHealth += health;

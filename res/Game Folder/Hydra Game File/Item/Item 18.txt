@@ -10,3 +10,5 @@ Item Action Value:
 I01
 Item Amount:
 30
+Item Drop Rate:
+.60

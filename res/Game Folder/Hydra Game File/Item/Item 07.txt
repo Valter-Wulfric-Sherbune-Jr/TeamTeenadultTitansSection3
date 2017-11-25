@@ -10,3 +10,5 @@ Item Action Value:
 40
 Item Amount:
 1
+Item Drop Rate:
+null

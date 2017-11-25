@@ -13,6 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import GameObject.Items;
 import GameObject.Monsters;
@@ -26,9 +29,10 @@ public class GameModel{
 	private String[] validState = {"Main Menu","New game","Player Creation",
 			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
 			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
-			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room", "Input Number"};
+			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room", "Input Number",
+			"Action","Multiple Monster"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
-			"Item Type:","Item Action Value:","Item Amount:"};
+			"Item Type:","Item Action Value:","Item Amount:","Item Drop Rate:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
 			"Monster Health:","Monster Damage:","Monster Hit Percentage:"};
 	private String[] roomCode = {"Room Floor:","Room ID:","Room Description:",
@@ -62,13 +66,13 @@ public class GameModel{
 			System.exit(0);
 		}
 	}
-	
+
 	/*Get the state of the game
 	 */
 	public String getState() {
 		return state;
 	}
-	
+
 	/*Save a state you want to switch to late
 	 */
 	public void setStoredState(String storedState) {
@@ -81,7 +85,7 @@ public class GameModel{
 			System.exit(0);
 		}
 	}
-	
+
 	/*Get the previous state of the game
 	 */
 	public String getStoredState(){
@@ -259,6 +263,14 @@ public class GameModel{
 							break;	
 						case "Item Amount:":
 							itemObject.setItemAmount(Integer.parseInt(fileLine));
+							break;
+						case "Item Drop Rate:":
+							if(!fileLine.equalsIgnoreCase("null")) {
+								itemObject.setItemDropRate(Double.parseDouble(fileLine));
+							}else {
+								itemObject.setItemDropRate(0);
+							}
+							
 							break;	
 						case "Monster Name:":
 							monsterObject.setMonsterName(fileLine);
@@ -371,7 +383,7 @@ public class GameModel{
 		}
 
 	}
-	
+
 	/*Copy the value of the object rather then the reference
 	 *Useful because you adding a monster from an hashmap to
 	 *a room object, but if you attack it, then it hurts all
@@ -379,21 +391,21 @@ public class GameModel{
 	 *object in that room is unique rather than by reference
 	 */
 	public static Object clone(Object copyObject) {
-	    try {
-	      ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
-	      ObjectOutputStream oos = new ObjectOutputStream(baos);
-	      oos.writeObject(copyObject);
-	      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-	      ObjectInputStream ois = new ObjectInputStream(bais);
-	      Object deepCopy = ois.readObject();
-	      return deepCopy;
-	    } catch (IOException e) {
-	      e.printStackTrace();
-	    } catch(ClassNotFoundException e) {
-	      e.printStackTrace();
-	    }
-	    return null;
-	  }
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(copyObject);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			Object deepCopy = ois.readObject();
+			return deepCopy;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/*Make a new player object and set him up
 	 *Need userInput to set the player name
@@ -439,21 +451,21 @@ public class GameModel{
 	public void setNextRoom(String userInput) {
 		this.nextRoom = roomList.get(player.getCurrentRoom().getRoomNavigationList().get(userInput));
 	}
-	
+
 	/*Return the player object
 	 *Use in method: playerCreation(), printChoice()
 	 */
 	public Rooms getNextRoom() {
 		return nextRoom;
 	}
-	
+
 	/*Return the puzzle of the next room
 	 *Use in method: movePlayer(), puzzleMenu(), usePuzzleItem(), inputNumber(), checkMonsterRoom()
 	 */
 	public Puzzles getNextRoomPuzzle() {
 		return puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
 	}
-	
+
 	/*Search the save folder of the game folder and add all
 	 *files to the saveList hashmap, with the save id as the key
 	 *Use in Method: actionMenu()
@@ -512,14 +524,14 @@ public class GameModel{
 		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList);
 		player.startGameTime();
 	}
-	
+
 	/*Get the saveData that was initalize
 	 *Use in Method: saveGame(), saveConflict, printChoice()
 	 */
 	public SaveData getSaveData(){
 		return save;
 	}
-	
+
 	/*Save the gameData and create a binary test file of it in
 	 *Use in Method: saveGame(), saveConflict
 	 *the save folder
@@ -535,7 +547,7 @@ public class GameModel{
 			System.out.println("Error: Reading File Error (Method saveGameData())");
 		}
 	}
-	
+
 	/*Search through the player inventory and see if
 	 *the user input matches one of the item in the inventory
 	 *Use in Method: checkUserItem()
@@ -548,7 +560,7 @@ public class GameModel{
 		}
 		return false;
 	}
-	
+
 	/*Set the current monster as a point of action
 	 *for the player to take again
 	 *Use in Method: attackMonster(), runAway()
@@ -556,14 +568,14 @@ public class GameModel{
 	public void setCurrentMonster(Monsters monster) {
 		this.currentMonster = monster;
 	}
-	
+
 	/*Get the current monster
 	 *Use in Method: attackPlayer(), runAway(), checkWeaponAmmo(), attackMonster()
 	 */
 	public Monsters getCurrentMonster() {
 		return currentMonster;
 	}
-	
+
 	/*Set the item that you are allowed to loot by
 	 *require an input of an arraylist which you can
 	 *copy the value
@@ -572,26 +584,66 @@ public class GameModel{
 	public void setLootList(ArrayList<Items> lootList) {
 		this.lootList = new ArrayList<Items>(lootList);
 	}
-	
+
 	/*return the lootList
 	 *Use in Method: lootItem()
 	 */
 	public ArrayList<Items> getLootList() {
 		return lootList;
 	}
-	
+
 	/*Remove the first loot from the loot list
 	 *Use in Method: lootItem()
 	 */
 	public void removeLoot() {
 		lootList.remove(0);
 	}
-	
+
 	/*Get the first loot from the loot list
 	 *Use in Method: printChoice(), lootItem()
 	 */
 	public Items getLoot() {
 		return lootList.get(0);
+	}
+
+	public ArrayList<Items> getMonsterLootList() {
+		ArrayList<Items> validDrop = new ArrayList<Items>();
+		ArrayList<String> itemIdList = new ArrayList<String>();
+		Set set = itemList.entrySet();
+		Iterator iterator = set.iterator();
+		while(iterator.hasNext()) { 
+			Map.Entry mEntry = (Map.Entry)iterator.next();
+			itemIdList.add((String) mEntry.getKey());
+		}
+		
+		
+		for(int x = 0; x < itemList.size(); x++) {
+			//Creates a random value between 1 and 100
+			double chance = Math.random() * 100;
+			double itemDropPercent = 0 ;
+			if(itemList.get(itemIdList.get(x)).getItemDropRate() != 0) {
+			//copy of percentage and multiply by a hundred to get a non decimal
+			itemDropPercent = itemList.get(itemIdList.get(x)).getItemDropRate()*100;
+			
+			}
+			
+			
+			Items newItem = (Items) clone(itemList.get(itemIdList.get(x)));
+			
+			if ((itemDropPercent - chance) >= 0) {
+				validDrop.add(newItem);
+			}
+		}
+		return validDrop;
+	}
+	
+	public boolean checkValidMonster(String userInput) {
+		for(int x = 0; x < player.getCurrentRoom().getRoomMonster().size(); x++) {
+			if(player.getCurrentRoom().getRoomMonster().get(x).getMonsterName().equalsIgnoreCase(userInput)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 

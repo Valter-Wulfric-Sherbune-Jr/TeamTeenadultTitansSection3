@@ -3,10 +3,12 @@ Hacking Tool
 Item ID:
 I12
 Item Description:
-Allows the user to unlock a door. One-time use. 
+Allows the user to hack an enemy for damage
 Item Type:
-Utility
+Throwable
 Item Action Value:
-null
+15
 Item Amount:
 1
+Item Drop Rate:
+.01

@@ -80,6 +80,10 @@ public class GameController {
 			output += "2. No\n";
 			break;
 		case "Inventory Menu":
+			output += ". .  : Player Stat :  . .\n";
+			output += model.getPlayer().getPlayerName();
+			output += " (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")\n";
+			output += model.getPlayer().getWeapon().getItemName() + " (Equipped)\n";
 			output += ". . : : Inventory : : . .\n";
 			output += model.getPlayer().getInventoryListString();
 			output +=  "\nWhat will you do?\n";
@@ -139,8 +143,12 @@ public class GameController {
 			output += "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
 			output += "                1. Attack\n";
 			output += "                2. Defend\n";
-			output += "                3. View Inventory\n";
-			output += "                4. Run Away\n";
+			output += "                3. Examine Monster\n";
+			output += "                4. View Inventory\n";
+			output += "                5. Run Away\n";
+			break;
+		case "Multiple Monster":
+			output +="Which monster do you want to attack? Type \"Exit\" to cancel";
 			break;
 		case "Loot Item":
 			output += "\nYou found a " + model.getLoot().getItemName() + ".\n";
@@ -214,6 +222,9 @@ public class GameController {
 			break;
 		case "Loot Item":
 			lootItem(userInput);
+			break;
+		case "Multiple Monster":
+			attackMultipleMonster(userInput);
 			break;
 		default:
 			view.println("Error: Not Valid State (Method readuserInput())");
@@ -450,11 +461,17 @@ public class GameController {
 			view.println("You block all attacks, and take no damage!");
 			view.println("--------------------------------------------------");
 			break;
-		case "check Inventory": case "check": case "inventory": case "3":
+		case "examine monster" : case "3":
+			for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+				view.println(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n" 
+						+model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterDesc()+ "\n");
+			}
+			break;
+		case "check Inventory": case "check": case "inventory": case "4":
 			model.setState("Inventory Menu");
 			model.setStoredState("Combat");
 			break;
-		case "run away": case "run": case "4":
+		case "run away": case "run": case "5":
 			runAway();
 			break;
 		default:
@@ -494,6 +511,14 @@ public class GameController {
 					view.println("The " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
 					view.println("--------------------------------------------------");
 					model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+					model.setLootList(model.getMonsterLootList());
+					if(!model.getLootList().isEmpty()) {
+						for(int x = 0; x < model.getLootList().size();x++) {
+							view.println("The monster drop " + model.getLoot().getItemName() +" on the floor of the room");
+							model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
+							model.removeLoot();
+						}
+					}
 
 				}
 			}
@@ -504,6 +529,52 @@ public class GameController {
 			}
 		}else {
 			model.setState("Multiple Monster");
+		}
+	}
+	
+	private void attackMultipleMonster(String userInput) {
+		if(model.checkValidMonster(userInput)) {
+			if(checkWeaponAmmo()) {
+				view.println("You don't have any ammo for your weapon!\n");
+			}else {
+				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+					if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterName().equalsIgnoreCase(userInput)) {
+						model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+					}
+				}
+				
+				view.println("You attack the " + model.getCurrentMonster().getMonsterName() + "!");
+				model.getCurrentMonster().takeDmg(model.getPlayer().getWeapon().getItemActionValue());
+				model.getPlayer().useWeaponAmmo(model.getPlayer().getWeapon());
+				view.println("The " + model.getCurrentMonster().getMonsterName() + " took " + 
+						model.getPlayer().getWeapon().getItemActionValue() + " damage!\n");
+
+				if(checkMonsterDeath()) {
+					view.println("The " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
+					view.println("--------------------------------------------------");
+					model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+					model.setLootList(model.getMonsterLootList());
+					if(!model.getLootList().isEmpty()) {
+						for(int x = 0; x < model.getLootList().size();x++) {
+							view.println("The monster drop " + model.getLoot().getItemName() +" on the floor of the room");
+							model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
+							model.removeLoot();
+						}
+					}
+
+				}
+			}
+			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+					attackPlayer();
+				}
+				model.setState("Combat Menu");
+			}else {
+				model.setState("Action Menu");
+			}
+		}else{
+			view.println("Invalid Input");
 		}
 	}
 
@@ -768,9 +839,14 @@ public class GameController {
 				model.setState("Action Menu");
 			}
 		}
-		else if(model.checkValidItem(userInput)) {
+		else if(model.checkValidItem(userInput) || (model.getStoredState().equalsIgnoreCase("Examine Item") && 
+				model.getPlayer().getWeapon().getItemName().equalsIgnoreCase(userInput))) {
+			if((model.getStoredState().equalsIgnoreCase("Examine Item") && 
+					model.getPlayer().getWeapon().getItemName().equalsIgnoreCase(userInput))) {
+				model.getPlayer().setSelectedItem(model.getPlayer().getWeapon());
+			}
 			for(int x = 0; x < model.getPlayer().getInventoryList().size(); x++) {
-				if(model.getPlayer().getInventoryList().get(x).getItemName().equals(userInput)) {
+				if(model.getPlayer().getInventoryList().get(x).getItemName().equalsIgnoreCase(userInput)) {
 					model.getPlayer().setSelectedItem(model.getPlayer().getInventoryList().get(x));
 				}
 			}
@@ -811,6 +887,8 @@ public class GameController {
 		if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("weapon")) {
 			view.println("\nAmmo x " + model.getPlayer().getWeaponAmmo(model.getPlayer().getSelectedItem()));
 		}
+
+		view.println("--------------------------------------------------");
 		switchState();
 	}
 
@@ -885,7 +963,7 @@ public class GameController {
 		if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
 			model.setState("Combat Menu");
 		}else {
-			model.setState("Action menu");
+			model.setState("Action Menu");
 		}
 	}
 

@@ -10,3 +10,5 @@ Item Action Value:
 I02
 Item Amount:
 3
+Item Drop Rate:
+.20
