@@ -27,11 +27,11 @@ public class GameController {
 
 		switch(model.getState()) {
 		case "New Game":
+			output += "Choose the game that you want to play.\n";
 			model.setGameFolderList();
 			for(String gameFolder : model.getGameFolderList()) {
-				output += " -" +gameFolder + "\n";
+				output += " - " +gameFolder + "\n";
 			}
-			output += "Choose the game that you want to play.\n";
 			break;
 		case "Main Menu":
 			output += "==================================================\n";
@@ -44,9 +44,10 @@ public class GameController {
 			output += "                  5. Exit Game\n";
 			break;
 		case "Player Creation":
-			output += "Please enter your:";
+			output += "Please enter your name:\n";
 			break;
 		case "Action Menu":
+			output += "--------------------------------------------------\n";
 			output += ">>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<\n";
 			output += ">>>>>       Action - What will you do?       <<<<<\n";
 			output += ">>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<\n";
@@ -57,7 +58,7 @@ public class GameController {
 			output += "                5. Quit Game\n";
 			break;
 		case "Move Player":
-			output += "\nWhich direction do you want to move? Type \"Exit\" to cancel\n";
+			output += "Which direction do you want to move? Type \"Exit\" to cancel\n";
 			output += "Exits: " + model.getPlayer().getCurrentRoom().getRoomConnection()+"\n";
 			break;
 		case "Save Menu":
@@ -80,6 +81,7 @@ public class GameController {
 			output += "2. No\n";
 			break;
 		case "Inventory Menu":
+			output += ". . : : Inventory : : . .\n";
 			output += model.getPlayer().getInventoryListString();
 			output +=  "\nWhat will you do?\n";
 			output +=  "1. Examine Item\n";
@@ -89,9 +91,9 @@ public class GameController {
 			output +=  "5. Exit\n";
 			break;
 		case "Select Item":
-			output += "Inventory:\n";
+			output += ". . : : Inventory : : . .\n";
 			output += model.getPlayer().getInventoryListString();
-			output += "\nSelect an item to ";
+			output += "\nWhich item do you want to ";
 			switch(model.getStoredState()) {
 			case"Examine Item":
 				output += "examine";
@@ -107,11 +109,12 @@ public class GameController {
 				break;
 			}
 
-			output += "? Type \"Exit\" to cancel.";
+			output += "? Type \"Exit\" to cancel.\n";
 			break;
 		case "Puzzle Menu":
-			output += "\nThe door is locked!\n";
-			output += "What will you do?\n";
+			output += "- - = PUZZLE = - -\n";
+			output += "The door is locked!\n";
+			output += "\nWhat will you do?\n";
 			output += "1. Input Number\n";
 			output += "2. Use Item\n";
 			output += "3. Hint\n";
@@ -124,14 +127,15 @@ public class GameController {
 			output += "Inventory:\n";
 			output += model.getPlayer().getInventoryListString();
 			output += "\nWhich item do you want to use? Type \"Exit\" to cancel.";
-			break;
+			break;	
 		case "Combat Menu":
 			for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
 				output += model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
 			}
-
 			output += "--------------------------------------------------\n";
-			output += "COMBAT - What will you do?\n";
+			output += "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
+			output += "\\\\\\\\\\       COMBAT - What will you do?       /////\n";
+			output += "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
 			output += "1. Attack\n";
 			output += "2. Defend\n";
 			output += "3. View Inventory\n";
@@ -144,8 +148,8 @@ public class GameController {
 			output += "2. No\n";
 			break;
 		default:
-			System.out.println("Error: Not Valid State (Method printChoice())");
-			System.out.println(model.getState());
+			view.println("Error: Not Valid State (Method printChoice())");
+			view.println(model.getState());
 			System.exit(0);
 			break;
 		}
@@ -164,8 +168,9 @@ public class GameController {
 		printChoice();
 
 		view.print("Input:\n> ");
-		String userInput = input.nextLine();
-
+		String userInput = input.nextLine().trim();
+		view.println("--------------------------------------------------");
+		
 		switch(model.getState()) {
 		case "Main Menu":
 			mainMenu(userInput);
@@ -210,17 +215,15 @@ public class GameController {
 			lootItem(userInput);
 			break;
 		default:
-			System.out.println("Error: Not Valid State (Method readuserInput())");
-			System.out.println(model.getState());
+			view.println("Error: Not Valid State (Method readuserInput())");
+			view.println(model.getState());
 			System.exit(0);
 		}
 	}	
 
-
 	private void lootItem(String userInput) {
 		switch(userInput.toLowerCase()) {
 		case "yes": case "y": case "1":
-			
 			if(model.getStoredState().equalsIgnoreCase("Room")) {
 				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomItem().size(); x++) {
 					if(model.getLoot().equals(model.getPlayer().getCurrentRoom().getRoomItem().get(x))) {
@@ -230,7 +233,7 @@ public class GameController {
 			}
 			
 			model.getPlayer().addItemToInventory(model.getLoot());
-			view.println("\nYou picked up the " + model.getLoot().getItemName() + ".");
+			view.println("You picked up the " + model.getLoot().getItemName() + ".");
 			model.removeLoot();
 			
 			
@@ -239,14 +242,14 @@ public class GameController {
 			}
 			break;
 		case "no": case "n": case "2":
-			view.println("\nYou decided to leave the " + model.getLoot().getItemName() + ".");
+			view.println("You decided to leave the " + model.getLoot().getItemName() + ".");
 			model.removeLoot();
 			if(model.getLootList().isEmpty()) {
 				model.setState("Action Menu");
 			}
 			break;
 		default:
-			view.println("\nInvalid Command");
+			view.println("Invalid Command");
 			break;
 		}
 		
@@ -343,7 +346,6 @@ public class GameController {
 
 	}
 
-
 	private void usePuzzleItem() {
 		if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(model.getPlayer().getSelectedItem().getItemId())) {
 			view.println("You used the " + model.getPlayer().getSelectedItem().getItemId() + ", and the door opens!");
@@ -358,6 +360,7 @@ public class GameController {
 			}
 		}else {
 			view.println("Nothing interesting happens.");
+			view.println("--------------------------------------------------");
 			model.setState("Puzzle Menu");
 		}
 
@@ -368,10 +371,12 @@ public class GameController {
 		case "input number" : case "1":
 			if(model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("input"))
 				model.setState("Input Number");
-			else if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item"))
+			else if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item")) {
 				view.println("There's nothing to input.");
+				view.println("--------------------------------------------------");
+			}
 			else {
-				System.out.println("Error with Puzzle Type " + model.getNextRoomPuzzle().getPuzzleType());
+				view.println("Error with Puzzle Type " + model.getNextRoomPuzzle().getPuzzleType());
 				System.exit(0);
 			}
 			break;
@@ -380,14 +385,15 @@ public class GameController {
 			model.setState("Use Item Puzzle");
 			break;
 		case "hint" : case "3":
-			view.println(model.getNextRoomPuzzle().getPuzzleHint());
-			view.println(model.getNextRoomPuzzle().getPuzzleDesc());
+			view.println(model.getNextRoomPuzzle().getPuzzleDesc() + "\n");
+			view.println("HINT:\n" + model.getNextRoomPuzzle().getPuzzleHint() + "\n");
 			break;
 		case "leave" : case "4":
 			model.setState("Action Menu");
 			break;
 		default:
-			view.print("Invalid Input");
+			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 		}
 
 	}
@@ -456,7 +462,8 @@ public class GameController {
 				break;
 			}
 		}else {
-			view.print("Invalid Input");
+			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 		}		
 	}
 
@@ -470,7 +477,7 @@ public class GameController {
 				view.println("You equipped the " + model.getPlayer().getWeapon().getItemName());
 				model.setState("Action Menu");
 			}else {
-				view.println("This isn't a weapon!");
+				view.println("That isn't a weapon!");
 				model.setState("Action Menu");
 			}
 			
@@ -490,7 +497,7 @@ public class GameController {
 				model.setState("Action Menu");
 			}
 		}else {
-			view.println("Nothing Interesting Happened");
+			view.println("Nothing interesting happens.");
 			model.setState("Action Menu");
 		}	
 	}
@@ -498,7 +505,7 @@ public class GameController {
 	private void dropItem() {
 		model.getPlayer().getCurrentRoom().addRoomItem(model.getPlayer().getSelectedItem());
 		model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
-		view.println("You drop the " + model.getPlayer().getSelectedItem().getItemName());
+		view.println("You drop the " + model.getPlayer().getSelectedItem().getItemName()+ ".");
 		model.setState("Action Menu");
 
 	}
@@ -535,6 +542,7 @@ public class GameController {
 			break;
 		default:
 			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 			break;
 		}
 	}
@@ -550,7 +558,7 @@ public class GameController {
 		case "examine room" : case "2":
 			view.println(model.getPlayer().getCurrentRoom().toString());
 			if(model.getPlayer().getCurrentRoom().getRoomItem().isEmpty()) {
-				view.println("You Found nothing in the room");
+				view.println("\nYou didn't find anything of interest.");
 				model.setState("Action Menu");
 			}else {
 				model.setLootList(model.getPlayer().getCurrentRoom().getRoomItem());
@@ -570,10 +578,10 @@ public class GameController {
 			break;
 		default:
 			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 			break;
 		}
 	}
-
 
 	/*Action Menu that set the state depending on the
 	 *player input
@@ -602,9 +610,9 @@ public class GameController {
 			}else {
 			model.setState("Action Menu");
 			}
-			break;
 		default:
-			view.println("\nInvalid Input.");
+			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 			break;
 		}
 	}
@@ -624,6 +632,7 @@ public class GameController {
 			model.setState("Player Creation");
 		}else {
 			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 		}
 	}
 
@@ -645,7 +654,7 @@ public class GameController {
 	 *Related State Affliction: Action Menu(Originated from), Combat Menu, Puzzle Menu
 	 */
 	public void movePlayer(String userInput) {
-		if(userInput.equals("Exit")) {
+		if(userInput.equalsIgnoreCase("exit")) {
 			model.setState("Action Menu");
 		}else if(model.checkValidDirection(userInput)) {
 			model.setNextRoom(userInput);
@@ -663,7 +672,7 @@ public class GameController {
 			}
 		}
 		else {
-			view.println("You can't go that way!");
+			view.println("You can't go that way!\n");
 		}
 	}
 
@@ -687,7 +696,8 @@ public class GameController {
 				model.setState("Action Menu");
 			}
 		}else {
-			view.print("Invalid command");
+			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 		}
 
 	}
@@ -709,7 +719,8 @@ public class GameController {
 			model.setState("Action Menu");
 			break;
 		default:
-			view.println("\nInvalid command");
+			view.println("Invalid Input");
+			view.println("--------------------------------------------------");
 			break;
 		}
 	}
