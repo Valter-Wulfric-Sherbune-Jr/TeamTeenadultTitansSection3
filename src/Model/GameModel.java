@@ -1,6 +1,8 @@
 package Model;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +26,7 @@ public class GameModel{
 	private String[] validState = {"Main Menu","New game","Player Creation",
 			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
 			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
-			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room"};
+			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room", "Input Number"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
@@ -47,9 +49,6 @@ public class GameModel{
 	private Monsters currentMonster;
 	private ArrayList<Items> lootList;
 
-	
-	
-	
 	/*Set the state of the game, if error then exit game
 	 *Used in method: readUserInput()
 	 */
@@ -64,6 +63,12 @@ public class GameModel{
 		}
 	}
 	
+	/*Get the state of the game
+	 */
+	public String getState() {
+		return state;
+	}
+	
 	/*Save a state you want to switch to late
 	 */
 	public void setStoredState(String storedState) {
@@ -75,13 +80,6 @@ public class GameModel{
 			System.out.println(storedState);
 			System.exit(0);
 		}
-	}
-	
-
-	/*Get the state of the game
-	 */
-	public String getState() {
-		return state;
 	}
 	
 	/*Get the previous state of the game
@@ -308,12 +306,14 @@ public class GameModel{
 							break;
 						case "Room Item:":
 							if(!fileLine.equals("null")) {
-								roomObject.addRoomItem(itemList.get(fileLine));
+								Items newItem = (Items) clone(itemList.get(fileLine));
+								roomObject.addRoomItem(newItem);
 								break;
 							}
 						case "Room Monster:":
 							if(!fileLine.equals("null")) {
-								roomObject.addRoomMonster(monsterList.get(fileLine));
+								Monsters newMonster = (Monsters) clone(monsterList.get(fileLine));
+								roomObject.addRoomMonster(newMonster);
 								break;
 							}
 						case "Puzzle ID:":
@@ -371,6 +371,29 @@ public class GameModel{
 		}
 
 	}
+	
+	/*Copy the value of the object rather then the reference
+	 *Useful because you adding a monster from an hashmap to
+	 *a room object, but if you attack it, then it hurts all
+	 *monster that share that object, but with clone, every 
+	 *object in that room is unique rather than by reference
+	 */
+	public static Object clone(Object copyObject) {
+	    try {
+	      ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
+	      ObjectOutputStream oos = new ObjectOutputStream(baos);
+	      oos.writeObject(copyObject);
+	      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+	      ObjectInputStream ois = new ObjectInputStream(bais);
+	      Object deepCopy = ois.readObject();
+	      return deepCopy;
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    } catch(ClassNotFoundException e) {
+	      e.printStackTrace();
+	    }
+	    return null;
+	  }
 
 	/*Make a new player object and set him up
 	 *Need userInput to set the player name
@@ -424,14 +447,16 @@ public class GameModel{
 		return nextRoom;
 	}
 	
-	
+	/*Return the puzzle of the next room
+	 *Use in method: movePlayer(), puzzleMenu(), usePuzzleItem(), inputNumber(), checkMonsterRoom()
+	 */
 	public Puzzles getNextRoomPuzzle() {
 		return puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
 	}
 	
 	/*Search the save folder of the game folder and add all
 	 *files to the saveList hashmap, with the save id as the key
-	 *Use in Method: 
+	 *Use in Method: actionMenu()
 	 */
 	public void setSaveList() {
 		saveList.clear();
@@ -473,12 +498,14 @@ public class GameModel{
 	}
 
 	/*Get the saveList hashmap
+	 *Use in Method: saveGame(), printChoice()
 	 */
 	public HashMap<Integer, SaveData> getSaveList() {
 		return saveList;
 	}
 
 	/*Initalize the saveData, but does not save the object yet
+	 *Use in Method: saveGame()
 	 */
 	public void setSaveData(int userInputInt){
 		player.endGameTime();
@@ -487,12 +514,14 @@ public class GameModel{
 	}
 	
 	/*Get the saveData that was initalize
+	 *Use in Method: saveGame(), saveConflict, printChoice()
 	 */
 	public SaveData getSaveData(){
 		return save;
 	}
 	
 	/*Save the gameData and create a binary test file of it in
+	 *Use in Method: saveGame(), saveConflict
 	 *the save folder
 	 */
 	public void saveGameData(SaveData data) {
@@ -507,6 +536,10 @@ public class GameModel{
 		}
 	}
 	
+	/*Search through the player inventory and see if
+	 *the user input matches one of the item in the inventory
+	 *Use in Method: checkUserItem()
+	 */
 	public boolean checkValidItem(String itemName) {
 		for(Items item: player.getInventoryList()) {
 			if(item.getItemName().equalsIgnoreCase(itemName)) {
@@ -516,35 +549,50 @@ public class GameModel{
 		return false;
 	}
 	
+	/*Set the current monster as a point of action
+	 *for the player to take again
+	 *Use in Method: attackMonster(), runAway()
+	 */
 	public void setCurrentMonster(Monsters monster) {
 		this.currentMonster = monster;
 	}
+	
+	/*Get the current monster
+	 *Use in Method: attackPlayer(), runAway(), checkWeaponAmmo(), attackMonster()
+	 */
 	public Monsters getCurrentMonster() {
 		return currentMonster;
 	}
 	
+	/*Set the item that you are allowed to loot by
+	 *require an input of an arraylist which you can
+	 *copy the value
+	 *Use in Method: actionMenu()
+	 */
 	public void setLootList(ArrayList<Items> lootList) {
 		this.lootList = new ArrayList<Items>(lootList);
 	}
+	
+	/*return the lootList
+	 *Use in Method: lootItem()
+	 */
 	public ArrayList<Items> getLootList() {
 		return lootList;
 	}
+	
+	/*Remove the first loot from the loot list
+	 *Use in Method: lootItem()
+	 */
 	public void removeLoot() {
 		lootList.remove(0);
 	}
+	
+	/*Get the first loot from the loot list
+	 *Use in Method: printChoice(), lootItem()
+	 */
 	public Items getLoot() {
 		return lootList.get(0);
 	}
 
-
-
-
-
-
-
-
-	public void updateLoadList() {
-
-	}
 
 }

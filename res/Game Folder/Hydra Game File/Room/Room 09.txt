@@ -8,7 +8,7 @@ Room Connection:
 R10:North
 R12:Staircase
 Room Access:
-null
+P02:R10
 Room Item:
 I03
 Room Monster:
