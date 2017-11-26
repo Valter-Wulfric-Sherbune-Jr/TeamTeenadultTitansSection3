@@ -39,9 +39,7 @@ public class GameController {
 			output += "==================================================\n";
 			output += "                  1. New Game\n";
 			output += "                  2. Load Game\n";
-			output += "                  3. View Score\n";
-			output += "                  4. Level Editor\n";
-			output += "                  5. Exit Game\n";
+			output += "                  3. Exit Game\n";
 			break;
 		case "Player Creation":
 			output += "Please enter your name:\n";
@@ -253,13 +251,7 @@ public class GameController {
 			model.setState("Save Menu");
 			model.setSaveList();
 			break;
-		case "view score" : case "3":
-			view.println("Not Implemented Yet");
-			break;
-		case "level editor" : case "4":
-			view.println("Not Implemented Yet");
-			break;
-		case "exit game" : case "5":
+		case "exit game" : case "3":
 			view.println("Exiting Game");
 			System.exit(0);
 			break;
