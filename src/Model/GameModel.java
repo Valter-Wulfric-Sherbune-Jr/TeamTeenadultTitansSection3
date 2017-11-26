@@ -30,7 +30,7 @@ public class GameModel{
 			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
 			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
 			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room", "Input Number",
-			"Action","Multiple Monster"};
+			"Action","Multiple Monster","Throw","Load Game"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:","Item Drop Rate:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
@@ -421,7 +421,9 @@ public class GameModel{
 			player.setPlayerCurrentHealth(100);
 			player.setWeapon(itemList.get("I01"));
 			player.addItemToInventory(itemList.get("I18"));
+			player.addItemToInventory(itemList.get("I18"));
 			player.addItemToInventory(itemList.get("I13"));
+			player.addItemToInventory(itemList.get("I07"));
 			player.setCurrentRoom(roomList.get("R01"));
 			player.startGameTime();
 		}catch(Exception e) {
@@ -523,7 +525,7 @@ public class GameModel{
 	 */
 	public void setSaveData(int userInputInt){
 		player.endGameTime();
-		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList);
+		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive);
 		player.startGameTime();
 	}
 
@@ -532,6 +534,16 @@ public class GameModel{
 	 */
 	public SaveData getSaveData(){
 		return save;
+	}
+	
+	public void loadGameSaveData(SaveData save) {
+		player = save.getPlayerData();
+		monsterList = save.getMonsterList();
+		roomList = save.getRoomList();
+		itemList = save.getItemList();
+		monsterAlive = save.getMonsterAlive();
+		player.startGameTime();
+		player.setCurrentRoom(save.getPlayerData().getCurrentRoom());
 	}
 
 	/*Save the gameData and create a binary test file of it in
@@ -668,6 +680,11 @@ public class GameModel{
 	 */
 	public void decreaseMonsterAlive() {
 		monsterAlive--;
+	}
+	
+	public void updateRoom(Rooms room) {
+		roomList.remove(room.getRoomId());
+		roomList.put(room.getRoomId(), room);
 	}
 
 

@@ -72,6 +72,7 @@ public class GameController {
 				else {
 					output +=(x + ". Empty" +"\n");
 				}
+				output += "Choose a save slot. Type \"Exit\" to cancel\n";
 			}
 			break;
 		case "Save Conflict":
@@ -188,7 +189,11 @@ public class GameController {
 			actionMenu(userInput);
 			break;
 		case "Save Menu":
-			saveGame(userInput);
+			if(model.getStoredState().equalsIgnoreCase("Load Game")) {
+				loadGame(userInput);
+			}else {
+				saveGame(userInput);
+			}
 			break;
 		case "New Game":
 			selectGameFolder(userInput);
@@ -244,8 +249,9 @@ public class GameController {
 			model.setState("New Game");
 			break;
 		case "load game" : case "2":
-			//model.setState("Load Menu");
-			view.println("Not Implemented Yet");
+			model.setStoredState("Load Game");
+			model.setState("Save Menu");
+			model.setSaveList();
 			break;
 		case "view score" : case "3":
 			view.println("Not Implemented Yet");
@@ -310,15 +316,18 @@ public class GameController {
 			if(model.getPlayer().getCurrentRoom().getRoomItem().isEmpty()) {
 				view.println("\nYou didn't find anything of interest.");
 				model.setState("Action Menu");
+				model.updateRoom(model.getPlayer().getCurrentRoom());
 			}else {
 				model.setLootList(model.getPlayer().getCurrentRoom().getRoomItem());
 				model.setStoredState("Room");
 				model.setState("Loot Item");
+				model.updateRoom(model.getPlayer().getCurrentRoom());
 			}
 			break;
 		case "check inventory" : case "3":
 			model.setStoredState("Action");
 			model.setState("Inventory Menu");
+			model.updateRoom(model.getPlayer().getCurrentRoom());
 			break;
 		case "save game" : case "4":
 			model.setState("Save Menu");
@@ -404,23 +413,53 @@ public class GameController {
 	 *Related State Affliction: Action Menu(Originated from), Save Conflict
 	 */
 	private void saveGame(String userInput) {
-		if(userInput.trim().equalsIgnoreCase("Exit")) {
-			model.setState("Action Menu");
-		}
-		else if(Integer.parseInt(userInput) >= 1 && Integer.parseInt(userInput) <= 10) {
-			int userInputInt = Integer.parseInt(userInput);
-			model.setSaveData(userInputInt);
-			if(model.getSaveList().get(userInputInt) != null) {
-				model.setState("Save Conflict");
-			}
-			else {
-				view.println("Save Successful");
-				model.saveGameData(model.getSaveData());
+		try {
+			if(userInput.trim().equalsIgnoreCase("Exit")) {
 				model.setState("Action Menu");
 			}
-		}else {
+			else if(Integer.parseInt(userInput) >= 1 && Integer.parseInt(userInput) <= 10) {
+				int userInputInt = Integer.parseInt(userInput);
+				model.setSaveData(userInputInt);
+				if(model.getSaveList().get(userInputInt) != null) {
+					model.setState("Save Conflict");
+				}
+				else {
+					view.println("Save Successful");
+					model.saveGameData(model.getSaveData());
+					model.setState("Action Menu");
+				}
+			}else {
+				view.println("Invalid Input");
+				view.println("--------------------------------------------------");
+			}
+		}catch(Exception e) {
 			view.println("Invalid Input");
-			view.println("--------------------------------------------------");
+		}
+
+	}
+
+	private void loadGame(String userInput) {
+		try {
+			if(userInput.trim().equalsIgnoreCase("Exit")) {
+				model.setState("Action Menu");
+			}
+			else if(Integer.parseInt(userInput) >= 1 && Integer.parseInt(userInput) <= 10) {
+				int userInputInt = Integer.parseInt(userInput);
+
+				if(model.getSaveList().get(userInputInt) != null) {
+					model.loadGameSaveData(model.getSaveList().get(userInputInt));
+					System.out.println("\nSuccessfully loaded Slot " + userInputInt);
+					model.setState("Action Menu");
+				}
+				else {
+					view.println("\nNo save data exists in Slot " + userInputInt);
+				}
+			}else {
+				view.println("Invalid Input");
+				view.println("--------------------------------------------------");
+			}
+		}catch(Exception e) {
+			view.println("Invalid Input");
 		}
 
 	}
@@ -456,6 +495,7 @@ public class GameController {
 		switch(userInput.toLowerCase()) {
 		case "attack" : case "1":
 			attackMonster();
+			model.updateRoom(model.getPlayer().getCurrentRoom());
 			break;
 		case "defend" : case "2":
 			view.println("You block all attacks, and take no damage!");
@@ -470,9 +510,11 @@ public class GameController {
 		case "check Inventory": case "check": case "inventory": case "4":
 			model.setState("Inventory Menu");
 			model.setStoredState("Combat");
+			model.updateRoom(model.getPlayer().getCurrentRoom());
 			break;
 		case "run away": case "run": case "5":
 			runAway();
+			model.updateRoom(model.getPlayer().getCurrentRoom());
 			break;
 		default:
 			view.println("Invalid command");
@@ -518,6 +560,7 @@ public class GameController {
 							model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
 							model.removeLoot();
 						}
+						view.println("--------------------------------------------------");
 					}
 					model.decreaseMonsterAlive();
 
@@ -533,7 +576,7 @@ public class GameController {
 			model.setState("Multiple Monster");
 		}
 	}
-	
+
 	/*If there is more then one monster in a room, then it gets the 
 	 *user input and check if what the user entered was valid then
 	 *precede to attack like normal. All monster will attack you
@@ -543,7 +586,7 @@ public class GameController {
 	 *Related State Affliction: Combat Menu, Action Menu, Multiple Monster, Combat Menu
 	 */
 	private void attackMultipleMonster(String userInput) {
-		if(model.checkValidMonster(userInput)) {
+		if(model.checkValidMonster(userInput) && !model.getStoredState().equalsIgnoreCase("Throw")) {
 			if(checkWeaponAmmo()) {
 				view.println("You don't have any ammo for your weapon!\n");
 			}else {
@@ -552,7 +595,7 @@ public class GameController {
 						model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
 					}
 				}
-				
+
 				view.println("You attack the " + model.getCurrentMonster().getMonsterName() + "!");
 				model.getCurrentMonster().takeDmg(model.getPlayer().getWeapon().getItemActionValue());
 				model.getPlayer().useWeaponAmmo(model.getPlayer().getWeapon());
@@ -570,6 +613,7 @@ public class GameController {
 							model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
 							model.removeLoot();
 						}
+						view.println("--------------------------------------------------");
 					}
 					model.decreaseMonsterAlive();
 
@@ -585,9 +629,49 @@ public class GameController {
 				model.setState("Action Menu");
 				checkWinCondition();
 			}
-		}else{
+		}else if(model.checkValidMonster(userInput) && model.getStoredState().equalsIgnoreCase("Throw")) {
+			for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+				if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterName().equalsIgnoreCase(userInput)) {
+					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+				}
+			}
+
+			view.println("You threw the " + model.getPlayer().getSelectedItem().getItemName());
+			model.getCurrentMonster().takeDmg(model.getPlayer().getSelectedItem().getItemActionValue());
+			model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
+			view.println("The " + model.getCurrentMonster().getMonsterName() + " took " + 
+					model.getPlayer().getSelectedItem().getItemActionValue() + " damage!\n");
+
+			if(checkMonsterDeath()) {
+				view.println("The " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
+				view.println("--------------------------------------------------");
+				model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+				model.setLootList(model.getMonsterLootList());
+				if(!model.getLootList().isEmpty()) {
+					for(int x = 0; x < model.getLootList().size();x++) {
+						view.println("The monster drop " + model.getLoot().getItemName() +" on the floor of the room");
+						model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
+						model.removeLoot();
+					}
+					view.println("--------------------------------------------------");
+				}
+				model.decreaseMonsterAlive();
+
+			}
+			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+					attackPlayer();
+				}
+				model.setState("Combat Menu");
+			}else {
+				model.setState("Action Menu");
+				checkWinCondition();
+			}
+		}
+		else{
 			view.println("Invalid Input");
-			
+
 		}
 	}
 
@@ -673,7 +757,7 @@ public class GameController {
 			model.setState("Main Menu");
 		}
 	}
-	
+
 	/*Check to see if the win condition is met and
 	 *if there is zero enemy alive then the you win
 	 *and sent to back to the main menu
@@ -949,6 +1033,48 @@ public class GameController {
 				switchState();
 			}else {
 				view.println("You are already at full health.");
+				switchState();
+			}
+		}
+		else if(model.getPlayer().getSelectedItem().getItemType().equalsIgnoreCase("throwable")) {
+			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+				if(model.getPlayer().getCurrentRoom().getRoomMonster().size() == 1) {
+					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(0));
+					view.println("You threw the " + model.getPlayer().getSelectedItem().getItemName());
+					model.getCurrentMonster().takeDmg(model.getPlayer().getSelectedItem().getItemActionValue());
+					model.getPlayer().removeItemFromInventory(model.getPlayer().getSelectedItem());
+					view.println("The " + model.getCurrentMonster().getMonsterName() + " took " + 
+							model.getPlayer().getSelectedItem().getItemActionValue() + " damage!\n");
+
+					if(checkMonsterDeath()) {
+						view.println("The " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
+						view.println("--------------------------------------------------");
+						model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+						model.setLootList(model.getMonsterLootList());
+						if(!model.getLootList().isEmpty()) {
+							for(int x = 0; x < model.getLootList().size();x++) {
+								view.println("The monster drop " + model.getLoot().getItemName() +" on the floor of the room");
+								model.getPlayer().getCurrentRoom().addRoomItem(model.getLoot());
+								model.removeLoot();
+							}
+							view.println("--------------------------------------------------");
+						}
+						model.decreaseMonsterAlive();
+
+					}
+					if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+						attackPlayer();
+						model.setState("Combat Menu");
+					}else {
+						model.setState("Action Menu");
+						checkWinCondition();
+					}
+				}else{
+					model.setStoredState("Throw");
+					model.setState("Multiple Monster");
+				}
+			}else {
+				view.println("You can't use that right now");
 				switchState();
 			}
 		}else {
