@@ -448,7 +448,7 @@ public class GameController {
 
 				if(model.getSaveList().get(userInputInt) != null) {
 					model.loadGameSaveData(model.getSaveList().get(userInputInt));
-					System.out.println("\nSuccessfully loaded Slot " + userInputInt);
+					view.println("\nSuccessfully loaded Slot " + userInputInt + "/n");
 					model.setState("Action Menu");
 				}
 				else {
@@ -504,7 +504,9 @@ public class GameController {
 		case "examine monster" : case "3":
 			for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
 				view.println(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n" 
-						+model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterDesc()+ "\n");
+						+ model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterDesc()+ "\n"
+						+ model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterDamage() + " Attack Point\n"
+						+ model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterHitPercentage() + " Hit Percent\n");
 			}
 			break;
 		case "check Inventory": case "check": case "inventory": case "4":

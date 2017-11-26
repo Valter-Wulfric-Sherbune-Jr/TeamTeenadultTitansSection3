@@ -14,5 +14,5 @@ Room Item:
 I10
 Room Monster:
 E01
-E01
-E01
+E02
+E03
