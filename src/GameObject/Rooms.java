@@ -68,7 +68,7 @@ public class Rooms implements Serializable{
 	public void setRoomDescription(String roomDescription){
 		/*If there are more then 50 character in a line, 
 		it'll make a new line*/
-		if(roomDescription.length() > 50) {
+		if(roomDescription.length() > 30) {
 			int totalCharacterLength = 0;
 			int descriptionLength = roomDescription.length();
 			String outputString ="";

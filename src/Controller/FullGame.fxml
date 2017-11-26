@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameFXFullGameController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <SplitPane dividerPositions="0.6757028112449799" prefHeight="296.0" prefWidth="998.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TabPane prefHeight="294.0" prefWidth="732.0" tabClosingPolicy="UNAVAILABLE">
+                           <tabs>
+                              <Tab text="Neutral">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Move">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Healing">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Throwable">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Combat">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Player Attack">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                              <Tab text="Enemy Attack">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TabPane prefHeight="296.0" prefWidth="320.0" tabClosingPolicy="UNAVAILABLE">
+                           <tabs>
+                              <Tab text="Console">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="267.0" prefWidth="289.0">
+                                       <children>
+                                          <TextArea fx:id="consoleTextArea" prefHeight="267.0" prefWidth="320.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <SplitPane dividerPositions="0.7379518072289156" prefHeight="296.0" prefWidth="998.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TabPane prefHeight="300.0" prefWidth="732.0" tabClosingPolicy="UNAVAILABLE">
+                           <tabs>
+                              <Tab fx:id="actionTab" text="Action">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="310.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="actionMove" mnemonicParsing="false" onAction="#actionMoveEvent" prefHeight="55.0" prefWidth="356.0" text="Move" />
+                                                <Button fx:id="actionInventory" mnemonicParsing="false" onAction="#actionInventoryEvent" prefHeight="55.0" prefWidth="356.0" text="Inventory" />
+                                                <Button fx:id="actionExamineRoom" mnemonicParsing="false" onAction="#actionExamineRoomEvent" prefHeight="55.0" prefWidth="371.0" text="Examine Room" />
+                                                <Button fx:id="actionSaveGame" mnemonicParsing="false" onAction="#actionSaveGameEvent" prefHeight="55.0" prefWidth="347.0" text="Save Game" />
+                                                <Button fx:id="actionQuitGame" mnemonicParsing="false" onAction="#actionQuitGameEvent" prefHeight="55.0" prefWidth="349.0" text="Quit Game" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <SplitPane dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                             <items>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="363.0">
+                                                   <children>
+                                                      <Label fx:id="actionLabel" alignment="CENTER" layoutX="-1.0" prefHeight="21.0" prefWidth="385.0" text="Inventory" textAlignment="CENTER" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <ListView fx:id="actionList" layoutX="-2.0" prefHeight="218.0" prefWidth="387.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </items>
+                                          </SplitPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="combatTab" text="Combat">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="317.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="combatAttack" mnemonicParsing="false" onAction="#combatAttackEvent" prefHeight="55.0" prefWidth="356.0" text="Attack" />
+                                                <Button fx:id="combatDefend" mnemonicParsing="false" onAction="#combatDefendEvent" prefHeight="55.0" prefWidth="371.0" text="Defend" />
+                                                <Button fx:id="combatExamineMonster" mnemonicParsing="false" onAction="#combatExamineEvent" prefHeight="55.0" prefWidth="347.0" text="Examine Monster" />
+                                                <Button fx:id="combatInventory" mnemonicParsing="false" onAction="#combatInventoryEvent" prefHeight="55.0" prefWidth="356.0" text="Inventory" />
+                                                <Button fx:id="combatRunAway" mnemonicParsing="false" onAction="#combatRunAwayEvent" prefHeight="55.0" prefWidth="349.0" text="Run Away" />
+                                                <Button fx:id="combatQuitGame" mnemonicParsing="false" onAction="#combatQuitGameEvent" prefHeight="55.0" prefWidth="349.0" text="Quit Game" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <SplitPane dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                             <items>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="363.0">
+                                                   <children>
+                                                      <Label fx:id="combatLabel" alignment="CENTER" layoutX="-1.0" prefHeight="21.0" prefWidth="385.0" text="Inventory" textAlignment="CENTER" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <ListView fx:id="combatList" layoutX="-2.0" prefHeight="218.0" prefWidth="387.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </items>
+                                          </SplitPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="puzzleTab" text="Puzzle">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="317.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="puzzleInputNumber" mnemonicParsing="false" onAction="#puzzleInputNumberEvent" prefHeight="55.0" prefWidth="356.0" text="Input Number" />
+                                                <Button fx:id="puzzleUseItem" mnemonicParsing="false" onAction="#puzzleUseItemEvent" prefHeight="55.0" prefWidth="371.0" text="Use Item" />
+                                                <Button fx:id="puzzleHint" mnemonicParsing="false" onAction="#puzzleHintEvent" prefHeight="55.0" prefWidth="347.0" text="Hint" />
+                                                <Button fx:id="puzzleExit" mnemonicParsing="false" onAction="#puzzleExitEvent" prefHeight="55.0" prefWidth="349.0" text="Exit" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <SplitPane fx:id="puzzleKeyPadPane" dividerPositions="0.5" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                             <items>
+                                                <AnchorPane maxHeight="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="50.0" prefWidth="384.0">
+                                                   <children>
+                                                      <TextArea fx:id="puzzleKeyPadTextArea" layoutY="-2.0" prefHeight="53.0" prefWidth="386.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <GridPane layoutX="-1.0" layoutY="-2.0" prefHeight="192.0" prefWidth="386.0">
+                                                         <columnConstraints>
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                         </columnConstraints>
+                                                         <rowConstraints>
+                                                            <RowConstraints maxHeight="110.0" minHeight="49.0" prefHeight="47.5" />
+                                                            <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="47.5" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="47.5" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="47.5" vgrow="SOMETIMES" />
+                                                         </rowConstraints>
+                                                         <children>
+                                                            <Button fx:id="puzzleKeyPad7" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="121.0" prefWidth="213.0" text="7" />
+                                                            <Button fx:id="puzzleKeyPad4" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="94.0" prefWidth="166.0" text="4" GridPane.rowIndex="1" />
+                                                            <Button fx:id="puzzleKeyPad1" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="109.0" prefWidth="205.0" text="1" GridPane.rowIndex="2" />
+                                                            <Button fx:id="puzzleKeyPadDot" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="107.0" prefWidth="230.0" text="Dot" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                            <Button fx:id="puzzleKeyPad2" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="135.0" prefWidth="205.0" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            <Button fx:id="puzzleKeyPad5" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="130.0" prefWidth="200.0" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Button fx:id="puzzleKeyPad6" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="95.0" prefWidth="164.0" text="6" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                            <Button fx:id="puzzleKeyPad3" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="140.0" prefWidth="213.0" text="3" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                            <Button fx:id="puzzleKeyPadClear" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="69.0" prefWidth="206.0" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                            <Button fx:id="puzzleKeyPad8" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="106.0" prefWidth="180.0" text="8" GridPane.columnIndex="1" />
+                                                            <Button fx:id="puzzleKeyPad9" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="123.0" prefWidth="183.0" text="9" GridPane.columnIndex="2" />
+                                                            <Button fx:id="puzzleKeyPad0" mnemonicParsing="false" onAction="#keyPadPressed" prefHeight="134.0" prefWidth="227.0" text="0" GridPane.rowIndex="3" />
+                                                         </children>
+                                                      </GridPane>
+                                                   </children>
+                                                </AnchorPane>
+                                             </items>
+                                          </SplitPane>
+                                          <SplitPane fx:id="puzzleInventoryPane" dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                             <items>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="363.0">
+                                                   <children>
+                                                      <Label fx:id="puzzleLabel" alignment="CENTER" layoutX="-1.0" prefHeight="21.0" prefWidth="385.0" text="Inventory" textAlignment="CENTER" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <ListView fx:id="puzzleList" layoutX="-2.0" prefHeight="218.0" prefWidth="387.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </items>
+                                          </SplitPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TabPane prefHeight="294.0" prefWidth="258.0" tabClosingPolicy="UNAVAILABLE">
+                           <tabs>
+                              <Tab text="Map">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children></AnchorPane>
+  </items>
+</SplitPane>
