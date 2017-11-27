@@ -239,7 +239,16 @@ public class GameFXFullGameController {
 		}else {
 			model.setNextRoom(actionList.getSelectionModel().getSelectedItem());
 			if(model.getNextRoomPuzzle() != null) {
-				System.out.println("test");
+				actionTab.setDisable(true);
+				puzzleTab.setDisable(false);
+				puzzleInventoryPane.setVisible(false);
+				puzzleKeyPadPane.setVisible(false);
+				combatList.setVisible(false);
+				actionList.setVisible(false);
+				tabPaneMenu.getSelectionModel().select(puzzleTab);
+				actionNeutralBox.setVisible(false);
+				actionInventoryPane.setVisible(false);
+				actionList.getSelectionModel().clearSelection();
 			}
 			else if(model.getNextRoom().getRoomMonster().isEmpty()) {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
@@ -568,8 +577,9 @@ public class GameFXFullGameController {
 
 	@FXML
 	void combatExamineEvent(ActionEvent event) {
+		consoleTextArea.appendText("\nYou examine the monster");
 		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
-			consoleTextArea.appendText(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n");
+			consoleTextArea.appendText("\n" + model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n");
 		}
 		consoleTextArea.appendText("--------------------------------------------------\n");
 	}
@@ -581,12 +591,23 @@ public class GameFXFullGameController {
 
 	@FXML
 	void combatRunAwayEvent(ActionEvent event) {
-
+		consoleTextArea.appendText("\nYou ran away from the monster");
+		consoleTextArea.appendText("\n--------------------------------------------------");
+		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+			model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
+			model.getCurrentMonster().setMonsterCurrentHealth(model.getCurrentMonster().getMonsterMaxHealth());
+		}
+		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
+		tabPaneMenu.getSelectionModel().select(actionTab);
+		combatList.getSelectionModel().clearSelection();
+		combatInventoryPane.setVisible(false);
+		actionTab.setDisable(false);
+		combatTab.setDisable(true);
 	}
 
 	@FXML
 	void combatQuitGameEvent(ActionEvent event) {
-
+		
 	}
 
 	//----------------------------------------------------------------------------
@@ -610,7 +631,12 @@ public class GameFXFullGameController {
 
 	@FXML
 	void puzzleExitEvent(ActionEvent event) {
-
+		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
+		tabPaneMenu.getSelectionModel().select(actionTab);
+		combatList.getSelectionModel().clearSelection();
+		combatInventoryPane.setVisible(false);
+		actionTab.setDisable(false);
+		combatTab.setDisable(true);
 	}
 
 	@FXML
