@@ -186,6 +186,9 @@ public class Items implements Serializable{
 
 		//Add Item Amount
 		returnString += "Amount: " + itemAmount;
+		
+		//Add Guide Line
+		returnString += "\n--------------------------------------------------";
 
 		
 		return returnString;

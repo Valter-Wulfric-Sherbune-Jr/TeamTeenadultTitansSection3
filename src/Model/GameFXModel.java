@@ -53,6 +53,7 @@ public class GameFXModel{
 	private Players player;
 	private String storedState = "";
 	private String state = "";
+	private String mainState = "";
 	private Rooms nextRoom;
 	private Monsters currentMonster;
 	private ArrayList<Items> lootList;
@@ -89,6 +90,25 @@ public class GameFXModel{
 		else {
 			System.out.println("Error: Not Valid State (Method setStoredState())");
 			System.out.println(storedState);
+			System.exit(0);
+		}
+	}
+
+	/*Get the previous state of the game
+	 */
+	public String getMainState(){
+		return mainState;
+	}
+	
+	/*Save a state you want to switch to late
+	 */
+	public void setMainState(String mainState) {
+		if(checkIfValidState(mainState)) {
+			this.mainState = mainState;
+		}
+		else {
+			System.out.println("Error: Not Valid State (Method setStoredState())");
+			System.out.println(mainState);
 			System.exit(0);
 		}
 	}
@@ -696,8 +716,10 @@ public class GameFXModel{
 	public void playMusic() throws URISyntaxException
 	{
 		String folderPath = "./res/Music/";
-		if(state.equalsIgnoreCase("Main Menu")) {
+		if(mainState.equalsIgnoreCase("Main Menu")) {
 			folderPath += "Main Menu.mp3";
+		}else if(mainState.equalsIgnoreCase("Action Menu")){
+			folderPath += "Action Menu.mp3";
 		}
 		
 		media = new Media(new File(folderPath).toURI().toString());

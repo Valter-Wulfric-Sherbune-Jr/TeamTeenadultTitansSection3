@@ -12,9 +12,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 
 
 public class GameFXMain extends Application 
@@ -23,9 +20,6 @@ public class GameFXMain extends Application
 	
 	
 	public void start(Stage stage) throws Exception {
-		GameFXModel game = new GameFXModel();
-		game.setState("Main Menu");
-		game.playMusic();
 		Parent root = FXMLLoader.load(getClass().getResource("FullGame.fxml"));
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);

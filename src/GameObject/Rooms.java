@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Rooms implements Serializable{
-	
+
 	/**
 	 * 
 	 */
@@ -54,7 +54,7 @@ public class Rooms implements Serializable{
 	public String getRoomId(){
 		return roomId;
 	}
-	
+
 	//Set and get the room floor
 	public void setRoomFloor(String roomFloor){
 		this.roomFloor = roomFloor;
@@ -62,8 +62,8 @@ public class Rooms implements Serializable{
 	public String getRoomFloor(){
 		return roomFloor;
 	}
-	
-	
+
+
 	//Set and get the room description
 	public void setRoomDescription(String roomDescription){
 		/*If there are more then 50 character in a line, 
@@ -90,8 +90,8 @@ public class Rooms implements Serializable{
 	public String getRoomDescription(){
 		return roomDescription;
 	}
-	
-	
+
+
 	/*Set and get the room access
 	 *Check to see the current room the user is in, then check to
 	 *see if there is a puzzle id corresponding to it, if there is
@@ -117,31 +117,66 @@ public class Rooms implements Serializable{
 	public HashMap<String, String> getRoomAccessList() {
 		return roomAccessList;
 	}
-	
-	
+
+
 	/*Add or remove an item in the room by needing an input
 	 *of the item id that you want in the room
 	 *
 	 *Get an arraylist of all the item id in the room
 	 */
 	public void addRoomItem(Items item) {
-		this.roomItem.add(item);
+		if(item.getItemType().equalsIgnoreCase("Ammo")) {
+			boolean itemFound= false;
+			String itemName = "";
+			for(int x = 0; x < roomItem.size(); x++) {
+				itemName = roomItem.get(x).getItemName();
+				if(roomItem.get(x).getItemName().equalsIgnoreCase(item.getItemName())) {
+					itemFound = true;
+					for(int y = 0; y < item.getItemAmount();y++) {
+						roomItem.get(x).increaseItemAmount();
+					}
+				}
+			}
+
+			if(!itemFound) {
+				int itemAmount = item.getItemAmount()-1;
+				Items newItem = item;
+				newItem.setItemAmount(1);
+				this.roomItem.add(newItem);
+				int roomItemNum= 0;
+				for(int x = 0; x < roomItem.size(); x++) {
+					if(roomItem.get(x).getItemName().equalsIgnoreCase(item.getItemName())) {
+						roomItemNum = x;
+						break;
+					}
+				}
+				System.out.println(itemAmount);
+				for(int y = 0; y < itemAmount;y++) {
+					System.out.println("Test");
+					roomItem.get(roomItemNum).increaseItemAmount();
+				}
+			}
+
+
+		}else {
+			this.roomItem.add(item);
+		}
 	}
 	public void removeRoomItemId(Items item) {
 		boolean remove = false;
-		
+
 		search:
-		for(int x = 0; x < this.roomItem.size(); x++) {
-			if(this.roomItem.get(x).equals(item)) {
-				this.roomItem.remove(x);
-				remove = true;
-				break search;
+			for(int x = 0; x < this.roomItem.size(); x++) {
+				if(this.roomItem.get(x).equals(item)) {
+					this.roomItem.remove(x);
+					remove = true;
+					break search;
+				}
 			}
-		}
-		
+
 		if(!remove)
-		System.out.println("Error: Item " + item.getItemName() + "/" + 
-				item.getItemId() + "  does not exist in this room");
+			System.out.println("Error: Item " + item.getItemName() + "/" + 
+					item.getItemId() + "  does not exist in this room");
 	}
 	public void setRoomItemId(ArrayList<Items> roomItem) {
 		this.roomItem = roomItem;
@@ -149,8 +184,8 @@ public class Rooms implements Serializable{
 	public ArrayList<Items> getRoomItem() {
 		return roomItem;
 	}
-	
-	
+
+
 	/*Add or remove an mosnter in the room by needing an input
 	 *of the mosnter id that you want in the room
 	 *
@@ -161,19 +196,19 @@ public class Rooms implements Serializable{
 	}
 	public void removeRoomMonster(Monsters monster) {
 		boolean remove = false;
-		
+
 		search:
-		for(int x = 0; x < this.roomMonster.size(); x++) {
-			if(this.roomMonster.get(x).equals(monster)) {
-				this.roomMonster.remove(x);
-				remove = true;
-				break search;
+			for(int x = 0; x < this.roomMonster.size(); x++) {
+				if(this.roomMonster.get(x).equals(monster)) {
+					this.roomMonster.remove(x);
+					remove = true;
+					break search;
+				}
 			}
-		}
-		
+
 		if(!remove)
-		System.out.println("Error: Monster " + monster.getMonsterName() + "/" +
-				monster.getMonsterId() + " does not exist in this room");
+			System.out.println("Error: Monster " + monster.getMonsterName() + "/" +
+					monster.getMonsterId() + " does not exist in this room");
 	}
 	public void setRoomMonsterId(ArrayList<Monsters> roomMonster) {
 		this.roomMonster = roomMonster;
@@ -181,8 +216,8 @@ public class Rooms implements Serializable{
 	public ArrayList<Monsters> getRoomMonster() {
 		return roomMonster;
 	}
-	
-	
+
+
 	/*Set the room connection to other room by inputing the direction
 	 *then the room id of where that direction will take you and put
 	 *both of it into a hashmap
@@ -192,7 +227,7 @@ public class Rooms implements Serializable{
 	public void setRoomConnection(String direction, String roomId) {
 		this.roomNavigationList.put(direction, roomId);	
 	}
-	
+
 	public String getRoomConnection() {
 		String RoomConnection = "";
 		Set set = roomNavigationList.entrySet();
@@ -210,8 +245,8 @@ public class Rooms implements Serializable{
 	public HashMap<String, String> getRoomNavigationList() {
 		return roomNavigationList;
 	}
-		
-	
+
+
 	public String toString() {
 		String returnString = "";
 
@@ -220,10 +255,10 @@ public class Rooms implements Serializable{
 
 		//Add Room Description
 		returnString += getRoomDescription();
-		
+
 		//Add Guide Line
 		returnString += "\n--------------------------------------------------";
-		
+
 		return returnString;
 	}
 }

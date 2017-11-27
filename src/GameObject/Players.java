@@ -174,7 +174,7 @@ public class Players implements Serializable{
 		boolean remove = false;
 		search:		
 			for(int x = 0; x < inventoryList.size(); x++) {
-				if(inventoryList.get(x).equals(item)) {
+				if(inventoryList.get(x).equals(item) && !item.getItemType().equalsIgnoreCase("Ammo")) {
 					if(inventoryList.get(x).getItemAmount() > 1) {
 						inventoryList.get(x).decreaseItemAmount();
 						remove = true;
@@ -184,6 +184,8 @@ public class Players implements Serializable{
 						remove = true;
 					}
 					break search;
+				}else if(inventoryList.get(x).equals(item) && item.getItemType().equalsIgnoreCase("Ammo")){
+					inventoryList.remove(x);
 				}
 			}
 		if(!remove) {

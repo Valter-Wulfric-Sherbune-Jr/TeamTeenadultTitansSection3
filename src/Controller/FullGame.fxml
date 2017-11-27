@@ -89,13 +89,13 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <TabPane prefHeight="300.0" prefWidth="732.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPaneMenu" prefHeight="300.0" prefWidth="732.0" tabClosingPolicy="UNAVAILABLE">
                            <tabs>
                               <Tab fx:id="actionTab" text="Action">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <VBox layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="310.0" spacing="10.0">
+                                          <VBox fx:id="actionNeutralBox" layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="310.0" spacing="10.0">
                                              <children>
                                                 <Button fx:id="actionMove" mnemonicParsing="false" onAction="#actionMoveEvent" prefHeight="55.0" prefWidth="356.0" text="Move" />
                                                 <Button fx:id="actionInventory" mnemonicParsing="false" onAction="#actionInventoryEvent" prefHeight="55.0" prefWidth="356.0" text="Inventory" />
@@ -107,7 +107,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
                                           </VBox>
-                                          <SplitPane dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                          <SplitPane fx:id="actionInventoryPane" dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
                                              <items>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="363.0">
                                                    <children>
@@ -121,6 +121,28 @@
                                                 </AnchorPane>
                                              </items>
                                           </SplitPane>
+                                          <VBox fx:id="actionInventoryBox" layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="310.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="actionExamineItem" mnemonicParsing="false" onAction="#actionExamineItemEvent" prefHeight="55.0" prefWidth="356.0" text="Examine Item" />
+                                                <Button fx:id="actionDropItem" mnemonicParsing="false" onAction="#actionDropItemEvent" prefHeight="55.0" prefWidth="356.0" text="Drop item" />
+                                                <Button fx:id="actionUseItem" mnemonicParsing="false" onAction="#actionUseItemEvent" prefHeight="55.0" prefWidth="371.0" text="Use Item" />
+                                                <Button fx:id="actionEquipItemEvent" mnemonicParsing="false" onAction="#actionEquipItemEvent" prefHeight="55.0" prefWidth="347.0" text="Equip Item" />
+                                                <Button fx:id="actionExitInventory" mnemonicParsing="false" onAction="#actionExitInventoryEvent" prefHeight="55.0" prefWidth="349.0" text="Exit" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox fx:id="actionLootBox" layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="310.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="actionPickUpItem" mnemonicParsing="false" onAction="#actionPickUpItemEvent" prefHeight="55.0" prefWidth="371.0" text="Pick Up Item" />
+                                                <Button fx:id="actionExamineLootEvent" mnemonicParsing="false" onAction="#actionExamineLootEvent" prefHeight="55.0" prefWidth="347.0" text="Examine Item" />
+                                                <Button fx:id="actionLootExit" mnemonicParsing="false" onAction="#actionLootExitEvent" prefHeight="55.0" prefWidth="349.0" text="Exit" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -129,7 +151,7 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <VBox layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="317.0" spacing="10.0">
+                                          <VBox fx:id="combatBox" layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="317.0" spacing="10.0">
                                              <children>
                                                 <Button fx:id="combatAttack" mnemonicParsing="false" onAction="#combatAttackEvent" prefHeight="55.0" prefWidth="356.0" text="Attack" />
                                                 <Button fx:id="combatDefend" mnemonicParsing="false" onAction="#combatDefendEvent" prefHeight="55.0" prefWidth="371.0" text="Defend" />
@@ -142,7 +164,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
                                           </VBox>
-                                          <SplitPane dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
+                                          <SplitPane fx:id="combatInventoryPane" dividerPositions="0.0942622950819672" layoutX="333.0" layoutY="11.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="386.0">
                                              <items>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="363.0">
                                                    <children>
