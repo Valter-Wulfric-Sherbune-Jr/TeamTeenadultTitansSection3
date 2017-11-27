@@ -178,6 +178,16 @@
                                                 </AnchorPane>
                                              </items>
                                           </SplitPane>
+                                          <VBox fx:id="combatLootBox" layoutX="4.0" layoutY="7.0" prefHeight="257.0" prefWidth="317.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="combatLootPickUp" mnemonicParsing="false" onAction="#combatLootPickUpEvent" prefHeight="55.0" prefWidth="356.0" text="Pick Up" />
+                                                <Button fx:id="combatLootExamineItem" mnemonicParsing="false" onAction="#combatLootExamineItemEvent" prefHeight="55.0" prefWidth="371.0" text="Examine Item" />
+                                                <Button fx:id="combatLootExit" mnemonicParsing="false" onAction="#combatLootExitEvent" prefHeight="55.0" prefWidth="349.0" text="Exit" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
                                        </children>
                                     </AnchorPane>
                                  </content>

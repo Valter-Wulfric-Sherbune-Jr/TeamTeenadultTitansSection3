@@ -26,8 +26,8 @@ import javafx.scene.layout.VBox;
 public class GameFXFullGameController {
 
 	@FXML
-    private TabPane tabPaneMenu;
-	
+	private TabPane tabPaneMenu;
+
 	@FXML
 	private Tab actionTab;
 
@@ -108,18 +108,30 @@ public class GameFXFullGameController {
 
 	@FXML
 	private Button combatQuitGame;
-	
+
 	@FXML
-    private SplitPane combatInventoryPane;
-	
+	private SplitPane combatInventoryPane;
+
 	@FXML
-    private VBox combatBox;
+	private VBox combatBox;
 
 	@FXML
 	private Label combatLabel;
 
 	@FXML
-	private ListView<?> combatList;
+	private ListView<String> combatList;
+
+	@FXML
+	private VBox combatLootBox;
+
+	@FXML
+	private Button combatLootPickUp;
+
+	@FXML
+	private Button combatLootExamineItem;
+
+	@FXML
+	private Button combatLootExit;
 
 	@FXML
 	private Tab puzzleTab;
@@ -219,11 +231,11 @@ public class GameFXFullGameController {
 	@FXML
 	void actionMoveEvent(ActionEvent event) {
 		if(actionList.getSelectionModel().getSelectedItem() == null) {
-		actionInventoryPane.setVisible(true);
-		actionList.setVisible(true);
-		actionLabel.setText("Room Exit");
-		setListDirection(model.getPlayer().getCurrentRoom().getRoomNavigationList());
-		actionList.setItems(observList);
+			actionInventoryPane.setVisible(true);
+			actionList.setVisible(true);
+			actionLabel.setText("Room Exit");
+			setListDirection(model.getPlayer().getCurrentRoom().getRoomNavigationList());
+			actionList.setItems(observList);
 		}else {
 			model.setNextRoom(actionList.getSelectionModel().getSelectedItem());
 			if(model.getNextRoomPuzzle() != null) {
@@ -233,6 +245,9 @@ public class GameFXFullGameController {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				consoleTextArea.appendText("\nYou moved to the next room");
 				consoleTextArea.appendText("\n--------------------------------------------------");
+				actionInventoryPane.setVisible(false);
+				actionList.getSelectionModel().clearSelection();
+
 			}
 			else{
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
@@ -243,12 +258,15 @@ public class GameFXFullGameController {
 				}
 				actionTab.setDisable(true);
 				combatTab.setDisable(false);
-				actionList.setVisible(false);
+				combatInventoryPane.setVisible(false);
 				combatList.setVisible(false);
+				actionList.setVisible(false);
 				tabPaneMenu.getSelectionModel().select(combatTab);
 				actionNeutralBox.setVisible(true);
-				actionInventoryPane.setVisible(false);
 				combatBox.setVisible(true);
+				actionInventoryPane.setVisible(false);
+				combatLootBox.setVisible(false);
+				actionList.getSelectionModel().clearSelection();
 			}
 		}
 	}
@@ -274,7 +292,6 @@ public class GameFXFullGameController {
 		ArrayList<Items> itemList = model.getPlayer().getInventoryList();
 		for(int x = 0; x < itemList.size(); x++) {
 			itemName = itemList.get(x).getItemName()+ " x" + itemList.get(x).getItemAmount();
-			System.out.println(itemName);
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
 				consoleTextArea.appendText("\n" + itemList.get(x).toString());
 			}
@@ -306,7 +323,26 @@ public class GameFXFullGameController {
 
 	@FXML
 	void actionUseItemEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items> itemList = model.getPlayer().getInventoryList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + 
+					itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
+				if(itemList.get(x).getItemType().equalsIgnoreCase("Healing") && model.getPlayer().getPlayerCurrentHealth() != 100) {
+					model.getPlayer().healHealth(itemList.get(x).getItemActionValue());
+					consoleTextArea.appendText("\nYou recover " + itemList.get(x).getItemActionValue() + " health.");
+					consoleTextArea.appendText("\n--------------------------------------------------");
+					model.getPlayer().removeItemFromInventory(itemList.get(x));
+					setListInventory(itemList);
+					actionList.setItems(observList);
+				}else {
+					consoleTextArea.appendText("\nThis item cannot be use right now");
+					consoleTextArea.appendText("\n--------------------------------------------------");
+				}	
+			}
 
+		}
 	}
 
 	@FXML
@@ -403,7 +439,126 @@ public class GameFXFullGameController {
 
 	@FXML
 	void combatAttackEvent(ActionEvent event) {
+		if(combatList.getSelectionModel().getSelectedItem() == null) {
+			combatInventoryPane.setVisible(true);
+			combatList.setVisible(true);
+			combatLabel.setText("Monsters");
+			setListMonster(model.getPlayer().getCurrentRoom().getRoomMonster());
+			combatList.setItems(observList);
+		}else {
+			String monsterName = "";
+			ArrayList<Monsters> monsterList = model.getPlayer().getCurrentRoom().getRoomMonster();
+			for(int x = 0; x < monsterList.size(); x++) {
+				monsterName = monsterList.get(x).getMonsterName() + " - Health:" + 
+						monsterList.get(x).getMonsterCurrentHealth() + "/" + monsterList.get(x).getMonsterMaxHealth();
+				if(monsterName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+					model.setCurrentMonster(monsterList.get(x));
 
+				}
+
+			}
+
+			
+			if(model.getPlayer().getWeaponAmmo(model.getPlayer().getWeapon()) == 0) {
+				consoleTextArea.appendText("\nYou don't have any ammo for your weapon!\n");
+				consoleTextArea.appendText("\n--------------------------------------------------");
+			}
+
+			consoleTextArea.appendText("\nYou attack the " + model.getCurrentMonster().getMonsterName() + "!");
+			model.getCurrentMonster().takeDmg(model.getPlayer().getWeapon().getItemActionValue());
+			model.getPlayer().useWeaponAmmo(model.getPlayer().getWeapon());
+			consoleTextArea.appendText("\nThe " + model.getCurrentMonster().getMonsterName() + " took " + 
+					model.getPlayer().getWeapon().getItemActionValue() + " damage!\n");
+
+			if(model.getCurrentMonster().getMonsterCurrentHealth() <= 0) {
+				consoleTextArea.appendText("\nThe " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
+				consoleTextArea.appendText("\n--------------------------------------------------");
+				model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
+				model.setLootList(model.getMonsterLootList());
+				if(!model.getLootList().isEmpty()) {
+					for(int y = 0; y < model.getLootList().size();y++) {
+						consoleTextArea.appendText("\nThe monster drop " + model.getSpecificLoot(y).getItemName() +" on the floor of the room");
+					}
+					consoleTextArea.appendText("\n--------------------------------------------------");
+				}
+				model.decreaseMonsterAlive();
+				
+
+			}
+
+			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
+				
+				for(int z = 0; z < model.getPlayer().getCurrentRoom().getRoomMonster().size(); z++) {
+					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(z));
+					attackPlayer();
+				}
+				combatList.getSelectionModel().clearSelection();
+				combatInventoryPane.setVisible(false);	
+			}else {
+				
+				combatBox.setVisible(false);
+				combatLootBox.setVisible(true);
+				setListItemInRoom(model.getLootList());
+				combatList.setItems(observList);
+				combatLabel.setText("Monster Drop");
+				checkWinCondition();
+			}
+
+		}
+	}
+
+	@FXML
+	void combatLootExamineItemEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items> itemList = model.getLootList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+				consoleTextArea.appendText("\n" + itemList.get(x).toString());
+			}
+
+		}
+	}
+
+	@FXML
+	void combatLootExitEvent(ActionEvent event) {
+		if(!model.getLootList().isEmpty()) {
+			consoleTextArea.appendText("\nThe rest of the time dropped to the floor");
+			consoleTextArea.appendText("\n--------------------------------------------------");
+			for(Items item : model.getLootList()) {
+				model.getPlayer().getCurrentRoom().addRoomItem(item);
+			}
+		}
+		tabPaneMenu.getSelectionModel().select(actionTab);
+		combatList.getSelectionModel().clearSelection();
+		combatInventoryPane.setVisible(false);
+		
+		actionTab.setDisable(false);
+		combatTab.setDisable(true);
+		
+	}
+
+	@FXML
+	void combatLootPickUpEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items>itemList = model.getLootList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + 
+					itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+				consoleTextArea.appendText("\nYou Picked Up the " + itemList.get(x).getItemName());
+				consoleTextArea.appendText("\n--------------------------------------------------");
+				model.getPlayer().addItemToInventory(itemList.get(x));
+				model.removeSpecificLoot(itemList.get(x));
+				setListInventory(model.getLootList());
+				combatList.setItems(observList);
+			}
+
+		}
+		
+			
+		
+		
 	}
 
 	@FXML
@@ -413,7 +568,10 @@ public class GameFXFullGameController {
 
 	@FXML
 	void combatExamineEvent(ActionEvent event) {
-
+		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+			consoleTextArea.appendText(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n");
+		}
+		consoleTextArea.appendText("--------------------------------------------------\n");
 	}
 
 	@FXML
@@ -511,12 +669,47 @@ public class GameFXFullGameController {
 			observList.add(item.get(x).getItemName() + " x" + item.get(x).getItemAmount());
 		}
 	}
-	
+
 	void setListMonster(ArrayList<Monsters> monster) {
 		observList.clear();
 		for(int x = 0; x < monster.size(); x++) {
 			observList.add(monster.get(x).getMonsterName() + " - Health:" + 
-					monster.get(x).getMonsterCurrentHealth() + monster.get(x).getMonsterMaxHealth());
+					monster.get(x).getMonsterCurrentHealth() + "/" + monster.get(x).getMonsterMaxHealth());
+		}
+	}
+
+	public void attackPlayer() {
+		consoleTextArea.appendText("\nThe " + model.getCurrentMonster().getMonsterName() + " attacks!");
+		int mosnterDamage = model.getCurrentMonster().attackPlayer();
+		if(mosnterDamage == 0) {
+			consoleTextArea.appendText("\nThe attack missed!");
+		}else {
+			consoleTextArea.appendText("\nYou took " + mosnterDamage + " damage!");
+			model.getPlayer().takeDmg(mosnterDamage);
+			consoleTextArea.appendText("\nHealth: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")");
+			checkPlayerDeath();
+		}
+		consoleTextArea.appendText("\n--------------------------------------------------");
+
+	}
+
+	private void checkPlayerDeath() {
+		if(model.getPlayer().getPlayerCurrentHealth() <= 0) {
+			consoleTextArea.appendText("\n\n--------------------------------------------------");
+			consoleTextArea.appendText("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
+			consoleTextArea.appendText("\n=====        YOU DIED   -   GAME OVER        =====");
+			consoleTextArea.appendText("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
+			consoleTextArea.appendText("\n--------------------------------------------------\n");
+		}
+	}
+
+	private void checkWinCondition() {
+		if(model.getMonsterAlive() == 0) {	
+			consoleTextArea.appendText("\n\n--------------------------------------------------");
+			consoleTextArea.appendText("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
+			consoleTextArea.appendText("\n=====        You Win   -    Vicotry        =====");
+			consoleTextArea.appendText("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
+			consoleTextArea.appendText("\n--------------------------------------------------\n");
 		}
 	}
 

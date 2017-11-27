@@ -638,6 +638,22 @@ public class GameFXModel{
 	public void removeLoot() {
 		lootList.remove(0);
 	}
+	
+	/*Remove the first loot from the loot list
+	 *Use in Method: lootItem()
+	 */
+	public void removeSpecificLoot(Items item) {
+		for(int x = 0 ; x < lootList.size(); x++) {
+			if(lootList.get(x).equals(item)) {
+				lootList.remove(x);
+				break;
+			}
+		}
+	}
+	
+	public Items getSpecificLoot(int x) {
+		return lootList.get(x);
+	}
 
 	/*Get the first loot from the loot list
 	 *Use in Method: printChoice(), lootItem()
