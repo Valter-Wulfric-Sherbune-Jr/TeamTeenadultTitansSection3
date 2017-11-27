@@ -467,7 +467,7 @@ public class GameFXFullGameController {
 
 			}
 
-			
+
 			if(model.getPlayer().getWeaponAmmo(model.getPlayer().getWeapon()) == 0) {
 				consoleTextArea.appendText("\nYou don't have any ammo for your weapon!\n");
 				consoleTextArea.appendText("\n--------------------------------------------------");
@@ -491,12 +491,12 @@ public class GameFXFullGameController {
 					consoleTextArea.appendText("\n--------------------------------------------------");
 				}
 				model.decreaseMonsterAlive();
-				
+
 
 			}
 
 			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
-				
+
 				for(int z = 0; z < model.getPlayer().getCurrentRoom().getRoomMonster().size(); z++) {
 					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(z));
 					attackPlayer();
@@ -504,7 +504,7 @@ public class GameFXFullGameController {
 				combatList.getSelectionModel().clearSelection();
 				combatInventoryPane.setVisible(false);	
 			}else {
-				
+
 				combatBox.setVisible(false);
 				combatLootBox.setVisible(true);
 				setListItemInRoom(model.getLootList());
@@ -532,7 +532,7 @@ public class GameFXFullGameController {
 	@FXML
 	void combatLootExitEvent(ActionEvent event) {
 		if(!model.getLootList().isEmpty()) {
-			consoleTextArea.appendText("\nThe rest of the time dropped to the floor");
+			consoleTextArea.appendText("\nThe rest of the item dropped to the floor");
 			consoleTextArea.appendText("\n--------------------------------------------------");
 			for(Items item : model.getLootList()) {
 				model.getPlayer().getCurrentRoom().addRoomItem(item);
@@ -541,10 +541,10 @@ public class GameFXFullGameController {
 		tabPaneMenu.getSelectionModel().select(actionTab);
 		combatList.getSelectionModel().clearSelection();
 		combatInventoryPane.setVisible(false);
-		
+
 		actionTab.setDisable(false);
 		combatTab.setDisable(true);
-		
+
 	}
 
 	@FXML
@@ -564,10 +564,10 @@ public class GameFXFullGameController {
 			}
 
 		}
-		
-			
-		
-		
+
+
+
+
 	}
 
 	@FXML
@@ -607,30 +607,49 @@ public class GameFXFullGameController {
 
 	@FXML
 	void combatQuitGameEvent(ActionEvent event) {
-		
+
 	}
 
 	//----------------------------------------------------------------------------
 
 	@FXML
 	void puzzleInputNumberEvent(ActionEvent event) {
-		puzzleKeyPadPane.setVisible(true);
-		puzzleInventoryPane.setVisible(false);
+		if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item")) {
+			consoleTextArea.appendText("\nThere's nothing to input.");
+			consoleTextArea.appendText("\n--------------------------------------------------");
+		}else {
+			puzzleKeyPadPane.setVisible(true);
+			puzzleInventoryPane.setVisible(false);
+//			if() {
+//				
+//			}
+		}
 	}
 
 	@FXML
 	void puzzleUseItemEvent(ActionEvent event) {
-		puzzleKeyPadPane.setVisible(false);
-		puzzleInventoryPane.setVisible(true);
+		if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("input")) {
+			consoleTextArea.appendText("\nThere's a keypad right next to the door");
+			consoleTextArea.appendText("\nmaybe I should use that");
+			consoleTextArea.appendText("\n--------------------------------------------------");
+		}else {
+			System.out.println(puzzleKeyPadTextArea.getText() + "g");
+			puzzleKeyPadPane.setVisible(false);
+			puzzleInventoryPane.setVisible(true);
+		}
 	}
 
 	@FXML
 	void puzzleHintEvent(ActionEvent event) {
-
+		consoleTextArea.appendText("\n" + model.getNextRoomPuzzle().getPuzzleHint());
+		consoleTextArea.appendText("\n--------------------------------------------------");
 	}
 
 	@FXML
 	void puzzleExitEvent(ActionEvent event) {
+		consoleTextArea.appendText("\nYou couldn't figure out how to solve the puzzle");
+		consoleTextArea.appendText("\nYou stumble back into the middle of the room");
+		consoleTextArea.appendText("\n--------------------------------------------------");
 		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
 		tabPaneMenu.getSelectionModel().select(actionTab);
 		combatList.getSelectionModel().clearSelection();
