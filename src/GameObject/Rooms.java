@@ -66,25 +66,25 @@ public class Rooms implements Serializable{
 
 	//Set and get the room description
 	public void setRoomDescription(String roomDescription){
-		/*If there are more then 50 character in a line, 
-		it'll make a new line*/
-		if(roomDescription.length() > 30) {
-			int totalCharacterLength = 0;
-			int descriptionLength = roomDescription.length();
-			String outputString ="";
-
-			for (String word : roomDescription.split(" ")) {
-				totalCharacterLength += word.length();
-				descriptionLength -= word.length()+1;
-				outputString += word + " ";
-
-				if(totalCharacterLength > 40 && descriptionLength > 0) {
-					totalCharacterLength = 0;
-					outputString += "\n";
-				}
-			}
-			roomDescription = outputString;
-		}
+//		/*If there are more then 50 character in a line, 
+//		it'll make a new line*/
+//		if(roomDescription.length() > 30) {
+//			int totalCharacterLength = 0;
+//			int descriptionLength = roomDescription.length();
+//			String outputString ="";
+//
+//			for (String word : roomDescription.split(" ")) {
+//				totalCharacterLength += word.length();
+//				descriptionLength -= word.length()+1;
+//				outputString += word + " ";
+//
+//				if(totalCharacterLength > 40 && descriptionLength > 0) {
+//					totalCharacterLength = 0;
+//					outputString += "\n";
+//				}
+//			}
+//			roomDescription = outputString;
+//		}
 		this.roomDescription = roomDescription;
 	}
 	public String getRoomDescription(){
