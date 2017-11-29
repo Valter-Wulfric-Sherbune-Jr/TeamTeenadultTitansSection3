@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,19 +23,25 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <TabPane prefHeight="294.0" prefWidth="732.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="294.0" prefWidth="670.0" tabClosingPolicy="UNAVAILABLE">
                            <tabs>
-                              <Tab text="Neutral">
+                              <Tab text="Action">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="265.0" prefWidth="638.0">
+                                       <children>
+                                          <ImageView fx:id="actionBackground" fitHeight="265.0" fitWidth="670.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children></AnchorPane>
                                  </content>
                               </Tab>
-                              <Tab text="Move">
+                              <Tab text="Combat">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="combatBackground" fitHeight="265.0" fitWidth="670.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children></AnchorPane>
                                  </content>
                               </Tab>
-                              <Tab text="Healing">
+                              <Tab text="Attack">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>

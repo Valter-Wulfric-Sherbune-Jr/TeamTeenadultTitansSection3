@@ -13,3 +13,5 @@ Room Item:
 I12
 Room Monster:
 null
+Room Picture:
+Room 1.png

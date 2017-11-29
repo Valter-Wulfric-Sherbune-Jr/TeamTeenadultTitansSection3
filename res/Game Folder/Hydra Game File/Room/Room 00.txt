@@ -18,3 +18,5 @@ Room Item:
 null
 Room Monster:
 null
+Room Picture:
+Room 1.png

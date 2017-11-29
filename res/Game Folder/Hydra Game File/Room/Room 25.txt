@@ -14,3 +14,5 @@ Room Item:
 null
 Room Monster:
 E09
+Room Picture:
+Room 1.png

@@ -13,3 +13,5 @@ Room Item:
 I07
 Room Monster:
 E05
+Room Picture:
+Room 1.png

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameFXLevelEditorController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Button fx:id="levelEditorBackButton" layoutX="14.0" layoutY="524.0" mnemonicParsing="false" onAction="#levelEditorBackButtonEvent" prefHeight="60.0" prefWidth="120.0" text="Back" />
+            <Button fx:id="levelEditorSaveFile" layoutX="362.0" layoutY="524.0" mnemonicParsing="false" onAction="#levelEditorSaveFileEvent" prefHeight="60.0" prefWidth="120.0" text="Save File" />
+            <Button fx:id="levelEditorLoadFile" layoutX="188.0" layoutY="524.0" mnemonicParsing="false" onAction="#levelEditorLoadFileEvent" prefHeight="60.0" prefWidth="120.0" text="Load File" />
+            <Button fx:id="levelEditorGetPreset" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#levelEditorGetPresetEvent" prefHeight="25.0" prefWidth="180.0" text="Get Preset" />
+            <TextArea fx:id="levelEditorHelpTextArea" layoutX="214.0" layoutY="27.0" prefHeight="480.0" prefWidth="268.0" />
+            <Label layoutX="214.0" layoutY="6.0" prefHeight="17.0" prefWidth="180.0" text="Helpful Information" />
+            <TextArea fx:id="levelEditorConsoleTextArea" layoutX="14.0" layoutY="158.0" prefHeight="153.0" prefWidth="180.0" />
+            <Label layoutX="16.0" layoutY="141.0" prefHeight="17.0" prefWidth="49.0" text="Console" />
+            <Label layoutX="14.0" layoutY="323.0" prefHeight="17.0" prefWidth="120.0" text="Category of Files" />
+            <VBox layoutX="15.0" layoutY="349.0" prefHeight="153.0" prefWidth="180.0" spacing="10.0">
+               <children>
+                  <RadioButton fx:id="levelEditorCharacterRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Character" />
+                  <RadioButton fx:id="levelEditorItemRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Item" />
+                  <RadioButton fx:id="levelEditorMonsterRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Monster" />
+                  <RadioButton fx:id="levelEditorPictureRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Picture" />
+                  <RadioButton fx:id="levelEditorPuzzleRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Puzzle" />
+                  <RadioButton fx:id="levelEditorRoomRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Room" />
+               </children>
+            </VBox>
+            <Button layoutX="17.0" layoutY="53.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Button" />
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="497.0">
+         <children>
+            <TabPane fx:id="levelEditorTabPane" layoutX="-5.0" prefHeight="598.0" prefWidth="519.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="levelEditorSlot1" text="Empty">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot1TextArea" prefHeight="637.0" prefWidth="869.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab fx:id="levelEditorSlot2" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot2TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot3" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot3TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot4" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot4TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot5" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot5TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot6" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot6TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot7" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot7TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot8" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot8TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot9" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot9TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="levelEditorSlot10" text="Empty">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="4.0" layoutY="-2.0" prefHeight="573.0" prefWidth="496.0" vbarPolicy="ALWAYS">
+                                 <content>
+                                    <TextArea fx:id="levelEditorSlot10TextArea" prefHeight="637.0" prefWidth="495.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children></AnchorPane>
+  </items>
+</SplitPane>

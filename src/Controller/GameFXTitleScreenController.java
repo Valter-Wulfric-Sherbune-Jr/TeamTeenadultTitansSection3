@@ -22,6 +22,9 @@ public class GameFXTitleScreenController {
 
     @FXML
     private Button newGameButton;
+    
+    @FXML
+    private Button levelEditorButton;
 
     @FXML
     private Button loadGameButton;
@@ -32,6 +35,16 @@ public class GameFXTitleScreenController {
     @FXML
     void exitGameOnClick(ActionEvent event) {
     	System.exit(0);
+    }
+    
+    @FXML
+    void levelEditorOnClick(ActionEvent event) throws IOException {
+    	Parent secondPane = FXMLLoader.load(getClass().getResource("LevelEditor.fxml"));
+    	Scene scene2 = new Scene(secondPane);
+    	
+    	Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());  
+    	window.setScene(scene2);
+    	window.show();
     }
 
     @FXML

@@ -14,3 +14,6 @@ Room Item:
 I10
 Room Monster:
 E01
+E01
+Room Picture:
+Room 1.png

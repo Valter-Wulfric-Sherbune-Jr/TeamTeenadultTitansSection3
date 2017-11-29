@@ -1,5 +1,6 @@
 package Controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 
 import GameObject.Items;
@@ -35,12 +37,20 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GameFXPlayGameController {
 
+    @FXML
+    private ImageView actionBackground;
+
+    @FXML
+    private ImageView combatBackground;
+    
 	@FXML
 	private SplitPane mainPane;
 
@@ -236,14 +246,35 @@ public class GameFXPlayGameController {
 		model.setMainState("Action Menu");
 		//model.playMusic();
 		model.setGameFolder("Hydra Game File");
+		model.loadGamePictureFolder();
 		model.loadGameFolder("Item");
 		model.loadGameFolder("Monster");
 		model.loadGameFolder("Puzzle");
-		model.loadGameFolder("Room");
+		model.loadGameFolder("Room");	
 		model.makeNewPlayer("Vector");
+		
+		File folder = new File("./res/Game Folder/Hydra Game File/" + "Picture/");
+		File[] listOfFiles = folder.listFiles();
+		String fileName = null;
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				fileName = file.getName();
+				System.out.println(file.getAbsoluteFile());
+				System.out.println(file.toURI().toString());
+				//Image image = new Image(, 670, 265,false,false);
+				
+				actionBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
+				actionBackground.setVisible(true);
+				actionBackground.setDisable(false);
+				
+			}
+		}
 
-
-		printTextConsole(model.getPlayer().getCurrentRoom().toString());
+//		Image image = new Image(getClass().getResource("test.png").toExternalForm(), 670, 265,false,false);
+//		actionBackground.setImage(image);
+//		actionBackground.setVisible(true);
+//		actionBackground.setDisable(false);
+		printHelp(model.getPlayer().getCurrentRoom().toString());
 	}
 
 	//----------------------------------------------------------------------------
@@ -264,22 +295,21 @@ public class GameFXPlayGameController {
 			else if(model.getNextRoom().getRoomMonster().isEmpty()) {
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 
-				String movedRoom = "";
-				output +=  "\nYou moved to the next room";
+				output +=  "You moved to the next room";
 				output +=  "\n--------------------------------------------------";
-				printTextConsole(output);
 				changeTab("Action");
+				printHelp(output);
 
 			}
 			else{
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
-				output += "\n- - - - -          ENCOUNTER!          - - - - -\n";
+				output += "- - - - -          ENCOUNTER!          - - - - -\n";
 				output += "-----------------------------------------------\n";
 				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
 					output += model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
-				}
-				printTextConsole(output);
+				}	
 				changeTab("Combat");
+				printHelp(output);
 			}
 		}
 	}
@@ -293,10 +323,11 @@ public class GameFXPlayGameController {
 		actionList.setItems(observList);
 		actionInventoryBox.setVisible(true);
 		actionNeutralBox.setVisible(false);
-		printTextConsole("\nPlayer Name: " + model.getPlayer().getPlayerName());
-		printTextConsole("\nPlayer Health: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")");
-		printTextConsole("\nPlayer Weapon: " +model.getPlayer().getWeapon().getItemName());
-		printTextConsole("\n--------------------------------------------------");
+		output += "Player Name: " + model.getPlayer().getPlayerName();
+		output += "\nPlayer Health: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
+		output += "\nPlayer Weapon: " +model.getPlayer().getWeapon().getItemName();
+		output += "\n--------------------------------------------------";
+		printHelp(output);
 	}
 
 	@FXML
@@ -306,7 +337,9 @@ public class GameFXPlayGameController {
 		for(int x = 0; x < itemList.size(); x++) {
 			itemName = itemList.get(x).getItemName()+ " x" + itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\n" + itemList.get(x).toString());
+				output += itemList.get(x).toString();
+				printHelp(output);
+				break;
 			}
 
 		}
@@ -323,12 +356,13 @@ public class GameFXPlayGameController {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\nYou drop the " + itemList.get(x).getItemName());
-				printTextConsole("\n--------------------------------------------------");
+				output += "You drop the " + itemList.get(x).getItemName();
+				output += "\n--------------------------------------------------";
 				model.getPlayer().getCurrentRoom().addRoomItem(itemList.get(x));
 				model.getPlayer().removeItemFromInventory(itemList.get(x));
 				setListInventory(itemList);
 				actionList.setItems(observList);
+				printHelp(output);
 			}
 
 		}
@@ -344,14 +378,16 @@ public class GameFXPlayGameController {
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
 				if(itemList.get(x).getItemType().equalsIgnoreCase("Healing") && model.getPlayer().getPlayerCurrentHealth() != 100) {
 					model.getPlayer().healHealth(itemList.get(x).getItemActionValue());
-					printTextConsole("\nYou recover " + itemList.get(x).getItemActionValue() + " health.");
-					printTextConsole("\n--------------------------------------------------");
+					output += "You recover " + itemList.get(x).getItemActionValue() + " health.";
+					output += "\n--------------------------------------------------";
 					model.getPlayer().removeItemFromInventory(itemList.get(x));
 					setListInventory(itemList);
 					actionList.setItems(observList);
+					printHelp(output);
 				}else {
-					printTextConsole("\nThis item cannot be use right now");
-					printTextConsole("\n--------------------------------------------------");
+					output += "This item cannot be use right now";
+					output += "\n--------------------------------------------------";
+					printHelp(output);
 				}	
 			}
 
@@ -366,10 +402,11 @@ public class GameFXPlayGameController {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\nYou equipped the " + itemList.get(x).getItemName());
+				output += "You equipped the " + itemList.get(x).getItemName();
 				model.getPlayer().equipWeapon(itemList.get(x));
 				setListInventory(itemList);
 				actionList.setItems(observList);
+				printHelp(output);
 			}
 
 		}
@@ -390,10 +427,11 @@ public class GameFXPlayGameController {
 		actionInventoryPane.setVisible(true);
 
 		actionList.setVisible(true);
-		printTextConsole("\n" + model.getPlayer().getCurrentRoom().toString());
+		output += model.getPlayer().getCurrentRoom().toString();
 		actionLabel.setText("Item on Ground");
 		setListInventory(model.getPlayer().getCurrentRoom().getRoomItem());
 		actionList.setItems(observList);
+		printHelp(output);
 
 	}
 
@@ -405,12 +443,13 @@ public class GameFXPlayGameController {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\nYou Picked Up the " + itemList.get(x).getItemName());
-				printTextConsole("\n--------------------------------------------------");
+				output += "You Picked Up the " + itemList.get(x).getItemName();
+				output += "\n--------------------------------------------------";
 				model.getPlayer().addItemToInventory(itemList.get(x));
 				model.getPlayer().getCurrentRoom().removeRoomItemId(itemList.get(x));
 				setListInventory(model.getPlayer().getCurrentRoom().getRoomItem());
 				actionList.setItems(observList);
+				printHelp(output);
 			}
 
 		}
@@ -424,7 +463,8 @@ public class GameFXPlayGameController {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(actionList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\n" + itemList.get(x).toString());
+				output +=  itemList.get(x).toString();
+				printHelp(output);
 			}
 
 		}
@@ -492,48 +532,53 @@ public class GameFXPlayGameController {
 
 
 			if(model.getPlayer().getWeaponAmmo(model.getPlayer().getWeapon()) == 0) {
-				printTextConsole("\nYou don't have any ammo for your weapon!\n");
-				printTextConsole("\n--------------------------------------------------");
+				output += "\nYou don't have any ammo for your weapon!\n";
+				output += "\n--------------------------------------------------";
+				printHelp(output);
 			}
 
-			printTextConsole("\nYou attack the " + model.getCurrentMonster().getMonsterName() + "!");
+			output += "\nYou attack the " + model.getCurrentMonster().getMonsterName() + "!";
 			model.getCurrentMonster().takeDmg(model.getPlayer().getWeapon().getItemActionValue());
 			model.getPlayer().useWeaponAmmo(model.getPlayer().getWeapon());
-			printTextConsole("\nThe " + model.getCurrentMonster().getMonsterName() + " took " + 
-					model.getPlayer().getWeapon().getItemActionValue() + " damage!\n");
+			output += "\nThe " + model.getCurrentMonster().getMonsterName() + " took " + 
+					model.getPlayer().getWeapon().getItemActionValue() + " damage!\n";
 
 			if(model.getCurrentMonster().getMonsterCurrentHealth() <= 0) {
-				printTextConsole("\nThe " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.");
-				printTextConsole("\n--------------------------------------------------");
+				output += "\nThe " + model.getCurrentMonster().getMonsterName() + " slumps over, defeated.";
+				output += "\n--------------------------------------------------";
 				model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
 				model.setLootList(model.getMonsterLootList());
-				if(!model.getLootList().isEmpty()) {
-					for(int y = 0; y < model.getLootList().size();y++) {
-						printTextConsole("\nThe monster drop " + model.getSpecificLoot(y).getItemName() +" on the floor of the room");
-					}
-					printTextConsole("\n--------------------------------------------------");
-				}
+				
 				model.decreaseMonsterAlive();
 
 
 			}
 
 			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
-
+				
 				for(int z = 0; z < model.getPlayer().getCurrentRoom().getRoomMonster().size(); z++) {
 					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(z));
 					attackPlayer();
 				}
 				combatList.getSelectionModel().clearSelection();
-				combatInventoryPane.setVisible(false);	
-			}else {
+				combatInventoryPane.setVisible(false);
+				printHelp(output);
 
+			}else {
+				if(!model.getLootList().isEmpty()) {
+					for(int y = 0; y < model.getLootList().size();y++) {
+						output += "\nThe monster drop " + model.getSpecificLoot(y).getItemName() +" on the floor of the room";
+					}
+					output += "\n--------------------------------------------------";
+				}
 				combatBox.setVisible(false);
 				combatLootBox.setVisible(true);
 				setListItemInRoom(model.getLootList());
 				combatList.setItems(observList);
 				combatLabel.setText("Monster Drop");
 				checkWinCondition();
+				printHelp(output);
+
 			}
 
 		}
@@ -546,7 +591,9 @@ public class GameFXPlayGameController {
 		for(int x = 0; x < itemList.size(); x++) {
 			itemName = itemList.get(x).getItemName()+ " x" + itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\n" + itemList.get(x).toString());
+				output += "\n" + itemList.get(x).toString();
+				printHelp(output);
+				break;
 			}
 
 		}
@@ -555,8 +602,8 @@ public class GameFXPlayGameController {
 	@FXML
 	void combatLootExitEvent(ActionEvent event) {
 		if(!model.getLootList().isEmpty()) {
-			printTextConsole("\nThe rest of the item dropped to the floor");
-			printTextConsole("\n--------------------------------------------------");
+			output += "The rest of the item dropped to the floor";
+			output += "\n--------------------------------------------------";
 			for(Items item : model.getLootList()) {
 				model.getPlayer().getCurrentRoom().addRoomItem(item);
 			}
@@ -564,6 +611,7 @@ public class GameFXPlayGameController {
 		tabPaneMenu.getSelectionModel().select(actionTab);
 		combatList.getSelectionModel().clearSelection();
 		changeTab("Action");
+		printHelp(output);
 
 	}
 
@@ -571,16 +619,18 @@ public class GameFXPlayGameController {
 	void combatLootPickUpEvent(ActionEvent event) {
 		String itemName = "";
 		ArrayList<Items>itemList = model.getLootList();
+		
 		for(int x = 0; x < itemList.size(); x++) {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
 			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
-				printTextConsole("\nYou Picked Up the " + itemList.get(x).getItemName());
-				printTextConsole("\n--------------------------------------------------");
+				output += "You Picked Up the " + itemList.get(x).getItemName();
+				output += "\n--------------------------------------------------";
 				model.getPlayer().addItemToInventory(itemList.get(x));
 				model.removeSpecificLoot(itemList.get(x));
 				setListInventory(model.getLootList());
 				combatList.setItems(observList);
+				printHelp(output);
 			}
 
 		}
@@ -597,11 +647,12 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void combatExamineEvent(ActionEvent event) {
-		printTextConsole("\nYou examine the monster");
+		output += "You examine the monster";
 		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
-			printTextConsole("\n" + model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n");
+			output += "\n" + model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
 		}
-		printTextConsole("--------------------------------------------------\n");
+		output += "--------------------------------------------------\n";
+		printHelp(output);
 	}
 
 	@FXML
@@ -611,14 +662,15 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void combatRunAwayEvent(ActionEvent event) {
-		printTextConsole("\nYou ran away from the monster");
-		printTextConsole("\n--------------------------------------------------");
+		output += "You ran away from the monster";
+		output += "\n--------------------------------------------------";
 		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
 			model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(x));
 			model.getCurrentMonster().setMonsterCurrentHealth(model.getCurrentMonster().getMonsterMaxHealth());
 		}
 		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
 		changeTab("Action");
+		printHelp(output);
 	}
 
 	@FXML
@@ -631,8 +683,9 @@ public class GameFXPlayGameController {
 	@FXML
 	void puzzleInputNumberEvent(ActionEvent event) {
 		if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item")) {
-			printTextConsole("\nThere's nothing to input.");
-			printTextConsole("\n--------------------------------------------------");
+			output += "There's nothing to input.";
+			output += "\n--------------------------------------------------";
+			printHelp(output);
 		}else {
 			puzzleKeyPadPane.setVisible(true);
 			puzzleInventoryPane.setVisible(false);
@@ -645,9 +698,10 @@ public class GameFXPlayGameController {
 	@FXML
 	void puzzleUseItemEvent(ActionEvent event) {
 		if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("input")) {
-			printTextConsole("\nThere's a keypad right next to the door");
-			printTextConsole("\nmaybe I should use that");
-			printTextConsole("\n--------------------------------------------------");
+			output += "There's a keypad right next to the door";
+			output += "\nmaybe I should use that";
+			output += "\n--------------------------------------------------";
+			printHelp(output);
 		}else {
 			puzzleKeyPadPane.setVisible(false);
 
@@ -667,17 +721,19 @@ public class GameFXPlayGameController {
 					if(itemName.equalsIgnoreCase(puzzleList.getSelectionModel().getSelectedItem())
 							&& model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(itemList.get(x).getItemId())) {
 						itemFound = true;
-						printTextConsole("\n You inserted the " + itemList.get(x).getItemName() + " and the door open");
-						printTextConsole("\n--------------------------------------------------");
+						output += "You inserted the " + itemList.get(x).getItemName() + " and the door open";
+						output += "\n--------------------------------------------------";
 						model.getPlayer().setCurrentRoom(model.getNextRoom());
 						changeTab("Action");
+						printHelp(output);
 						break;
 					}
 
 				}
 				if(!itemFound) {
-					printTextConsole("\n Nothing Interesting Happen");
-					printTextConsole("\n--------------------------------------------------");
+					output += "Nothing Interesting Happen";
+					output += "\n--------------------------------------------------";
+					printHelp(output);
 				}
 			}
 		}
@@ -685,16 +741,18 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void puzzleHintEvent(ActionEvent event) {
-		printTextConsole("\n" + model.getNextRoomPuzzle().getPuzzleHint());
-		printTextConsole("\n--------------------------------------------------");
+		output += model.getNextRoomPuzzle().getPuzzleHint();
+		output += "\n--------------------------------------------------";
+		printHelp(output);
 	}
 
 	@FXML
 	void puzzleExitEvent(ActionEvent event) {
-		printTextConsole("\nYou couldn't figure out how to solve the puzzle");
-		printTextConsole("\nYou stumble back into the middle of the room");
-		printTextConsole("\n--------------------------------------------------");
+		output += "You couldn't figure out how to solve the puzzle";
+		output += "\nYou stumble back into the middle of the room";
+		output += "\n--------------------------------------------------";	
 		changeTab("Action");
+		printHelp(output);
 	}
 
 	@FXML
@@ -762,37 +820,41 @@ public class GameFXPlayGameController {
 	}
 
 	public void attackPlayer() {
-		printTextConsole("\nThe " + model.getCurrentMonster().getMonsterName() + " attacks!");
+		output += "\nThe " + model.getCurrentMonster().getMonsterName() + " attacks!";
 		int mosnterDamage = model.getCurrentMonster().attackPlayer();
 		if(mosnterDamage == 0) {
-			printTextConsole("\nThe attack missed!");
+			output += "\nThe attack missed!";
 		}else {
-			printTextConsole("\nYou took " + mosnterDamage + " damage!");
+			output += "\nYou took " + mosnterDamage + " damage!";
 			model.getPlayer().takeDmg(mosnterDamage);
-			printTextConsole("\nHealth: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")");
+			output += "\nHealth: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
+			output += "\n--------------------------------------------------";
 			checkPlayerDeath();
 		}
-		printTextConsole("\n--------------------------------------------------");
+
+
 
 	}
 
 	private void checkPlayerDeath() {
 		if(model.getPlayer().getPlayerCurrentHealth() <= 0) {
-			printTextConsole("\n\n--------------------------------------------------");
-			printTextConsole("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
-			printTextConsole("\n=====        YOU DIED   -   GAME OVER        =====");
-			printTextConsole("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
-			printTextConsole("\n--------------------------------------------------\n");
+			output += "\n\n--------------------------------------------------";
+			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
+			output += "\n=====        YOU DIED   -   GAME OVER        =====";
+			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
+			output += "\n--------------------------------------------------\n";
+			printHelp(output);
 		}
 	}
 
 	private void checkWinCondition() {
 		if(model.getMonsterAlive() == 0) {	
-			printTextConsole("\n\n--------------------------------------------------");
-			printTextConsole("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
-			printTextConsole("\n=====        You Win   -    Vicotry        =====");
-			printTextConsole("\n||||||||||||||||||||||||||||||||||||||||||||||||||");
-			printTextConsole("\n--------------------------------------------------\n");
+			output += "\n\n--------------------------------------------------";
+			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
+			output += "\n=====        You Win   -    Vicotry        =====";
+			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
+			output += "\n--------------------------------------------------\n";
+			printHelp(output);
 		}
 	}
 
@@ -818,6 +880,7 @@ public class GameFXPlayGameController {
 		case "combat":
 			actionTab.setDisable(true);
 			combatTab.setDisable(false);
+			combatBox.setVisible(true);
 			tabPaneMenu.getSelectionModel().select(combatTab);
 			combatInventoryPane.setVisible(false);
 			combatLootBox.setVisible(false);
@@ -836,35 +899,27 @@ public class GameFXPlayGameController {
 		}
 	}
 
-	private void printTextConsole(String text) {
-		ArrayList<String> textWord = new ArrayList<String>();
-		for(String word: text.split(" ")) {
-			if(word.contains("\n")) {
-				String[] array = word.split("\n");
-
-				if(array[1].length() == 0) {
-					textWord.add(array[0]);
-					textWord.add("\n\n");
-					textWord.add(array[2]);
-				}else {
-
-					textWord.add(array[0]);
-					textWord.add("\n");
-					textWord.add(array[1]);
-					System.out.println(array[0] + "0");
-					System.out.println(array[1] + "1");
-				}
-			}else {
-				textWord.add(word);
+	private void printHelp(String textWord) {
+		ArrayList<String> textWordArray = new ArrayList<String>();
+		Scanner scanner = new Scanner(textWord);
+		int wordLength = 0;
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			wordLength += line.length();
+			for(String word: line.split(" ")) {
+				textWordArray.add(word + " ");
 			}
+			textWordArray.add("\n");
+
 		}
 
+		int seconds = (int) Math.floor(wordLength / 75);
 
 		final Animation animation = new Transition()
 		{
 			int lengthOfString = 0;
 			{
-				setCycleDuration(Duration.seconds(1));
+				setCycleDuration(Duration.seconds(seconds-.5));
 			}
 
 
@@ -873,20 +928,9 @@ public class GameFXPlayGameController {
 			{
 				try {
 
-					lengthOfString += textWord.get(0).length();
 
-					if(lengthOfString >= 50) {
-						lengthOfString =0;
-						consoleTextArea.appendText(textWord.get(0));
-						consoleTextArea.appendText("\n");
-					}else {
-						consoleTextArea.appendText(textWord.get(0));
-						consoleTextArea.appendText(" ");
-					}
-					if(textWord.get(0).contains("\n")) {
-						lengthOfString = 0;
-					}
-					textWord.remove(0);
+					consoleTextArea.appendText(textWordArray.get(0));
+					textWordArray.remove(0);
 				}catch(Exception e) {
 
 				}
@@ -898,11 +942,17 @@ public class GameFXPlayGameController {
 		};
 
 		animation.statusProperty().addListener((obs, oldStatus, newStatus) -> 
-		actionTab.setDisable(newStatus==Animation.Status.RUNNING));
+
+		tabPaneMenu.getSelectionModel().getSelectedItem().setDisable(newStatus==Animation.Status.RUNNING)
+
+
+
+				);
 		animation.play();
 		animation.setOnFinished(e ->
 		output = " ");
 	}
+	
 
 
 

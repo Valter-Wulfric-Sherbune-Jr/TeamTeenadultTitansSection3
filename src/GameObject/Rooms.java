@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
+
+import javafx.scene.image.Image;
 
 public class Rooms implements Serializable{
 
@@ -21,6 +24,7 @@ public class Rooms implements Serializable{
 	private ArrayList<Monsters> roomMonster;
 	private HashMap<String, String> roomNavigationList = new HashMap<String, String>();
 	private HashMap<String, String> roomAccessList = new HashMap<String, String>();
+	private Image roomBackground;
 
 	//Create Default Object
 	public Rooms(){
@@ -30,12 +34,13 @@ public class Rooms implements Serializable{
 		this.roomAccess = "null";
 		this.roomItem = new ArrayList<Items>();
 		this.roomMonster = new ArrayList<Monsters>();
+		this.roomBackground = null;
 	}
 
 	//Create Object with set parameter
 	public Rooms(String roomId, String roomFloor, String roomDescription, String roomAccess,
 			ArrayList<Items> roomItem, ArrayList<Monsters> roomMonster, HashMap<String, String> roomNavigationList,
-			HashMap<String, String> roomAccessList) {
+			HashMap<String, String> roomAccessList, Image roomBackground) {
 		super();
 		this.roomId = roomId;
 		this.roomFloor = roomFloor;
@@ -45,6 +50,7 @@ public class Rooms implements Serializable{
 		this.roomMonster = roomMonster;
 		this.roomNavigationList = roomNavigationList;
 		this.roomAccessList = roomAccessList;
+		this.roomBackground = roomBackground;
 	}
 
 	//Set and get room id
@@ -66,27 +72,43 @@ public class Rooms implements Serializable{
 
 	//Set and get the room description
 	public void setRoomDescription(String roomDescription){
-//		/*If there are more then 50 character in a line, 
-//		it'll make a new line*/
-//		if(roomDescription.length() > 30) {
-//			int totalCharacterLength = 0;
-//			int descriptionLength = roomDescription.length();
-//			String outputString ="";
-//
-//			for (String word : roomDescription.split(" ")) {
-//				totalCharacterLength += word.length();
-//				descriptionLength -= word.length()+1;
-//				outputString += word + " ";
-//
-//				if(totalCharacterLength > 40 && descriptionLength > 0) {
-//					totalCharacterLength = 0;
-//					outputString += "\n";
-//				}
-//			}
-//			roomDescription = outputString;
-//		}
+		/*If there are more then 50 character in a line, 
+		it'll make a new line*/
+		if(roomDescription.length() > 30) {
+			int totalCharacterLength = 0;
+			int descriptionLength = roomDescription.length();
+			String outputString ="";
+
+			for (String word : roomDescription.split(" ")) {
+				totalCharacterLength += word.length();
+				descriptionLength -= word.length()+1;
+				outputString += word + " ";
+
+				if(totalCharacterLength > 40 && descriptionLength > 0) {
+					totalCharacterLength = 0;
+					outputString += "\n";
+				}
+			}
+			roomDescription = outputString;
+		}
 		this.roomDescription = roomDescription;
 	}
+	
+	public ArrayList<String> getRealRoomDescription() {
+		ArrayList<String> textWordArray = new ArrayList<String>();
+		Scanner scanner = new Scanner(roomDescription);
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			for(String word: line.split(" ")) {
+				textWordArray.add(word + " ");
+			}
+			textWordArray.add("\n");
+			System.out.println(line);
+		}
+		
+		return textWordArray;
+	}
+	
 	public String getRoomDescription(){
 		return roomDescription;
 	}
@@ -260,5 +282,13 @@ public class Rooms implements Serializable{
 		returnString += "\n--------------------------------------------------";
 
 		return returnString;
+	}
+
+	public void setRoomBackground(Image image) {
+		this.roomBackground = image;
+		
+	}
+	public Image getRoomBackground() {
+		return roomBackground;
 	}
 }

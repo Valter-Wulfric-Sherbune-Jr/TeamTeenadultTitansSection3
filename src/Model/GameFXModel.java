@@ -22,6 +22,7 @@ import GameObject.Items;
 import GameObject.Monsters;
 import GameObject.Rooms;
 import GameObject.SaveData;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -40,7 +41,7 @@ public class GameFXModel{
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
 			"Monster Health:","Monster Damage:","Monster Hit Percentage:"};
 	private String[] roomCode = {"Room Floor:","Room ID:","Room Description:",
-			"Room Connection:","Room Access:","Room Item:","Room Monster:"};
+			"Room Connection:","Room Access:","Room Item:","Room Monster:", "Room Picture:"};
 	private String[] puzzleCode = {"Puzzle ID:","Puzzle Description:","Puzzle Type:",
 			"Puzzle Solution:","Puzzle Hint:","Puzzle Damage:"};
 	private ArrayList<String> gameFolderList = new ArrayList<String>();
@@ -49,6 +50,7 @@ public class GameFXModel{
 	private HashMap<String, Rooms> roomList = new HashMap<String, Rooms>();
 	private HashMap<String, Puzzles> puzzleList = new HashMap<String, Puzzles>();
 	private HashMap<Integer, SaveData> saveList = new HashMap<Integer, SaveData>();
+	private HashMap<String, Image> pictureList = new HashMap<String, Image>();
 	private SaveData save;
 	private Players player;
 	private String storedState = "";
@@ -56,7 +58,7 @@ public class GameFXModel{
 	private String mainState = "";
 	private Rooms nextRoom;
 	private Monsters currentMonster;
-	private ArrayList<Items> lootList;
+	private ArrayList<Items> lootList = new ArrayList<Items>();
 	private int monsterAlive = 0;
 	private MediaPlayer mediaPlayer;
 	private static Media media;
@@ -182,6 +184,34 @@ public class GameFXModel{
 	 */
 	public String getGameFolder() {
 		return gameFolder;
+	}
+	
+	/*Return the gamefolder
+	 *Used in method:
+	 */
+	public void loadGamePictureFolder() {
+		/*Add all the file, in that folder into an arrayList
+		 */
+		System.out.println("Test 1");
+		ArrayList<String> filePath = new ArrayList<String>();
+		ArrayList<String> fileNameArray = new ArrayList<String>();
+		File folder = new File(gameFolder + "Picture/");
+		File[] listOfFiles = folder.listFiles();
+		String fileName = null;
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				fileName = file.getName();
+				
+				fileNameArray.add(fileName);
+				Image image = new Image(file.toURI().toString(), 670, 265,false,false);
+				System.out.println(file.toURI().toString());
+				pictureList.put(fileName,image);
+				System.out.println("Work'");
+				
+			}
+		}
+		
+		
 	}
 
 	/*Search through a subfolder of a gamefolder
@@ -354,6 +384,11 @@ public class GameFXModel{
 								Monsters newMonster = (Monsters) clone(monsterList.get(fileLine));
 								roomObject.addRoomMonster(newMonster);
 								monsterAlive++;
+								break;
+							}	
+						case "Room Picture:":
+							if(!fileLine.equals("null")) {
+								roomObject.setRoomBackground(pictureList.get(fileLine));
 								break;
 							}
 						case "Puzzle ID:":
@@ -621,8 +656,10 @@ public class GameFXModel{
 	 *copy the value
 	 *Use in Method: actionMenu()
 	 */
-	public void setLootList(ArrayList<Items> lootList) {
-		this.lootList = new ArrayList<Items>(lootList);
+	public void setLootList(ArrayList<Items> lootListMonster) {
+		for(Items item: lootListMonster) {
+			lootList.add(item);
+		}
 	}
 
 	/*return the lootList

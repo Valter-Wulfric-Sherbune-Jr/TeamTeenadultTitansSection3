@@ -26,6 +26,7 @@
                <children>
                   <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameOnClick" prefHeight="20.0" prefWidth="300.0" text="New Game" />
                   <Button fx:id="loadGameButton" mnemonicParsing="false" onAction="#loadGameOnClick" prefHeight="20.0" prefWidth="300.0" text="Load Game" />
+                  <Button fx:id="levelEditorButton" mnemonicParsing="false" onAction="#levelEditorOnClick" prefHeight="20.0" prefWidth="300.0" text="Level Editor" />
                   <Button fx:id="exitGameButton" mnemonicParsing="false" onAction="#exitGameOnClick" prefHeight="20.0" prefWidth="300.0" text="Exit Game" />
                </children>
             </VBox>
