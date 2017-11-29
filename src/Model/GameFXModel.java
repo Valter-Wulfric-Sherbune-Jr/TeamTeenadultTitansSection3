@@ -31,15 +31,11 @@ import GameObject.Players;
 
 public class GameFXModel{
 	private String gameFolder = "";
-	private String[] validState = {"Main Menu","New game","Player Creation",
-			"Load Menu","Action Menu", "Move Player","Save Menu","Save Conflict","Select Item",
-			"Examine Item","Drop Item","Use Item", "Equip Item", "Inventory Menu", "Puzzle Menu", 
-			"Puzzle", "Use Item Puzzle", "Combat Menu","Combat","Loot Item","Room", "Input Number",
-			"Action","Multiple Monster","Throw","Load Game"};
 	private String[] itemCode = {"Item Name:","Item ID:","Item Description:",
 			"Item Type:","Item Action Value:","Item Amount:","Item Drop Rate:"};
 	private String[] monsterCode = {"Monster Name:","Monster ID:","Monster Description:",
-			"Monster Health:","Monster Damage:","Monster Hit Percentage:"};
+			"Monster Health:","Monster Damage:","Monster Hit Percentage:", "Monster Type:",
+	"Monster Picture:"};
 	private String[] roomCode = {"Room Floor:","Room ID:","Room Description:",
 			"Room Connection:","Room Access:","Room Item:","Room Monster:", "Room Picture:"};
 	private String[] puzzleCode = {"Puzzle ID:","Puzzle Description:","Puzzle Type:",
@@ -53,85 +49,14 @@ public class GameFXModel{
 	private HashMap<String, Image> pictureList = new HashMap<String, Image>();
 	private SaveData save;
 	private Players player;
-	private String storedState = "";
-	private String state = "";
-	private String mainState = "";
 	private Rooms nextRoom;
 	private Monsters currentMonster;
 	private ArrayList<Items> lootList = new ArrayList<Items>();
 	private int monsterAlive = 0;
 	private MediaPlayer mediaPlayer;
 	private static Media media;
+	private static Media media2;
 
-	/*Set the state of the game, if error then exit game
-	 *Used in method: readUserInput()
-	 */
-	public void setState(String state) {
-		if(checkIfValidState(state)) {
-			this.state = state;
-		}
-		else {
-			System.out.println("Error: Not Valid State (Method setState())");
-			System.out.println(state);
-			System.exit(0);
-		}
-	}
-
-	/*Get the state of the game
-	 */
-	public String getState() {
-		return state;
-	}
-
-	/*Save a state you want to switch to late
-	 */
-	public void setStoredState(String storedState) {
-		if(checkIfValidState(storedState)) {
-			this.storedState = storedState;
-		}
-		else {
-			System.out.println("Error: Not Valid State (Method setStoredState())");
-			System.out.println(storedState);
-			System.exit(0);
-		}
-	}
-
-	/*Get the previous state of the game
-	 */
-	public String getMainState(){
-		return mainState;
-	}
-	
-	/*Save a state you want to switch to late
-	 */
-	public void setMainState(String mainState) {
-		if(checkIfValidState(mainState)) {
-			this.mainState = mainState;
-		}
-		else {
-			System.out.println("Error: Not Valid State (Method setStoredState())");
-			System.out.println(mainState);
-			System.exit(0);
-		}
-	}
-
-	/*Get the previous state of the game
-	 */
-	public String getStoredState(){
-		return storedState;
-	}
-
-	/*Return true of false on whether the state is valid or not
-	 *Used in method: setState()
-	 */
-	public boolean checkIfValidState(String state) {
-		for(String stateArray: validState) {
-			if(stateArray.equalsIgnoreCase(state)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	/*Clear the game folder list, then search the folder path
 	 *and add all the game folder to an arrayList
@@ -185,33 +110,38 @@ public class GameFXModel{
 	public String getGameFolder() {
 		return gameFolder;
 	}
-	
+
 	/*Return the gamefolder
 	 *Used in method:
 	 */
 	public void loadGamePictureFolder() {
 		/*Add all the file, in that folder into an arrayList
 		 */
-		System.out.println("Test 1");
-		ArrayList<String> filePath = new ArrayList<String>();
-		ArrayList<String> fileNameArray = new ArrayList<String>();
-		File folder = new File(gameFolder + "Picture/");
+		File folder = new File(gameFolder + "Picture/Room/");
 		File[] listOfFiles = folder.listFiles();
 		String fileName = null;
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-				fileName = file.getName();
-				
-				fileNameArray.add(fileName);
+				fileName = file.getName();	
 				Image image = new Image(file.toURI().toString(), 670, 265,false,false);
-				System.out.println(file.toURI().toString());
 				pictureList.put(fileName,image);
-				System.out.println("Work'");
-				
+
 			}
 		}
-		
-		
+
+		File folder2 = new File(gameFolder + "Picture/Monster/");
+		File[] listOfFiles2 = folder2.listFiles();
+		String fileName2 = null;
+		for (File file2 : listOfFiles2) {
+			if (file2.isFile()) {
+				fileName2 = file2.getName();	
+				Image image = new Image(file2.toURI().toString(), 110, 170,false,false);
+				pictureList.put(fileName2,image);
+
+			}
+		}
+
+
 	}
 
 	/*Search through a subfolder of a gamefolder
@@ -347,6 +277,18 @@ public class GameFXModel{
 							break;	
 						case "Monster Hit Percentage:":
 							monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
+							break;
+						case "Monster Type:":
+							System.out.println(fileLine);
+							monsterObject.setMonsterType(fileLine);
+							break;
+						case "Monster Picture:":	
+							if(!fileLine.equals("null")) {
+								roomObject.setRoomBackground(pictureList.get(fileLine));
+							}else {
+								roomObject.setRoomBackground(pictureList.get("Unknown"));
+							}
+
 							break;	
 						case "Room Floor:":
 							roomObject.setRoomFloor(fileLine);
@@ -547,6 +489,7 @@ public class GameFXModel{
 				if (file.isFile()) {
 					fileName = file.getName();
 					folderPath = gameFolder + "Save/" + fileName;
+					System.out.println(folderPath);
 					try(ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath)))
 					{
 						while(true) {
@@ -586,7 +529,9 @@ public class GameFXModel{
 	 */
 	public void setSaveData(int userInputInt){
 		player.endGameTime();
+		System.out.println(player.getPlayerName());
 		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive);
+		System.out.println("Test2");
 		player.startGameTime();
 	}
 
@@ -596,7 +541,7 @@ public class GameFXModel{
 	public SaveData getSaveData(){
 		return save;
 	}
-	
+
 	public void loadGameSaveData(SaveData save) {
 		player = save.getPlayerData();
 		monsterList = save.getMonsterList();
@@ -675,7 +620,7 @@ public class GameFXModel{
 	public void removeLoot() {
 		lootList.remove(0);
 	}
-	
+
 	/*Remove the first loot from the loot list
 	 *Use in Method: lootItem()
 	 */
@@ -687,7 +632,7 @@ public class GameFXModel{
 			}
 		}
 	}
-	
+
 	public Items getSpecificLoot(int x) {
 		return lootList.get(x);
 	}
@@ -746,37 +691,33 @@ public class GameFXModel{
 		}
 		return false;
 	}
-	
+
 	/*Get the amount of monster alive
 	 *Use in Method: checkWinCondition()
 	 */
 	public int getMonsterAlive() {
 		return monsterAlive;
 	}
-	
+
 	/*Decrease the amount of monster alive
 	 *Use in Method: attackMonster(), attackMultipleMonster()
 	 */
 	public void decreaseMonsterAlive() {
 		monsterAlive--;
 	}
-	
+
 	public void updateRoom(Rooms room) {
 		roomList.remove(room.getRoomId());
 		roomList.put(room.getRoomId(), room);
 	}
-	
-	public void playMusic() throws URISyntaxException
+
+	public void playMusic(String music) throws URISyntaxException
 	{
 		String folderPath = "./res/Music/";
-		if(mainState.equalsIgnoreCase("Main Menu")) {
-			folderPath += "Main Menu.mp3";
-		}else if(mainState.equalsIgnoreCase("Action Menu")){
-			folderPath += "Action Menu.mp3";
-		}
-		
+		folderPath += music;
+
 		media = new Media(new File(folderPath).toURI().toString());
-		
+
 		mediaPlayer = new MediaPlayer(media);
 		mediaPlayer.setAutoPlay(true);
 		mediaPlayer.play();
@@ -788,9 +729,52 @@ public class GameFXModel{
 			}
 		});
 		mediaPlayer.setVolume(0.2);
+
+
+
+	}
+
+	public void playCombatMusic(String music, String music2) throws URISyntaxException
+	{
+		String folderPath1 = "./res/Music/";
+		folderPath1 += music;
+
+		String folderPath2 = "./res/Music/";
+		folderPath2 += music2;
 		
-	
-		
+		System.out.println(folderPath1);
+		System.out.println(folderPath2);
+
+		media = new Media(new File(folderPath1).toURI().toString());
+		media2 = new Media(new File(folderPath2).toURI().toString());
+
+		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.play();
+		mediaPlayer.setOnEndOfMedia(new Runnable()
+		{
+			public void run()
+			{
+				mediaPlayer = new MediaPlayer(media2);
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.play();
+				mediaPlayer.setOnEndOfMedia(new Runnable()
+				{
+					public void run()
+					{
+						mediaPlayer.seek(Duration.ZERO);
+					}
+
+				});
+
+			}
+
+
+		});
+		mediaPlayer.setVolume(0.2);
+
+
+
 	}
 	public void stopMusic() throws URISyntaxException
 	{

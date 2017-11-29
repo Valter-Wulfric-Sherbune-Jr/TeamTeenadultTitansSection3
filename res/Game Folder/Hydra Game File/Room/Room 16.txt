@@ -11,7 +11,8 @@ R17:North
 Room Access:
 P03:R17
 Room Item:
-null
+I05
+I22
 Room Monster:
 null
 Room Picture:

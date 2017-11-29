@@ -7,11 +7,11 @@ This division holds the offices and work centers of employees who are part of th
 Room Connection:
 R15:West
 R13:North
-R9:Staircase
+R09:Staircase
 Room Access:
 P05:R15
 Room Item:
-null
+I12
 Room Monster:
 null
 Room Picture:

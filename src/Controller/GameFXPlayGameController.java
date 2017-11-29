@@ -22,6 +22,7 @@ import javafx.animation.Transition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -45,12 +46,27 @@ import javafx.util.Duration;
 
 public class GameFXPlayGameController {
 
-    @FXML
-    private ImageView actionBackground;
+	@FXML
+	private ImageView actionBackground;
 
-    @FXML
-    private ImageView combatBackground;
-    
+	@FXML
+	private ImageView actionPlayerImage;
+
+	@FXML
+	private ImageView combatBackground;
+
+	@FXML
+	private ImageView combatEnemyImage3;
+
+	@FXML
+	private ImageView combatEnemyImage1;
+
+	@FXML
+	private ImageView combatEnemyImage2;
+
+	@FXML
+	private ImageView combatEnemyImage4;
+
 	@FXML
 	private SplitPane mainPane;
 
@@ -161,6 +177,21 @@ public class GameFXPlayGameController {
 
 	@FXML
 	private Button combatLootExit;
+	
+	 @FXML
+	    private VBox combatInventoryVBox;
+
+    @FXML
+    private Button combatUseItem;
+
+    @FXML
+    private Button combatExamineItem;
+
+    @FXML
+    private Button combatEquipItem;
+
+    @FXML
+    private Button combatInventoryExit;
 
 	@FXML
 	private Tab puzzleTab;
@@ -243,8 +274,10 @@ public class GameFXPlayGameController {
 	//----------------------------------------------------------------------------
 
 	public void initialize() throws URISyntaxException {
-		model.setMainState("Action Menu");
-		//model.playMusic();
+		ArrayList<ImageView> combatImage = new ArrayList<ImageView>();
+		
+		
+		model.playMusic("Action Menu.mp3");
 		model.setGameFolder("Hydra Game File");
 		model.loadGamePictureFolder();
 		model.loadGameFolder("Item");
@@ -252,35 +285,19 @@ public class GameFXPlayGameController {
 		model.loadGameFolder("Puzzle");
 		model.loadGameFolder("Room");	
 		model.makeNewPlayer("Vector");
-		
-		File folder = new File("./res/Game Folder/Hydra Game File/" + "Picture/");
-		File[] listOfFiles = folder.listFiles();
-		String fileName = null;
-		for (File file : listOfFiles) {
-			if (file.isFile()) {
-				fileName = file.getName();
-				System.out.println(file.getAbsoluteFile());
-				System.out.println(file.toURI().toString());
-				//Image image = new Image(, 670, 265,false,false);
-				
-				actionBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
-				actionBackground.setVisible(true);
-				actionBackground.setDisable(false);
-				
-			}
-		}
 
-//		Image image = new Image(getClass().getResource("test.png").toExternalForm(), 670, 265,false,false);
-//		actionBackground.setImage(image);
-//		actionBackground.setVisible(true);
-//		actionBackground.setDisable(false);
+		actionBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
+		actionBackground.setVisible(true);
+		actionBackground.setDisable(false);
+
+
 		printHelp(model.getPlayer().getCurrentRoom().toString());
 	}
 
 	//----------------------------------------------------------------------------
 
 	@FXML
-	void actionMoveEvent(ActionEvent event) {
+	void actionMoveEvent(ActionEvent event) throws URISyntaxException {
 		if(actionList.getSelectionModel().getSelectedItem() == null) {
 			actionInventoryPane.setVisible(true);
 			actionList.setVisible(true);
@@ -302,12 +319,23 @@ public class GameFXPlayGameController {
 
 			}
 			else{
+				model.stopMusic();
+				String combatMusic = "Combat 1.mp3";
+				
+				model.playCombatMusic("Battle Transition.mp3", "Combat 1.mp3");
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
+				
 				output += "- - - - -          ENCOUNTER!          - - - - -\n";
 				output += "-----------------------------------------------\n";
 				for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
 					output += model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
+					if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterType().equalsIgnoreCase("Final Boss")) {
+						combatMusic = "Combat 3.mp3";
+					}else if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterType().equalsIgnoreCase("Mini Boss")) {
+						combatMusic = "Combat 2.mp3";
+					}
 				}	
+				
 				changeTab("Combat");
 				printHelp(output);
 			}
@@ -471,10 +499,12 @@ public class GameFXPlayGameController {
 	}
 
 	@FXML
-	void actionLootExitEvent(ActionEvent event) {
+	void actionLootExitEvent(ActionEvent event) throws URISyntaxException  {
 		actionLootBox.setVisible(false);
 		actionNeutralBox.setVisible(true);
 		actionInventoryPane.setVisible(false);
+		model.stopMusic();
+		model.playMusic("Action Menu.mp3");
 
 
 
@@ -482,11 +512,53 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void actionSaveGameEvent(ActionEvent event) {
+		if(actionList.getSelectionModel().getSelectedItem() == null) {
+		actionInventoryPane.setVisible(true);
+		model.setSaveList();
+		for(int x = 1; x <= 10; x++) {
+			
+			if(model.getSaveList().get(x) != null) {
+				System.out.println(model.getSaveList().get(x).getPlayerData().getCurrentRoom().getRoomId());
+				observList.add(x + ". Name: " + model.getSaveList().get(x).getPlayerData().getPlayerName()
+						+ " Time: " + model.getSaveList().get(x).getPlayerData().getGameTime()
+						+ " Room: " + model.getSaveList().get(x).getPlayerData().getCurrentRoom().getRoomId());
 
+			}
+			else {
+				observList.add(x + ". Empty");
+			}
+		}
+		
+		actionLabel.setText("Save Data");
+		actionList.setItems(observList);
+		}else {
+			model.setSaveList();
+			model.setSaveData(actionList.getSelectionModel().getSelectedIndex()+1);
+			model.saveGameData(model.getSaveData());
+			output += "The game has been saved!\n";
+			output += "--------------------------------------------------";
+			printHelp(output);
+			
+			for(int x = 1; x <= 10; x++) {
+				if(model.getSaveList().get(x) != null) {
+					observList.add(x + ". Name: " + model.getSaveList().get(x).getPlayerData().getPlayerName()
+							+ " Time: " + model.getSaveList().get(x).getPlayerData().getGameTime()
+							+ " Room: " + model.getSaveList().get(x).getPlayerData().getCurrentRoom().getRoomId());
+
+				}
+				else {
+					observList.add(x + ". Empty");
+				}
+			}
+			
+			actionLabel.setText("Save Data");
+			actionList.setItems(observList);
+			
+		}
 	}
 
 	@FXML
-	void actionQuitGameEvent(ActionEvent event) throws IOException {
+	void actionQuitGameEvent(ActionEvent event) throws IOException, URISyntaxException {
 		mainPane.setDisable(true);
 
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -496,6 +568,7 @@ public class GameFXPlayGameController {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
+			model.stopMusic();
 			Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
 			Scene scene = new Scene(secondPane);
 
@@ -510,7 +583,7 @@ public class GameFXPlayGameController {
 	//----------------------------------------------------------------------------
 
 	@FXML
-	void combatAttackEvent(ActionEvent event) {
+	void combatAttackEvent(ActionEvent event) throws URISyntaxException, IOException {
 		if(combatList.getSelectionModel().getSelectedItem() == null) {
 			combatInventoryPane.setVisible(true);
 			combatList.setVisible(true);
@@ -548,17 +621,17 @@ public class GameFXPlayGameController {
 				output += "\n--------------------------------------------------";
 				model.getPlayer().getCurrentRoom().removeRoomMonster(model.getCurrentMonster());
 				model.setLootList(model.getMonsterLootList());
-				
+
 				model.decreaseMonsterAlive();
 
 
 			}
 
 			if(!model.getPlayer().getCurrentRoom().getRoomMonster().isEmpty()) {
-				
+
 				for(int z = 0; z < model.getPlayer().getCurrentRoom().getRoomMonster().size(); z++) {
 					model.setCurrentMonster(model.getPlayer().getCurrentRoom().getRoomMonster().get(z));
-					attackPlayer();
+					attackPlayer(event);
 				}
 				combatList.getSelectionModel().clearSelection();
 				combatInventoryPane.setVisible(false);
@@ -578,6 +651,8 @@ public class GameFXPlayGameController {
 				combatLabel.setText("Monster Drop");
 				checkWinCondition();
 				printHelp(output);
+				model.stopMusic();
+				model.playMusic("Victory.mp3");
 
 			}
 
@@ -600,7 +675,7 @@ public class GameFXPlayGameController {
 	}
 
 	@FXML
-	void combatLootExitEvent(ActionEvent event) {
+	void combatLootExitEvent(ActionEvent event) throws URISyntaxException  {
 		if(!model.getLootList().isEmpty()) {
 			output += "The rest of the item dropped to the floor";
 			output += "\n--------------------------------------------------";
@@ -612,6 +687,8 @@ public class GameFXPlayGameController {
 		combatList.getSelectionModel().clearSelection();
 		changeTab("Action");
 		printHelp(output);
+		model.stopMusic();
+		model.playMusic("Action Menu.mp3");
 
 	}
 
@@ -619,7 +696,7 @@ public class GameFXPlayGameController {
 	void combatLootPickUpEvent(ActionEvent event) {
 		String itemName = "";
 		ArrayList<Items>itemList = model.getLootList();
-		
+
 		for(int x = 0; x < itemList.size(); x++) {
 			itemName = itemList.get(x).getItemName()+ " x" + 
 					itemList.get(x).getItemAmount();
@@ -642,7 +719,9 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void combatDefendEvent(ActionEvent event) {
-
+		output += "You block the monster attack\n";
+		output += "--------------------------------------------------\n";
+		printHelp(output);
 	}
 
 	@FXML
@@ -657,11 +736,57 @@ public class GameFXPlayGameController {
 
 	@FXML
 	void combatInventoryEvent(ActionEvent event) {
-
+		combatInventoryPane.setVisible(true);
+		combatList.setVisible(true);
+		combatLabel.setText("Inventory List"); 
+		combatBox.setVisible(false);
+		setListInventory(model.getPlayer().getInventoryList());
+		combatList.setItems(observList);
+		combatInventoryVBox.setVisible(true);
+		//combatBox.setVisible(false);
+		output += "Player Name: " + model.getPlayer().getPlayerName();
+		output += "\nPlayer Health: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
+		output += "\nPlayer Weapon: " +model.getPlayer().getWeapon().getItemName();
+		output += "\n--------------------------------------------------";
+		printHelp(output);
 	}
+	
+	@FXML
+    void combatUseItemEvent(ActionEvent event) {
+
+    }
+	
+	@FXML
+    void combatExamineItemEvent(ActionEvent event) {
+
+    }
+	@FXML
+    void combatEquipItemEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items> itemList = model.getPlayer().getInventoryList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + 
+					itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+				output += "You equipped the " + itemList.get(x).getItemName();
+				model.getPlayer().equipWeapon(itemList.get(x));
+				setListInventory(itemList);
+				actionList.setItems(observList);
+				printHelp(output);
+			}
+
+		}
+    }
+	
+	@FXML
+    void combatInventoryExitEvent(ActionEvent event) {
+		combatInventoryVBox.setVisible(false);
+		combatInventoryPane.setVisible(false);
+		combatBox.setVisible(true);
+    }
 
 	@FXML
-	void combatRunAwayEvent(ActionEvent event) {
+	void combatRunAwayEvent(ActionEvent event) throws URISyntaxException {
 		output += "You ran away from the monster";
 		output += "\n--------------------------------------------------";
 		for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
@@ -671,11 +796,31 @@ public class GameFXPlayGameController {
 		model.getPlayer().setCurrentRoom(model.getPlayer().getPreviousRoom());
 		changeTab("Action");
 		printHelp(output);
+		model.stopMusic();
+		model.playMusic("Action Menu.mp3");
 	}
 
 	@FXML
-	void combatQuitGameEvent(ActionEvent event) {
+	void combatQuitGameEvent(ActionEvent event) throws IOException, URISyntaxException {
+		mainPane.setDisable(true);
 
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText("You are exiting to the Main Menu");
+		alert.setContentText("Are you sure you wanna exit?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			model.stopMusic();
+			Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
+			Scene scene = new Scene(secondPane);
+
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());  
+			window.setScene(scene);
+			window.show();
+		} else {
+			mainPane.setDisable(false);
+		}
 	}
 
 	//----------------------------------------------------------------------------
@@ -771,21 +916,6 @@ public class GameFXPlayGameController {
 		}
 	}
 
-
-	void setTabActive() {
-		if(model.getState().equalsIgnoreCase("Action Menu")) {
-			actionTab.setDisable(false);
-			combatTab.setDisable(false);
-			puzzleTab.setDisable(false);
-		}
-		else if(model.getState().equalsIgnoreCase("Combat Menu")) {
-
-		}
-		else if(model.getState().equalsIgnoreCase("Puzzle Menu")) {
-
-		}
-	}
-
 	void setListDirection(HashMap<String, ?> list) {
 		observList.clear();
 		Set set = list.entrySet();
@@ -807,6 +937,8 @@ public class GameFXPlayGameController {
 	void setListInventory(ArrayList<Items> item) {
 		observList.clear();
 		for(int x = 0; x < item.size(); x++) {
+			System.out.println(x);
+			System.out.println(item.size() + " size");
 			observList.add(item.get(x).getItemName() + " x" + item.get(x).getItemAmount());
 		}
 	}
@@ -819,7 +951,7 @@ public class GameFXPlayGameController {
 		}
 	}
 
-	public void attackPlayer() {
+	public void attackPlayer(Event event) throws URISyntaxException, IOException {
 		output += "\nThe " + model.getCurrentMonster().getMonsterName() + " attacks!";
 		int mosnterDamage = model.getCurrentMonster().attackPlayer();
 		if(mosnterDamage == 0) {
@@ -829,21 +961,23 @@ public class GameFXPlayGameController {
 			model.getPlayer().takeDmg(mosnterDamage);
 			output += "\nHealth: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
 			output += "\n--------------------------------------------------";
-			checkPlayerDeath();
+			checkPlayerDeath(event);
 		}
 
 
 
 	}
 
-	private void checkPlayerDeath() {
+	private void checkPlayerDeath(Event event) throws URISyntaxException, IOException {
 		if(model.getPlayer().getPlayerCurrentHealth() <= 0) {
-			output += "\n\n--------------------------------------------------";
-			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
-			output += "\n=====        YOU DIED   -   GAME OVER        =====";
-			output += "\n||||||||||||||||||||||||||||||||||||||||||||||||||";
-			output += "\n--------------------------------------------------\n";
-			printHelp(output);
+			model.stopMusic();
+			
+			Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
+			Scene scene = new Scene(secondPane);
+
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());  
+			window.setScene(scene);
+			window.show();
 		}
 	}
 
@@ -919,7 +1053,7 @@ public class GameFXPlayGameController {
 		{
 			int lengthOfString = 0;
 			{
-				setCycleDuration(Duration.seconds(seconds-.5));
+				setCycleDuration(Duration.seconds(seconds));
 			}
 
 
@@ -952,7 +1086,7 @@ public class GameFXPlayGameController {
 		animation.setOnFinished(e ->
 		output = " ");
 	}
-	
+
 
 
 

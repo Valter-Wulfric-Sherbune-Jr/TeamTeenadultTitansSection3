@@ -3,9 +3,9 @@ VECTOR V5 Submachine Gun Ammunition
 Item ID:
 I20
 Item Description:
-Ammo for VECTOR V5
+An ammo cartridge used for a VECTOR V5 Submachine Gun.
 Item Type:
-Ammo 
+Ammo
 Item Action Value:
 I03
 Item Amount:

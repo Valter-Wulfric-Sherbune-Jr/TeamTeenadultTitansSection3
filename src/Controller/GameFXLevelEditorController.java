@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import Model.GameFXModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,9 +35,6 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	private Button levelEditorLoadFile;
-
-	@FXML
-	private Button levelEditorNewFile;
 
 	@FXML
 	private Button levelEditorGetPreset;
@@ -130,14 +128,20 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	private TextArea levelEditorSlot10TextArea;
+	
+	@FXML
+    private Button levelEditorClear;
 
 	String radioSelection = "";
 
 	tabSelection[] tabSlot = new tabSelection[11];
 
 	ToggleGroup radioToggleGroup = new ToggleGroup();
+	
+	GameFXModel model = new GameFXModel();
 
-	public void initialize(){
+	public void initialize() throws URISyntaxException{
+	    model.playMusic("Level Editor.mp3");
 
 		tabSlot[0] = new tabSelection(levelEditorSlot1,levelEditorSlot1TextArea);		
 		tabSlot[1] = new tabSelection(levelEditorSlot2,levelEditorSlot2TextArea);		
@@ -160,7 +164,9 @@ public class GameFXLevelEditorController {
 	}
 
 	@FXML
-	void levelEditorBackButtonEvent(ActionEvent event) throws IOException {
+	void levelEditorBackButtonEvent(ActionEvent event) throws IOException, URISyntaxException {
+		model.stopMusic();
+		
 		Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
 		Scene scene = new Scene(secondPane);
 
@@ -169,15 +175,6 @@ public class GameFXLevelEditorController {
 		window.show();
 	}
 
-	@FXML
-	void levelEditorChooseGameFolderEvent(ActionEvent event) {
-
-	}
-
-	@FXML
-	void levelEditorCreateGameFolderEvent(ActionEvent event) {
-
-	}
 
 	@FXML
 	void levelEditorGetPresetEvent(ActionEvent event) {
@@ -322,9 +319,11 @@ public class GameFXLevelEditorController {
 		tabSlot[x].getTabSlot().setText(file.getName());
 	}
 
-	@FXML
-	void levelEditorNewFileEvent(ActionEvent event) {
 
+	@FXML
+	void levelEditorClearEvent(ActionEvent event) {
+		int x = levelEditorTabPane.getSelectionModel().getSelectedIndex(); 
+		tabSlot[x].getTextAreaSlot().setText("");
 	}
 
 	@FXML
@@ -375,16 +374,10 @@ public class GameFXLevelEditorController {
 			output += "-[Item Action Value]\n";
 			output += "5 (different action value depending on type)\n"
 					+ "(Only 1 puzzle allowed, but mutiple room fine)\n";
-			output += "-[Room Item:]\n";
-			output += "I01 (Letter I followed by 2 Digit)\n"
-					+ "(Can have multiple item in a room)\n";
-			output += "-[Room Monster:]\n";
-			output += "R01 (Letter I followed by 2 Digit)\n" + 
-					"(Can have multiple monster in a room,\n"
-					+ "but they must be unique monster)\n";
-			output += "-[Room Picture:]\n";
-			output += "Room 1.png (File name of picture)\n"
-					+ "(Only 1 picture allowed)\n";
+			output += "-[Item Amount:]\n";
+			output += "1 (The amount you can pick up and drop)\n";
+			output += "-[Item Drop Rate:]\n";
+			output += ".20 (2 digit decimal)\n";
 			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Monster":

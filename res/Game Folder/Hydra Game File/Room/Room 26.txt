@@ -8,10 +8,11 @@ Room Connection:
 R25:East
 R27:South
 Room Access:
-R06:R27
+P06:R27
 Room Item:
-I05
+I10
+I12
 Room Monster:
-null
+E04
 Room Picture:
 Room 1.png

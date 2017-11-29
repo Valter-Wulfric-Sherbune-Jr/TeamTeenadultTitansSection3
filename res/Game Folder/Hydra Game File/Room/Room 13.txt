@@ -11,8 +11,9 @@ R12:South
 Room Access:
 null
 Room Item:
-I13
+I10
 Room Monster:
+E01
 E02
 Room Picture:
 Room 1.png

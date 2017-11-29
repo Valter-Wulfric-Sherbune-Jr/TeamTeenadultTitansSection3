@@ -21,8 +21,8 @@
             <Button fx:id="levelEditorGetPreset" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#levelEditorGetPresetEvent" prefHeight="25.0" prefWidth="180.0" text="Get Preset" />
             <TextArea fx:id="levelEditorHelpTextArea" layoutX="214.0" layoutY="27.0" prefHeight="480.0" prefWidth="268.0" />
             <Label layoutX="214.0" layoutY="6.0" prefHeight="17.0" prefWidth="180.0" text="Helpful Information" />
-            <TextArea fx:id="levelEditorConsoleTextArea" layoutX="14.0" layoutY="158.0" prefHeight="153.0" prefWidth="180.0" />
-            <Label layoutX="16.0" layoutY="141.0" prefHeight="17.0" prefWidth="49.0" text="Console" />
+            <TextArea fx:id="levelEditorConsoleTextArea" layoutX="14.0" layoutY="111.0" prefHeight="200.0" prefWidth="180.0" />
+            <Label layoutX="16.0" layoutY="90.0" prefHeight="17.0" prefWidth="49.0" text="Console" />
             <Label layoutX="14.0" layoutY="323.0" prefHeight="17.0" prefWidth="120.0" text="Category of Files" />
             <VBox layoutX="15.0" layoutY="349.0" prefHeight="153.0" prefWidth="180.0" spacing="10.0">
                <children>
@@ -34,7 +34,7 @@
                   <RadioButton fx:id="levelEditorRoomRadioButton" mnemonicParsing="false" onAction="#radioButtonPressed" text="Room" />
                </children>
             </VBox>
-            <Button layoutX="17.0" layoutY="53.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="180.0" text="Button" />
+            <Button fx:id="levelEditorClear" layoutX="14.0" layoutY="54.0" mnemonicParsing="false" onAction="#levelEditorClearEvent" prefHeight="25.0" prefWidth="180.0" text="Clear" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="497.0">
          <children>

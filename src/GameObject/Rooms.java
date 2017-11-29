@@ -94,20 +94,6 @@ public class Rooms implements Serializable{
 		this.roomDescription = roomDescription;
 	}
 	
-	public ArrayList<String> getRealRoomDescription() {
-		ArrayList<String> textWordArray = new ArrayList<String>();
-		Scanner scanner = new Scanner(roomDescription);
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			for(String word: line.split(" ")) {
-				textWordArray.add(word + " ");
-			}
-			textWordArray.add("\n");
-			System.out.println(line);
-		}
-		
-		return textWordArray;
-	}
 	
 	public String getRoomDescription(){
 		return roomDescription;
@@ -172,9 +158,7 @@ public class Rooms implements Serializable{
 						break;
 					}
 				}
-				System.out.println(itemAmount);
 				for(int y = 0; y < itemAmount;y++) {
-					System.out.println("Test");
 					roomItem.get(roomItemNum).increaseItemAmount();
 				}
 			}
