@@ -286,6 +286,8 @@ public class GameFXPlayGameController {
 		model.loadGameFolder("Room");	
 		model.makeNewPlayer("Vector");
 
+		puzzleKeyPadTextArea.setEditable(false);
+		consoleTextArea.setEditable(false);
 		actionBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
 		actionBackground.setVisible(true);
 		actionBackground.setDisable(false);
@@ -322,7 +324,7 @@ public class GameFXPlayGameController {
 				model.stopMusic();
 				String combatMusic = "Combat 1.mp3";
 				
-				model.playCombatMusic("Battle Transition.mp3", "Combat 1.mp3");
+				
 				model.getPlayer().setCurrentRoom(model.getNextRoom());
 				
 				output += "- - - - -          ENCOUNTER!          - - - - -\n";
@@ -335,7 +337,7 @@ public class GameFXPlayGameController {
 						combatMusic = "Combat 2.mp3";
 					}
 				}	
-				
+				model.playCombatMusic("Battle Transition.mp3", combatMusic);
 				changeTab("Combat");
 				printHelp(output);
 			}
@@ -743,7 +745,6 @@ public class GameFXPlayGameController {
 		setListInventory(model.getPlayer().getInventoryList());
 		combatList.setItems(observList);
 		combatInventoryVBox.setVisible(true);
-		//combatBox.setVisible(false);
 		output += "Player Name: " + model.getPlayer().getPlayerName();
 		output += "\nPlayer Health: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
 		output += "\nPlayer Weapon: " +model.getPlayer().getWeapon().getItemName();
@@ -753,12 +754,48 @@ public class GameFXPlayGameController {
 	
 	@FXML
     void combatUseItemEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items> itemList = model.getPlayer().getInventoryList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + 
+					itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+				if(itemList.get(x).getItemType().equalsIgnoreCase("Healing") && model.getPlayer().getPlayerCurrentHealth() != 100) {
+					model.getPlayer().healHealth(itemList.get(x).getItemActionValue());
+					output += "You recover " + itemList.get(x).getItemActionValue() + " health.";
+					output += "\n--------------------------------------------------";
+					model.getPlayer().removeItemFromInventory(itemList.get(x));
+					setListInventory(itemList);
+					combatList.setItems(observList);
+					printHelp(output);
+				}else if(itemList.get(x).getItemType().equalsIgnoreCase("Throwable")) {
+					output += "This item function has not been implemented yet";
+					output += "\n--------------------------------------------------";
+					printHelp(output);
+				}
+				else {
+					output += "This item cannot be use right now";
+					output += "\n--------------------------------------------------";
+					printHelp(output);
+				}	
+			}
 
+		}
     }
 	
 	@FXML
     void combatExamineItemEvent(ActionEvent event) {
+		String itemName = "";
+		ArrayList<Items> itemList = model.getPlayer().getInventoryList();
+		for(int x = 0; x < itemList.size(); x++) {
+			itemName = itemList.get(x).getItemName()+ " x" + itemList.get(x).getItemAmount();
+			if(itemName.equalsIgnoreCase(combatList.getSelectionModel().getSelectedItem())) {
+				output += itemList.get(x).toString();
+				printHelp(output);
+				break;
+			}
 
+		}
     }
 	@FXML
     void combatEquipItemEvent(ActionEvent event) {
@@ -826,17 +863,61 @@ public class GameFXPlayGameController {
 	//----------------------------------------------------------------------------
 
 	@FXML
-	void puzzleInputNumberEvent(ActionEvent event) {
+	void puzzleInputNumberEvent(ActionEvent event) throws URISyntaxException {
 		if (model.getNextRoomPuzzle().getPuzzleType().equalsIgnoreCase("item")) {
 			output += "There's nothing to input.";
 			output += "\n--------------------------------------------------";
 			printHelp(output);
 		}else {
+			if(puzzleKeyPadTextArea.getText().equalsIgnoreCase("")) {
 			puzzleKeyPadPane.setVisible(true);
 			puzzleInventoryPane.setVisible(false);
-			//			if() {
-			//				
-			//			}
+			}else {
+				if(model.getNextRoomPuzzle().getPuzzleSolution().equalsIgnoreCase(puzzleKeyPadTextArea.getText())) {
+					output += "You enter the number, and the door opens!";
+					output += "\n--------------------------------------------------";
+					if(model.getNextRoom().getRoomMonster().isEmpty()) {
+						model.getPlayer().setCurrentRoom(model.getNextRoom());
+
+						output +=  "\nYou moved to the next room";
+						output +=  "\n--------------------------------------------------";
+						changeTab("Action");
+						printHelp(output);
+
+					}
+					else{
+						model.stopMusic();
+						String combatMusic = "Combat 1.mp3";
+						
+						
+						model.getPlayer().setCurrentRoom(model.getNextRoom());
+						
+						output += "- - - - -          ENCOUNTER!          - - - - -\n";
+						output += "-----------------------------------------------\n";
+						for(int x = 0; x < model.getPlayer().getCurrentRoom().getRoomMonster().size(); x++) {
+							output += model.getPlayer().getCurrentRoom().getRoomMonster().get(x).toString() + "\n";
+							if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterType().equalsIgnoreCase("Final Boss")) {
+								combatMusic = "Combat 3.mp3";
+							}else if(model.getPlayer().getCurrentRoom().getRoomMonster().get(x).getMonsterType().equalsIgnoreCase("Mini Boss")) {
+								combatMusic = "Combat 2.mp3";
+							}
+						}	
+						model.playCombatMusic("Battle Transition.mp3", combatMusic);
+						changeTab("Combat");
+						printHelp(output);
+					}
+
+				}else {
+					model.getPlayer().takeDmg(model.getNextRoomPuzzle().getPuzzleDamage());
+					output += "You input the wrong number and get shocked for " + model.getNextRoomPuzzle().getPuzzleDamage() + " damage!";
+					output += "\nPlayer Health: (" + model.getPlayer().getPlayerCurrentHealth() + "/" + model.getPlayer().getPlayerMaxHealth() + ")";
+					output += "\n--------------------------------------------------";
+					printHelp(output);
+				}
+
+				
+			}
+			
 		}
 	}
 
@@ -1009,6 +1090,7 @@ public class GameFXPlayGameController {
 			actionInventoryBox.setVisible(false);
 			actionLootBox.setVisible(false);
 			actionList.setVisible(false);
+			actionBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
 			actionList.getSelectionModel().clearSelection();
 			break;
 		case "combat":
@@ -1018,6 +1100,7 @@ public class GameFXPlayGameController {
 			tabPaneMenu.getSelectionModel().select(combatTab);
 			combatInventoryPane.setVisible(false);
 			combatLootBox.setVisible(false);
+			combatBackground.setImage(model.getPlayer().getCurrentRoom().getRoomBackground());
 			combatList.getSelectionModel().clearSelection();
 			break;
 		case "puzzle":
