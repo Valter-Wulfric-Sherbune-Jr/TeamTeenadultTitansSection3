@@ -16,9 +16,14 @@ import GameObject.Items;
 import GameObject.Monsters;
 import Model.GameFXModel;
 import javafx.animation.Animation;
+import javafx.animation.Animation.Status;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.animation.Transition;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -1117,57 +1122,25 @@ public class GameFXPlayGameController {
 	}
 
 	private void printHelp(String textWord) {
-		ArrayList<String> textWordArray = new ArrayList<String>();
-		Scanner scanner = new Scanner(textWord);
-		int wordLength = 0;
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			wordLength += line.length();
-			for(String word: line.split(" ")) {
-				textWordArray.add(word + " ");
-			}
-			textWordArray.add("\n");
-
-		}
-
-		int seconds = (int) Math.floor(wordLength / 75);
-
-		final Animation animation = new Transition()
-		{
-			int lengthOfString = 0;
-			{
-				setCycleDuration(Duration.seconds(seconds));
-			}
-
-
-
-			protected void interpolate(double frac) 
-			{
-				try {
-
-
-					consoleTextArea.appendText(textWordArray.get(0));
-					textWordArray.remove(0);
-				}catch(Exception e) {
-
-				}
-
-			}
-
-
-
-		};
-
-		animation.statusProperty().addListener((obs, oldStatus, newStatus) -> 
-
-		tabPaneMenu.getSelectionModel().getSelectedItem().setDisable(newStatus==Animation.Status.RUNNING)
-
-
-
-				);
-		animation.play();
-		animation.setOnFinished(e ->
-		output = " ");
+		Timeline timelines = new Timeline();
+		final IntegerProperty t = new SimpleIntegerProperty(0);
+		KeyFrame keyFrame = new KeyFrame(
+				Duration.seconds(.009),
+				event -> {
+					if(t.get() > textWord.length()) {
+						timelines.stop();
+					} else {
+						consoleTextArea.setText(textWord.substring(0, t.get()));
+						t.set(t.get() + 1);
+					}
+				});
+		
+		timelines.statusProperty().addListener((obs, oldStatus, newStatus) -> 
+		//timelines.Status.RUNNING
+		tabPaneMenu.getSelectionModel().getSelectedItem().setDisable(timelines.getStatus() == Status.RUNNING));
+		timelines.getKeyFrames().add(keyFrame);
+		timelines.setCycleCount(Animation.INDEFINITE);
+		timelines.play();
 	}
 
 

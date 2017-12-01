@@ -279,7 +279,6 @@ public class GameFXModel{
 							monsterObject.setMonsterHitPercentage(Double.parseDouble(fileLine));
 							break;
 						case "Monster Type:":
-							System.out.println(fileLine);
 							monsterObject.setMonsterType(fileLine);
 							break;
 						case "Monster Picture:":	
@@ -489,7 +488,6 @@ public class GameFXModel{
 				if (file.isFile()) {
 					fileName = file.getName();
 					folderPath = gameFolder + "Save/" + fileName;
-					System.out.println(folderPath);
 					try(ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath)))
 					{
 						while(true) {
@@ -529,9 +527,7 @@ public class GameFXModel{
 	 */
 	public void setSaveData(int userInputInt){
 		player.endGameTime();
-		System.out.println(player.getPlayerName());
 		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive);
-		System.out.println("Test2");
 		player.startGameTime();
 	}
 
@@ -742,8 +738,6 @@ public class GameFXModel{
 		String folderPath2 = "./res/Music/";
 		folderPath2 += music2;
 		
-		System.out.println(folderPath1);
-		System.out.println(folderPath2);
 
 		media = new Media(new File(folderPath1).toURI().toString());
 		media2 = new Media(new File(folderPath2).toURI().toString());
