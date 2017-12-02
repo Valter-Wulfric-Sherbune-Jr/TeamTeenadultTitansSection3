@@ -24,7 +24,7 @@ public class Rooms implements Serializable{
 	private ArrayList<Monsters> roomMonster;
 	private HashMap<String, String> roomNavigationList = new HashMap<String, String>();
 	private HashMap<String, String> roomAccessList = new HashMap<String, String>();
-	private Image roomBackground;
+	private String roomBackground;
 
 	//Create Default Object
 	public Rooms(){
@@ -40,7 +40,7 @@ public class Rooms implements Serializable{
 	//Create Object with set parameter
 	public Rooms(String roomId, String roomFloor, String roomDescription, String roomAccess,
 			ArrayList<Items> roomItem, ArrayList<Monsters> roomMonster, HashMap<String, String> roomNavigationList,
-			HashMap<String, String> roomAccessList, Image roomBackground) {
+			HashMap<String, String> roomAccessList, String roomBackground) {
 		super();
 		this.roomId = roomId;
 		this.roomFloor = roomFloor;
@@ -268,11 +268,11 @@ public class Rooms implements Serializable{
 		return returnString;
 	}
 
-	public void setRoomBackground(Image image) {
+	public void setRoomBackground(String image) {
 		this.roomBackground = image;
 		
 	}
-	public Image getRoomBackground() {
+	public String getRoomBackground() {
 		return roomBackground;
 	}
 }

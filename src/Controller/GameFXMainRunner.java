@@ -25,7 +25,7 @@ public class GameFXMainRunner extends Application
 		Parent root = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
-        stage.setTitle("Empyrean");
+        stage.setTitle("Game Maker");
         stage.show();
         stage.setResizable(false);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

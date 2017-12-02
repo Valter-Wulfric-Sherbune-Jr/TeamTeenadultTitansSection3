@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import Model.GameFXModel;
 import javafx.event.ActionEvent;
@@ -17,15 +20,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class GameFXLevelEditorController {
+
+	@FXML
+	private SplitPane mainPane;
 
 	@FXML
 	private Button levelEditorBackButton;
@@ -38,9 +47,6 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	private Button levelEditorGetPreset;
-
-	@FXML
-	private TextField levelEditorFileNameTextArea;
 
 	@FXML
 	private TextArea levelEditorHelpTextArea;
@@ -65,6 +71,12 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	private RadioButton levelEditorRoomRadioButton;
+
+	@FXML
+	private RadioButton levelEditorGameSettingRadioButton;
+
+	@FXML
+	private Button levelEditorCreateGameFolder;
 
 	@FXML
 	private TabPane levelEditorTabPane;
@@ -128,20 +140,17 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	private TextArea levelEditorSlot10TextArea;
-	
-	@FXML
-    private Button levelEditorClear;
 
 	String radioSelection = "";
 
 	tabSelection[] tabSlot = new tabSelection[11];
 
 	ToggleGroup radioToggleGroup = new ToggleGroup();
-	
+
 	GameFXModel model = new GameFXModel();
 
 	public void initialize() throws URISyntaxException{
-	    model.playMusic("Level Editor.mp3");
+		model.playMusic("Level Editor.mp3");
 
 		tabSlot[0] = new tabSelection(levelEditorSlot1,levelEditorSlot1TextArea);		
 		tabSlot[1] = new tabSelection(levelEditorSlot2,levelEditorSlot2TextArea);		
@@ -154,19 +163,34 @@ public class GameFXLevelEditorController {
 		tabSlot[8] = new tabSelection(levelEditorSlot9,levelEditorSlot9TextArea);		
 		tabSlot[9] = new tabSelection(levelEditorSlot10,levelEditorSlot10TextArea);
 
+		tabSlot[0].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[1].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[2].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[3].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[4].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[5].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[6].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[7].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[8].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		tabSlot[9].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+
 		levelEditorCharacterRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorItemRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorMonsterRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorPictureRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorPuzzleRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorRoomRadioButton.setToggleGroup(radioToggleGroup);
+		levelEditorGameSettingRadioButton.setToggleGroup(radioToggleGroup);
+
+		levelEditorConsoleTextArea.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+		levelEditorConsoleTextArea.setEditable(false);
 
 	}
 
 	@FXML
 	void levelEditorBackButtonEvent(ActionEvent event) throws IOException, URISyntaxException {
 		model.stopMusic();
-		
+
 		Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
 		Scene scene = new Scene(secondPane);
 
@@ -184,25 +208,22 @@ public class GameFXLevelEditorController {
 			int x = levelEditorTabPane.getSelectionModel().getSelectedIndex();
 			System.out.println(x);
 			String output = "";
+			tabSlot[x].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 			switch(radioSelection) {
 			case "Character":
-				output += "Room Floor:";
+				output += "Character Name:";
 				output += "\nnull\n";
-				output += "Room ID:";
+				output += "Character ID:";
 				output += "\nnull\n";
-				output += "Room Description:";
+				output += "Character Description:";
 				output += "\nnull\n";
-				output += "Room Connection:";
+				output += "Character Health:";
 				output += "\nnull\n";
-				output += "Room Access:";
+				output += "Character Inventory:";
 				output += "\nnull\n";
-				output += "Room Item:";
+				output += "Character Weapon:";
 				output += "\nnull\n";
-				output += "Room Monster:";
-				output += "\nnull\n";
-				output += "Room Picture:";
-				output += "\nnull\n";
-				output += "Room Floor:";
+				output += "Character Location:";
 				output += "\nnull\n";
 				tabSlot[x].getTextAreaSlot().setText(output);
 				break;
@@ -276,6 +297,13 @@ public class GameFXLevelEditorController {
 				output += "\nnull\n";
 				tabSlot[x].getTextAreaSlot().setText(output);
 				break;
+			case "Game Setting":
+				output += "Create Player:";
+				output += "\nnull\n";
+				output += "Set Starting Room:";
+				output += "\nnull\n";
+				tabSlot[x].getTextAreaSlot().setText(output);
+				break;
 			}
 		}
 	}
@@ -290,103 +318,220 @@ public class GameFXLevelEditorController {
 		chooser.getExtensionFilters().add(extentionFilter);
 		chooser.setTitle("Load File");
 		File file = chooser.showOpenDialog(new Stage());
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(file.getAbsolutePath()));
 		String output = "";
 		String fileLine = "";
-		while((fileLine = bufferedReader.readLine()) != null) {
-			if(fileLine.length() > 50) {
-				int totalCharacterLength = 0;
-				int descriptionLength = fileLine.length();
-				String outputString ="";
+		if (file != null) {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(file.getAbsolutePath()));
+			while((fileLine = bufferedReader.readLine()) != null) {
+				if(fileLine.length() > 50) {
+					int totalCharacterLength = 0;
+					int descriptionLength = fileLine.length();
+					String outputString ="";
 
-				for (String word : fileLine.split(" ")) {
-					totalCharacterLength += word.length();
-					descriptionLength -= word.length()+1;
-					outputString += word + " ";
+					for (String word : fileLine.split(" ")) {
+						totalCharacterLength += word.length();
+						descriptionLength -= word.length()+1;
+						outputString += word + " ";
 
-					if(totalCharacterLength > 40 && descriptionLength > 0) {
-						totalCharacterLength = 0;
-						outputString += "\n";
+						if(totalCharacterLength > 40 && descriptionLength > 0) {
+							totalCharacterLength = 0;
+							outputString += "\n";
+						}
 					}
+					output += outputString + "\n";
+				}else {
+					output += fileLine;
+					output += "\n";
 				}
-				output += outputString + "\n";
-			}else {
-				output += fileLine;
-				output += "\n";
 			}
+			tabSlot[x].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
+			tabSlot[x].getTextAreaSlot().setText(output);
+			tabSlot[x].getTabSlot().setText(file.getName());
+			levelEditorConsoleTextArea.setText("File Loaded!");
+		}else {
+			levelEditorConsoleTextArea.setText("Load File Cancel");
 		}
-		tabSlot[x].getTextAreaSlot().setText(output);
-		tabSlot[x].getTabSlot().setText(file.getName());
+
 	}
 
-
-	@FXML
-	void levelEditorClearEvent(ActionEvent event) {
-		int x = levelEditorTabPane.getSelectionModel().getSelectedIndex(); 
-		tabSlot[x].getTextAreaSlot().setText("");
-	}
 
 	@FXML
 	void radioButtonPressed(ActionEvent event) {
 		radioSelection = ((RadioButton)event.getSource()).getText();
 		String output = "";
+		levelEditorHelpTextArea.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 		switch(radioSelection) {
 		case "Character":
-			output += "-[Room Floor:]\n";
-			output += "Elevator (Put in the Room Name)\n"
-					+ "(Only 1 name allowed)\n";
-			output += "-[Room ID:]\n";
-			output += "R00 (Letter R Followed by 2 Digit)\n"
-					+ "(Only 1 ID allowed)\n";
-			output += "-[Room Description:]\n";
-			output += "A dark secret room (Describe the room)\n";
-			output += "-[Room Connection:]\n";
-			output += "R02:Roof (Room ID followed by room direction)\n"
-					+ "(Can have mutiple room direction and id)\n";
-			output += "-[Room Access:]\n";
-			output += "P09:R02 (Puzzle Id followed by previous room id)\n"
-					+ "(Only 1 puzzle allowed, but mutiple room fine)\n";
-			output += "-[Room Item:]\n";
-			output += "I01 (Letter I followed by 2 Digit)\n"
-					+ "(Can have multiple item in a room)\n";
-			output += "-[Room Monster:]\n";
-			output += "R01 (Letter I followed by 2 Digit)\n" + 
-					"(Can have multiple monster in a room,\n"
-					+ "but they must be unique monster)\n";
-			output += "-[Room Picture:]\n";
-			output += "Room 1.png (File name of picture)\n"
-					+ "(Only 1 picture allowed)\n";
+			output += "-[Character Name:]\n";
+			output += "(Put in the character name)\n"
+					+ "(Rule: Only 1 character name allowed)\n\n";
+
+			output += "-[Character ID:]\n";
+			output += "(Letter C Followed by 2 Digit)\n"
+					+ "(Rule: Only 1 ID allowed)\n\n";
+
+			output += "-[Character Description:]\n";
+			output += "(Describe the character)\n\n";
+
+			output += "-[Character Health:]\n";
+			output += "(Describe the character)\n\n";
+
+			output += "-[Character Inventory:]\n";
+			output += "(Letter I Followed by 2 Digit)\n"
+					+ "(Rule: Can have multiple item)\n\n";
+
+			output += "-[Character Weapon:]\n";
+			output += "(Letter W Followed by 2 Digit)\n"
+					+ "(Rule: Can only have 1 weapon)\n\n";
+
+			output += "-[Character Location:]\n";
+			output += "(Letter R Followed by 2 Digit)\n"
+					+ "(Rule: Can only have 1 room)\n\n";
 			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Item":
 			output += "-[Item Name:]\n";
-			output += "An Arrow (Put in the weapon name)\n"
-					+ "(Only 1 name allowed)\n";
-			output += "-[Weapon ID:]\n";
-			output += "I01 (Letter I Followed by 2 Digit)\n"
-					+ "(Only 1 ID allowed)\n";
-			output += "-[Weapon Description:]\n";
-			output += "Hurts my Knee (Describe the weapon)\n";
+			output += "(Put in the item name)\n"
+					+ "(Rule: Only 1 item name allowed)\n\n";
+
+			output += "-[Item ID:]\n";
+			output += "(Letter I Followed by 2 Digit)\n"
+					+ "(Rule: Only 1 ID allowed)\n\n";
+
+			output += "-[Item Description:]\n";
+			output += "(Describe the weapon)\n\n";
+
 			output += "-[Item Type:]\n";
-			output += "Weapon (5 Different type of item)\n"
-					+ "(Can have 1 type)\n"
-					+ "(Weapon,Utility,Ammo,Healing,Throwable)\n";
+			output += "(Only 5 type of item allowed below)\n"
+					+ "(Rule: Only 1 type allowed)\n"
+					+ "(Rule: Weapon,Special Weapon,Utility,Ammo,Healing, or Throwable)\n\n";
+
 			output += "-[Item Action Value]\n";
-			output += "5 (different action value depending on type)\n"
-					+ "(Only 1 puzzle allowed, but mutiple room fine)\n";
+			output += "(Different action value depending on type, int or null)\n"
+					+ "(Hint: Weapon/Special Weapon = Weapon Damage)\n"
+					+ "(Hint: Utility = Null)\n"
+					+ "(Hint: Ammo = Weapon ID)\n"
+					+ "(Hint: Healing = Healing Amount)\n"
+					+ "(Hint: Throwable = Weapon Damage)\n"
+					+ "(Rule: Only 1 Action Value allowed)\n\n";
+
 			output += "-[Item Amount:]\n";
-			output += "1 (The amount you can pick up and drop)\n";
+			output += "(The amount you can pick up and drop)\n"
+					+ "(Rule: Only 1 Item Amount allowed)\n\n";
+
 			output += "-[Item Drop Rate:]\n";
-			output += ".20 (2 digit decimal)\n";
+			output += "(2 Digit decimal number below 1)\n"
+					+ "(Rule: Only 1 Item drop rate allowed)";
 			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Monster":
+			output += "-[Monster Name:]\n";
+			output += "(Put in the monster name)\n"
+					+ "(Rule: Only 1 monster name allowed)\n\n";
+
+			output += "-[Monster ID:]\n";
+			output += "(Letter M Followed by 2 Digit)\n"
+					+ "(Rule: Only 1 ID allowed)\n";
+
+			output += "-[Monster Description:]\n";
+			output += "(Describe the monster)\n\n";
+
+			output += "-[Monster Health:]\n";
+			output += "(Set monster max health)\n\n";
+
+			output += "-[Monster Damage:]\n";
+			output += "(Set monster damage)\n\n";
+
+			output += "-[Monster Hit Percentage:]\n";
+			output += "(2 Digit decimal number below 1)\n"
+					+"(Rule: Only 1 Monster Hit Percentage allowed)\n\n";
+
+			output += "-[Monster Type:]\n";
+			output += "(Only 3 type of monster allowed below)\n"
+					+ "(Rule: Grunt, Mini Boss, or Final Boss)\n\n";
+
+			output += "-[Monster Picture:]\n";
+			output += "(File name of picture)\n"
+					+ "(Only 1 picture allowed)\n"
+					+ "(Place picture in picture folder)";
+			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Picture":
+			output += "Place picture in picture folder";
+			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Puzzle":
+			output += "-[Puzzle ID:]\n";
+			output += "(Letter P followed by 2 Digit)\n"
+					+ "(Rule: Only 1 ID Allowed)\n\n";
+
+			output += "-[Puzzle Description:]\n";
+			output += "(Describe the puzzle)\n\n";
+
+			output += "-[Puzzle Type:]\n";
+			output += "(Only 2 type of puzzle allowed below)\n"
+					+ "(Rule: Input or Item)\n\n";
+
+			output += "-[Puzzle Solution:]\n";
+			output += "(Number to solve puzzle or ID of item)\n\n";
+
+			output += "-[Puzzle Hints:]\n";
+			output += "(Describe the hint for the puzzle)\n\n";
+
+			output += "-[Puzzle Damage:]\n";
+			output += "(Integer of damage if you fail to beat puzzle)";
+
+			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Room":
+			output += "-[Room Floor:]\n";
+			output += "(Put Room Name Here)\n"
+					+ "(Rule: Only 1 Name Allowed)\n\n";
+
+			output += "-[Room ID:]\n";
+			output += "(Letter R Followed by 2 Digit)\n"
+					+ "(Rule: Only 1 ID Allowed)\n\n";
+
+			output += "-[Room Description:]\n";
+			output += "(Describe the room)\n\n";
+
+			output += "-[Room Connection:]\n";
+			output += "(Room ID and Room direction seperated by comma)\n"
+					+ "(Hint: Can have multiple room connection)\n\n";
+
+			output += "-[Room Access:]\n";
+			output += "(Puzzle Id and Previous Room id seperated by comma)\n"
+					+ "(Rule: Only 1 puzzle, but multiple room fine)\n\n";
+
+			output += "-[Room Item:]\n";
+			output += "(Letter I followed by 2 Digit)\n"
+					+ "(Hint: Can have multiple item in a room)\n\n";
+
+			output += "-[Room Monster:]\n";
+			output += "(Letter R followed by 2 Digit)\n" + 
+					"(Hint: Can have multiple monster in a room)\n"
+					+ "(Rule: Must be Unique Monster)\n\n";
+
+			output += "-[Room Picture:]\n";
+			output += "(File name of picture)\n"
+					+ "(Only 1 picture allowed)\n"
+					+ "(Place picture in picture folder)";
+			levelEditorHelpTextArea.setText(output);
+			break;
+		case "Game Setting":
+			output += "-[Create Character:]\n";
+			output += "(Letter C Followed by 2 Digit)\n"
+					+ "(Hint: Can make multiple character)\n"
+					+ "(Rule: Max character is 3)\n\n";
+
+			output += "-[Game Introduction:]\n";
+			output += "(Describe the introduction)\n\n";
+
+			output += "-[Set Starting Room:]\n";
+			output += "(Letter R Followed by 2 Digit)\n"
+					+ "(Rule: Can only have 1 starting room)\n\n";
+
+			levelEditorHelpTextArea.setText(output);
 			break;
 		}
 	}
@@ -395,10 +540,16 @@ public class GameFXLevelEditorController {
 	void levelEditorSaveFileEvent(ActionEvent event) {
 		int x = levelEditorTabPane.getSelectionModel().getSelectedIndex();
 		if(tabSlot[x].getTextAreaSlot().getText().equalsIgnoreCase("")) {
-			levelEditorConsoleTextArea.setText("There is nothing to save \nwith this file");
+			levelEditorConsoleTextArea.setText("There is nothing to save");
 		}else {
 
+
 			FileChooser fileChooser = new FileChooser();
+
+			if(!tabSlot[x].getTabSlot().getText().equalsIgnoreCase("Empty")) {
+				fileChooser.setInitialFileName(tabSlot[x].getTabSlot().getText());
+			}
+
 			File userDirectory = new File("./res/Game Folder/");
 			fileChooser.setInitialDirectory(userDirectory);
 
@@ -410,8 +561,48 @@ public class GameFXLevelEditorController {
 			if(file != null){
 				SaveFile(tabSlot[x].getTextAreaSlot().getText(), file);
 				tabSlot[x].getTabSlot().setText(file.getName());
+				levelEditorConsoleTextArea.setText("File Saved!");
+			}else {
+				levelEditorConsoleTextArea.setText("Saving file cancel");
 			}
 		}
+	}
+
+	@FXML
+	void levelEditorCreateGameFolderEvent(ActionEvent event) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Game Folder Creater");
+		dialog.setHeaderText("Creating Game Folder");
+		dialog.setContentText("Please enter a name:");
+
+
+		// Traditional way to get the response value.
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			File filePath = new File("./res/Game Folder/" + result.get());
+			if(filePath.exists() && filePath.isDirectory()) {
+				levelEditorConsoleTextArea.setText("Folder already exist there");
+			}else {
+				File gameFolder = new File("./res/Game Folder/" + result.get());
+				File characterFolder = new File("./res/Game Folder/" + result.get() + "/Character");
+				File itemFolder = new File("./res/Game Folder/" + result.get() + "/Item");
+				File monsterFolder = new File("./res/Game Folder/" + result.get() + "/Monster");
+				File pictureFolder = new File("./res/Game Folder/" + result.get() + "/Picture");
+				File puzzleFolder = new File("./res/Game Folder/" + result.get() + "/Puzzle");
+				File roomFolder = new File("./res/Game Folder/" + result.get() + "/Room");
+
+				gameFolder.mkdir();
+				characterFolder.mkdir();
+				itemFolder.mkdir();
+				monsterFolder.mkdir();
+				pictureFolder.mkdir();
+				puzzleFolder.mkdir();
+				roomFolder.mkdir();
+				levelEditorConsoleTextArea.setText("Folder " + result.get() + " created.");
+			}
+
+		}
+
 	}
 
 	private void SaveFile(String content, File file){

@@ -15,16 +15,18 @@ public class SaveData implements Serializable{
 	private HashMap<String, Monsters> monsterList;
 	private HashMap<String, Rooms> roomList;
 	private int monsterAlive;
+	private String gameFolder;
 
 
 	public SaveData(int saveId, Players playerData, HashMap<String, Items> itemList,
-			HashMap<String, Monsters> monsterList, HashMap<String, Rooms> roomList, int monsterAlive) {
+			HashMap<String, Monsters> monsterList, HashMap<String, Rooms> roomList, int monsterAlive, String gameFolder) {
 		this.saveId = saveId;
 		this.playerData = playerData;
 		this.itemList = itemList;
 		this.monsterList = monsterList;
 		this.roomList = roomList;
 		this.monsterAlive = monsterAlive;
+		this.gameFolder = gameFolder;
 	}
 
 	public int getSaveId() {
@@ -74,5 +76,15 @@ public class SaveData implements Serializable{
 	public void setMonsterAlive(int monsterAlive) {
 		this.monsterAlive = monsterAlive;
 	}
+
+	public String getGameFolder() {
+		return gameFolder;
+	}
+
+	public void setGameFolder(String gameFolder) {
+		this.gameFolder = gameFolder;
+	}
+	
+	
 
 }

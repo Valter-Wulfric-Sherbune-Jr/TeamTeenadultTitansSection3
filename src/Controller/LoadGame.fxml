@@ -17,7 +17,7 @@
       </Label>
    </top>
    <center>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="183.0" prefWidth="463.0" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="loadGameScrollPane" hbarPolicy="NEVER" prefHeight="183.0" prefWidth="463.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
             <ListView fx:id="loadGameList" prefHeight="525.0" prefWidth="999.0" />
          </content>

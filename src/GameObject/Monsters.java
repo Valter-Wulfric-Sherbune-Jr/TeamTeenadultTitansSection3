@@ -17,7 +17,8 @@ public class Monsters implements Serializable{
 	private int monsterDamage;
 	private double monsterHitPercentage;
 	private String monsterType;
-	private Image monsterAvatar;
+	private String monsterIcon;
+	private String monsterBattleImage;
 
 	//Create Default Object
 	public Monsters() {
@@ -28,13 +29,14 @@ public class Monsters implements Serializable{
 		this.monsterCurrentHealth = monsterMaxHealth;
 		this.monsterDamage = 00;
 		this.monsterHitPercentage = 0;
-		this.monsterAvatar = null;
-		this.monsterType = "Error";
+		this.monsterIcon = "null";
+		this.monsterBattleImage = "null";
+		this.monsterType = "Grunt";
 	}
 
 	//Create Object with set parameter
 	public Monsters(String monsterID, String monsterName, String monsterDesc, int monsterMaxHealth, int monsterDamage,
-			double monsterHitPercentage, Image monsterAvatar,String monsterType) {
+			double monsterHitPercentage, String monsterIcon, String monsterBattleImage,String monsterType) {
 		this.monsterId = monsterID;
 		this.monsterName = monsterName;
 		this.monsterDesc = monsterDesc;
@@ -42,7 +44,8 @@ public class Monsters implements Serializable{
 		this.monsterCurrentHealth = monsterMaxHealth;
 		this.monsterDamage = monsterDamage;
 		this.monsterHitPercentage = monsterHitPercentage;
-		this.monsterAvatar = monsterAvatar;
+		this.monsterIcon = monsterIcon;
+		this.monsterBattleImage = monsterBattleImage;
 		this.monsterType = monsterType;
 		
 	}
@@ -197,14 +200,22 @@ public class Monsters implements Serializable{
 		return returnString;
 	}
 	
-	public void setMonsterAvatar(Image monsterAvatar) {
-		this.monsterAvatar = monsterAvatar;
-		
+	public String getMonsterIcon() {
+		return monsterIcon;
 	}
-	public Image getMonsterAvatar() {
-		return monsterAvatar;
+
+	public void setMonsterIcon(String monsterIcon) {
+		this.monsterIcon = monsterIcon;
 	}
-	
+
+	public String getMonsterBattleImage() {
+		return monsterBattleImage;
+	}
+
+	public void setMonsterBattleImage(String monsterBattleImage) {
+		this.monsterBattleImage = monsterBattleImage;
+	}
+
 	public String getMonsterType() {
 		return monsterType;
 	}

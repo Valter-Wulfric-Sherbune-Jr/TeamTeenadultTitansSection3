@@ -1,0 +1,17 @@
+Room Floor:
+Roof
+Room ID:
+R01
+Room Description:
+Edited Room Text
+Room Connection:
+R02:East
+R03:South
+Room Access:
+null
+Room Item:
+null
+Room Monster:
+null
+Room Picture:
+Room 1.png

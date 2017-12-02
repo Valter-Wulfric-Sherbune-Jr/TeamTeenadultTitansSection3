@@ -3,7 +3,9 @@ Roof
 Room ID:
 R02
 Room Description:
-A room with maroon carpet and potted plastic plants in the corners. To the north is a blood-stained elevator. It barely seems functional due to its damaged key 
+A room with maroon carpet and potted plastic plants 
+in the corners. To the north is a blood-stained elevator. 
+It barely seems functional due to its damaged key 
 scanner. 
 Room Connection:
 R01:West
@@ -15,5 +17,10 @@ Room Item:
 I26
 Room Monster:
 E01
+E02
+E01
+E02
+E03
+E03
 Room Picture:
 Room 1.png

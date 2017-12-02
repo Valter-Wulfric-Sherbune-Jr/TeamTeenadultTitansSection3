@@ -85,18 +85,6 @@ public class GameFXModel{
 		return gameFolderList;
 	}
 
-	/*Check if the user input match a game folder
-	 *Used in method: selectGameFolder()
-	 */
-	public boolean checkValidGameFolder(String userGameFolder) {
-		for(String gameFolder: gameFolderList) {
-			if(gameFolder.equalsIgnoreCase(userGameFolder)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/*Set the game folder using userinput
 	 *Used in method: selectGameFolder()
 	 */
@@ -142,6 +130,10 @@ public class GameFXModel{
 		}
 
 
+	}
+	
+	public HashMap<String, Image> getPictureList() {
+		return pictureList;
 	}
 
 	/*Search through a subfolder of a gamefolder
@@ -281,13 +273,11 @@ public class GameFXModel{
 						case "Monster Type:":
 							monsterObject.setMonsterType(fileLine);
 							break;
-						case "Monster Picture:":	
-							if(!fileLine.equals("null")) {
-								roomObject.setRoomBackground(pictureList.get(fileLine));
-							}else {
-								roomObject.setRoomBackground(pictureList.get("Unknown"));
-							}
-
+						case "Monster Icon:":
+							monsterObject.setMonsterIcon(fileLine);
+							break;	
+						case "Monster BattleImage:":
+							monsterObject.setMonsterBattleImage(fileLine);
 							break;	
 						case "Room Floor:":
 							roomObject.setRoomFloor(fileLine);
@@ -329,8 +319,10 @@ public class GameFXModel{
 							}	
 						case "Room Picture:":
 							if(!fileLine.equals("null")) {
-								roomObject.setRoomBackground(pictureList.get(fileLine));
+								roomObject.setRoomBackground(fileLine);
 								break;
+							}else {
+								roomObject.setRoomBackground("null");
 							}
 						case "Puzzle ID:":
 							puzzleObject.setPuzzleId(fileLine);
@@ -478,16 +470,15 @@ public class GameFXModel{
 	 */
 	public void setSaveList() {
 		saveList.clear();
-
-		String folderPath = gameFolder + "Save/";
 		try {	
-			File folder = new File(folderPath);
+			File folder = new File("./res/Save/");
 			File[] listOfFiles = folder.listFiles();
 			String fileName = null;
 			for (File file : listOfFiles) {
 				if (file.isFile()) {
 					fileName = file.getName();
-					folderPath = gameFolder + "Save/" + fileName;
+					String folderPath = "./res/Save/" + fileName;
+					System.out.println(fileName);
 					try(ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(folderPath)))
 					{
 						while(true) {
@@ -510,7 +501,7 @@ public class GameFXModel{
 		catch(Exception e) {
 			System.out.println("Error; Save folder does not exist" + e.toString());
 			System.out.println("Creating save folder...");
-			File dir = new File(folderPath);
+			File dir = new File("./res/Save");
 			dir.mkdir();
 		}
 	}
@@ -525,9 +516,9 @@ public class GameFXModel{
 	/*Initalize the saveData, but does not save the object yet
 	 *Use in Method: saveGame()
 	 */
-	public void setSaveData(int userInputInt){
+	public void setSaveData(int userInputInt, String gameFolder2){
 		player.endGameTime();
-		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive);
+		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive,gameFolder2);
 		player.startGameTime();
 	}
 
@@ -555,12 +546,13 @@ public class GameFXModel{
 	public void saveGameData(SaveData data) {
 		try {
 			ObjectOutputStream out = 
-					new ObjectOutputStream(new FileOutputStream(gameFolder + "Save/Save "+ data.getSaveId() +".dat"));
+					new ObjectOutputStream(new FileOutputStream("./res/Save/Save "+ data.getSaveId() +".dat"));
 			out.writeObject(data);
 		} catch (FileNotFoundException e) {
 			System.out.println("Error: File Not Found (Method saveGameData())");
 		} catch (IOException e) {
 			System.out.println("Error: Reading File Error (Method saveGameData())");
+			System.out.println(e);
 		}
 	}
 
