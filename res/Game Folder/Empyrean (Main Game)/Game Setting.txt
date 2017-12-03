@@ -1,0 +1,14 @@
+Party Member:
+P01
+P02
+P03
+Party Inventory:
+I02
+I03
+I10
+I10
+I10
+I18
+I12
+Set Starting Room:
+R01

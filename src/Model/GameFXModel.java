@@ -20,6 +20,7 @@ import java.util.Set;
 
 import GameObject.Items;
 import GameObject.Monsters;
+import GameObject.Party;
 import GameObject.Rooms;
 import GameObject.SaveData;
 import javafx.scene.image.Image;
@@ -40,6 +41,10 @@ public class GameFXModel{
 			"Room Connection:","Room Access:","Room Item:","Room Monster:", "Room Picture:"};
 	private String[] puzzleCode = {"Puzzle ID:","Puzzle Description:","Puzzle Type:",
 			"Puzzle Solution:","Puzzle Hint:","Puzzle Damage:"};
+	private String[] playerCode = {"Player Name:","Player ID:","Player Health:",
+	"Player Weapon:", "Player Icon:", "Player Select:", "Player Death:"};
+	private String[] gameSettingCode = {"Create Player:","Party Member:","Party Inventory:",
+	"Set Starting Room:"};
 	private ArrayList<String> gameFolderList = new ArrayList<String>();
 	private HashMap<String, Items> itemList = new HashMap<String, Items>();
 	private HashMap<String, Monsters> monsterList = new HashMap<String, Monsters>();
@@ -47,15 +52,18 @@ public class GameFXModel{
 	private HashMap<String, Puzzles> puzzleList = new HashMap<String, Puzzles>();
 	private HashMap<Integer, SaveData> saveList = new HashMap<Integer, SaveData>();
 	private HashMap<String, Image> pictureList = new HashMap<String, Image>();
+	private HashMap<String, Players> playerList = new HashMap<String, Players>();
 	private SaveData save;
-	private Players player;
+	private Party playerParty = new Party();;
 	private Rooms nextRoom;
 	private Monsters currentMonster;
 	private ArrayList<Items> lootList = new ArrayList<Items>();
 	private int monsterAlive = 0;
 	private MediaPlayer mediaPlayer;
-	private static Media media;
-	private static Media media2;
+	private MediaPlayer mediaPlayerSoundEffect;
+	private static Media mediaMenu;
+	private static Media mediaTransition;
+	private static Media mediaSoundEffect;
 
 
 	/*Clear the game folder list, then search the folder path
@@ -128,10 +136,22 @@ public class GameFXModel{
 
 			}
 		}
+		
+		File folder3 = new File(gameFolder + "Picture/Player/");
+		File[] listOfFiles3 = folder3.listFiles();
+		String fileName3 = null;
+		for (File file3 : listOfFiles3) {
+			if (file3.isFile()) {
+				fileName3 = file3.getName();	
+				Image image = new Image(file3.toURI().toString(), 260, 225,false,false);
+				pictureList.put(fileName3,image);
+				System.out.println(file3.toURI().toString());
+			}
+		}
 
 
 	}
-	
+
 	public HashMap<String, Image> getPictureList() {
 		return pictureList;
 	}
@@ -172,6 +192,7 @@ public class GameFXModel{
 				Monsters monsterObject = new Monsters();
 				Puzzles puzzleObject = new Puzzles();	
 				Rooms roomObject = new Rooms();
+				Players playerObject = new Players();
 
 				/*While loop to check if the text file line matches one of the set code
 				 *if it matches, the set code then it set it as such, otherwise set code
@@ -215,6 +236,16 @@ public class GameFXModel{
 							}
 						}
 						break;
+
+					case"player":
+						for(String playerSetCode: playerCode) {
+							if(playerSetCode.equalsIgnoreCase(fileLine)) {
+								setCode = playerSetCode;
+								fileLine = bufferedReader.readLine();
+								break;
+							}
+						}
+						break;
 					}
 
 					//Depending on the set code, it'll set the information it got from flieLine
@@ -249,8 +280,8 @@ public class GameFXModel{
 							}else {
 								itemObject.setItemDropRate(0);
 							}
+							break;
 
-							break;	
 						case "Monster Name:":
 							monsterObject.setMonsterName(fileLine);
 							break;
@@ -279,6 +310,7 @@ public class GameFXModel{
 						case "Monster BattleImage:":
 							monsterObject.setMonsterBattleImage(fileLine);
 							break;	
+
 						case "Room Floor:":
 							roomObject.setRoomFloor(fileLine);
 							break;
@@ -324,6 +356,7 @@ public class GameFXModel{
 							}else {
 								roomObject.setRoomBackground("null");
 							}
+
 						case "Puzzle ID:":
 							puzzleObject.setPuzzleId(fileLine);
 							break;
@@ -339,11 +372,29 @@ public class GameFXModel{
 						case "Puzzle Hint:":
 							puzzleObject.setPuzzleHint(fileLine);
 							break;
-						case "Puzzle Damage:":
-							if(fileLine.equals("null"))
-								puzzleObject.setPuzzleDamage(0);
-							else
-								puzzleObject.setPuzzleDamage(Integer.parseInt(fileLine));
+
+						case "Player Name:":
+							playerObject.setPlayerName(fileLine);
+							break;
+						case "Player ID:":
+							playerObject.setPlayerId(fileLine);
+							break;
+						case "Player Health:":
+							double maxhealth = Double.parseDouble(fileLine);
+							playerObject.setPlayerMaxHealth(maxhealth);
+							playerObject.setPlayerCurrentHealth(maxhealth);
+							break;
+						case "Player Weapon:":
+							playerObject.setWeapon(itemList.get(fileLine));
+							break;
+						case "Player Icon:":
+							playerObject.setPlayerIcon(fileLine);
+							break;
+						case "Player Select:":
+							playerObject.setPlayerSelect(fileLine);
+							break;
+						case "Player Death:":
+							playerObject.setPlayerDeath(fileLine);
 							break;
 						}	
 					}
@@ -365,6 +416,9 @@ public class GameFXModel{
 				case"room":
 					roomList.put(roomObject.getRoomId(), roomObject);
 					break;
+				case"player":
+					playerList.put(playerObject.getPlayerId(), playerObject);
+					break;
 				}				
 			}
 
@@ -380,6 +434,54 @@ public class GameFXModel{
 
 	}
 
+	public void setGameSetting(){
+		BufferedReader bufferedReader;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(gameFolder + "/Game Setting.txt"));
+
+			String fileLine = "";
+			String setCode = "";
+			while((fileLine = bufferedReader.readLine()) != null) {
+
+				for(String gameSettingSetCode: gameSettingCode) {
+					if(gameSettingSetCode.equalsIgnoreCase(fileLine)) {
+						setCode = gameSettingSetCode;
+						fileLine = bufferedReader.readLine();
+						break;
+					}
+				}
+
+				if(setCode != null) {
+					switch(setCode) {
+					case "Party Member:":
+						if(!fileLine.equals("null")) {
+							playerParty.addPartyMember(playerList.get(fileLine));		
+						}
+						break;
+					case "Party Inventory:":
+						if(!fileLine.equals("null")) {
+							playerParty.addItemToInventory(itemList.get(fileLine));
+						}						
+						break;
+					case "Set Starting Room:":
+						if(!fileLine.equals("null")) {
+							playerParty.setCurrentRoom(roomList.get(fileLine));
+						}
+						break;	
+					}	
+
+
+
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/*Copy the value of the object rather then the reference
 	 *Useful because you adding a monster from an hashmap to
 	 *a room object, but if you attack it, then it hurts all
@@ -403,40 +505,16 @@ public class GameFXModel{
 		return null;
 	}
 
-	/*Make a new player object and set him up
-	 *Need userInput to set the player name
-	 *Used in method: playerCreation()
-	 */
-	public void makeNewPlayer(String playerName) {
-		try {
-			player = new Players();
-			player.setPlayerName(playerName);
-			player.setPlayerMaxHealth(100);
-			player.setPlayerCurrentHealth(100);
-			player.setWeapon(itemList.get("I01"));
-			player.addItemToInventory(itemList.get("I18"));
-			player.addItemToInventory(itemList.get("I18"));
-			player.addItemToInventory(itemList.get("I13"));
-			player.addItemToInventory(itemList.get("I07"));
-			player.setCurrentRoom(roomList.get("R01"));
-			player.startGameTime();
-		}catch(Exception e) {
-			System.out.println("Error: Setting Player");
-		}
+	public Party getParty() {
+		return playerParty;
 	}
 
-	/*Return the player object
-	 *Use in method: playerCreation(), printChoice()
-	 */
-	public Players getPlayer() {
-		return player;
-	}
 	/*Check if the direction the player enter is valid 
 	 *for the room
 	 *Used in method: movePlayer()
 	 */
 	public boolean checkValidDirection(String userInput) {
-		if(player.getCurrentRoom().getRoomNavigationList().get(userInput) != null) {
+		if(playerParty.getCurrentRoom().getRoomNavigationList().get(userInput) != null) {
 			return true;
 		}else {
 			return false;
@@ -447,7 +525,7 @@ public class GameFXModel{
 	 *Use in method: playerCreation(), printChoice()
 	 */
 	public void setNextRoom(String userInput) {
-		this.nextRoom = roomList.get(player.getCurrentRoom().getRoomNavigationList().get(userInput));
+		this.nextRoom = roomList.get(playerParty.getCurrentRoom().getRoomNavigationList().get(userInput));
 	}
 
 	/*Return the player object
@@ -461,7 +539,7 @@ public class GameFXModel{
 	 *Use in method: movePlayer(), puzzleMenu(), usePuzzleItem(), inputNumber(), checkMonsterRoom()
 	 */
 	public Puzzles getNextRoomPuzzle() {
-		return puzzleList.get(nextRoom.getRoomAccessList().get(player.getCurrentRoom().getRoomId()));
+		return puzzleList.get(nextRoom.getRoomAccessList().get(playerParty.getCurrentRoom().getRoomId()));
 	}
 
 	/*Search the save folder of the game folder and add all
@@ -513,14 +591,14 @@ public class GameFXModel{
 		return saveList;
 	}
 
-	/*Initalize the saveData, but does not save the object yet
-	 *Use in Method: saveGame()
-	 */
-	public void setSaveData(int userInputInt, String gameFolder2){
-		player.endGameTime();
-		this.save = new SaveData(userInputInt,player,itemList,monsterList,roomList,monsterAlive,gameFolder2);
-		player.startGameTime();
-	}
+		/*Initalize the saveData, but does not save the object yet
+		 *Use in Method: saveGame()
+		 */
+		public void setSaveData(int userInputInt, String gameFolder2){
+			playerParty.endGameTime();
+			this.save = new SaveData(userInputInt,playerParty,itemList,monsterList,roomList,monsterAlive,gameFolder2);
+			playerParty.startGameTime();
+		}
 
 	/*Get the saveData that was initalize
 	 *Use in Method: saveGame(), saveConflict, printChoice()
@@ -529,15 +607,15 @@ public class GameFXModel{
 		return save;
 	}
 
-	public void loadGameSaveData(SaveData save) {
-		player = save.getPlayerData();
-		monsterList = save.getMonsterList();
-		roomList = save.getRoomList();
-		itemList = save.getItemList();
-		monsterAlive = save.getMonsterAlive();
-		player.startGameTime();
-		player.setCurrentRoom(save.getPlayerData().getCurrentRoom());
-	}
+		public void loadGameSaveData(SaveData save) {
+			playerParty = save.getParty();
+			monsterList = save.getMonsterList();
+			roomList = save.getRoomList();
+			itemList = save.getItemList();
+			monsterAlive = save.getMonsterAlive();
+			playerParty.startGameTime();
+			playerParty.setCurrentRoom(save.getParty().getCurrentRoom());
+		}
 
 	/*Save the gameData and create a binary test file of it in
 	 *Use in Method: saveGame(), saveConflict
@@ -554,19 +632,6 @@ public class GameFXModel{
 			System.out.println("Error: Reading File Error (Method saveGameData())");
 			System.out.println(e);
 		}
-	}
-
-	/*Search through the player inventory and see if
-	 *the user input matches one of the item in the inventory
-	 *Use in Method: checkUserItem()
-	 */
-	public boolean checkValidItem(String itemName) {
-		for(Items item: player.getInventoryList()) {
-			if(item.getItemName().equalsIgnoreCase(itemName)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/*Set the current monster as a point of action
@@ -667,19 +732,6 @@ public class GameFXModel{
 		return validDrop;
 	}
 
-	/*Check if the user input matches a valid
-	 *monster in the room
-	 *Use in Method: attackMultipleMonster()
-	 */
-	public boolean checkValidMonster(String userInput) {
-		for(int x = 0; x < player.getCurrentRoom().getRoomMonster().size(); x++) {
-			if(player.getCurrentRoom().getRoomMonster().get(x).getMonsterName().equalsIgnoreCase(userInput)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/*Get the amount of monster alive
 	 *Use in Method: checkWinCondition()
 	 */
@@ -698,15 +750,39 @@ public class GameFXModel{
 		roomList.remove(room.getRoomId());
 		roomList.put(room.getRoomId(), room);
 	}
+	
+	public void playSoundEffect(String music) {
+		String folderPath = "./res/Music/";
+		folderPath += music;
+
+		mediaSoundEffect = new Media(new File(folderPath).toURI().toString());
+
+		mediaPlayerSoundEffect = new MediaPlayer(mediaSoundEffect);
+		mediaPlayerSoundEffect.setAutoPlay(true);
+		mediaPlayerSoundEffect.play();
+		mediaPlayerSoundEffect.setVolume(0.5);
+	}
+	
+	public void playGameSoundEffect(String music) {
+		String folderPath = gameFolder + "Music/";
+		folderPath += music;
+
+		mediaSoundEffect = new Media(new File(folderPath).toURI().toString());
+
+		mediaPlayerSoundEffect = new MediaPlayer(mediaSoundEffect);
+		mediaPlayerSoundEffect.setAutoPlay(true);
+		mediaPlayerSoundEffect.play();
+		mediaPlayerSoundEffect.setVolume(0.5);
+	}
 
 	public void playMusic(String music) throws URISyntaxException
 	{
 		String folderPath = "./res/Music/";
 		folderPath += music;
 
-		media = new Media(new File(folderPath).toURI().toString());
+		mediaMenu = new Media(new File(folderPath).toURI().toString());
 
-		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer = new MediaPlayer(mediaMenu);
 		mediaPlayer.setAutoPlay(true);
 		mediaPlayer.play();
 		mediaPlayer.setOnEndOfMedia(new Runnable()
@@ -716,7 +792,7 @@ public class GameFXModel{
 				mediaPlayer.seek(Duration.ZERO);
 			}
 		});
-		mediaPlayer.setVolume(0.2);
+		mediaPlayer.setVolume(0.5);
 
 
 
@@ -729,19 +805,19 @@ public class GameFXModel{
 
 		String folderPath2 = "./res/Music/";
 		folderPath2 += music2;
-		
 
-		media = new Media(new File(folderPath1).toURI().toString());
-		media2 = new Media(new File(folderPath2).toURI().toString());
 
-		mediaPlayer = new MediaPlayer(media);
+		mediaTransition = new Media(new File(folderPath1).toURI().toString());
+		mediaMenu = new Media(new File(folderPath2).toURI().toString());
+
+		mediaPlayer = new MediaPlayer(mediaTransition);
 		mediaPlayer.setAutoPlay(true);
 		mediaPlayer.play();
 		mediaPlayer.setOnEndOfMedia(new Runnable()
 		{
 			public void run()
 			{
-				mediaPlayer = new MediaPlayer(media2);
+				mediaPlayer = new MediaPlayer(mediaMenu);
 				mediaPlayer.setAutoPlay(true);
 				mediaPlayer.play();
 				mediaPlayer.setOnEndOfMedia(new Runnable()

@@ -10,7 +10,7 @@ public class SaveData implements Serializable{
 	 */
 	private static final long serialVersionUID = 1539034718245633359L;
 	private int saveId;
-	private Players playerData;
+	private Party party;
 	private HashMap<String, Items> itemList;
 	private HashMap<String, Monsters> monsterList;
 	private HashMap<String, Rooms> roomList;
@@ -18,16 +18,27 @@ public class SaveData implements Serializable{
 	private String gameFolder;
 
 
-	public SaveData(int saveId, Players playerData, HashMap<String, Items> itemList,
+	public SaveData(int saveId, Party party, HashMap<String, Items> itemList,
 			HashMap<String, Monsters> monsterList, HashMap<String, Rooms> roomList, int monsterAlive, String gameFolder) {
 		this.saveId = saveId;
-		this.playerData = playerData;
+		this.party = party;
 		this.itemList = itemList;
 		this.monsterList = monsterList;
 		this.roomList = roomList;
 		this.monsterAlive = monsterAlive;
 		this.gameFolder = gameFolder;
 	}
+
+	
+	public Party getParty() {
+		return party;
+	}
+
+
+	public void setParty(Party party) {
+		this.party = party;
+	}
+
 
 	public int getSaveId() {
 		return saveId;
@@ -37,13 +48,6 @@ public class SaveData implements Serializable{
 		this.saveId = saveId;
 	}
 
-	public Players getPlayerData() {
-		return playerData;
-	}
-
-	public void setPlayerData(Players playerData) {
-		this.playerData = playerData;
-	}
 
 	public HashMap<String, Items> getItemList() {
 		return itemList;

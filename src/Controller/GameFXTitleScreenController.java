@@ -47,6 +47,7 @@ public class GameFXTitleScreenController {
     
     public void initialize() throws URISyntaxException {
     	model.playMusic("Main Menu.mp3");
+    	model.playSoundEffect("Scene Transition.wav");
     	
     	newGameButton.setStyle("-fx-focus-color: grey;");
     	levelEditorButton.setStyle("-fx-focus-color: grey;");
@@ -56,12 +57,14 @@ public class GameFXTitleScreenController {
     
     @FXML
     void exitGameOnClick(ActionEvent event) {
+    	model.playSoundEffect("Button Press.wav");
     	System.exit(0);
     }
     
     @FXML
     void levelEditorOnClick(ActionEvent event) throws IOException, URISyntaxException {
     	model.stopMusic();
+    	model.playSoundEffect("Button Press.wav");
     	Parent secondPane = FXMLLoader.load(getClass().getResource("LevelEditor.fxml"));
     	Scene scene2 = new Scene(secondPane);
     	
@@ -72,7 +75,7 @@ public class GameFXTitleScreenController {
 
     @FXML
     void loadGameOnClick(ActionEvent event) throws IOException {
-    	
+    	model.playSoundEffect("Button Press.wav");
 
     	Parent secondPane = FXMLLoader.load(getClass().getResource("LoadGame.fxml"));
     	Scene scene3 = new Scene(secondPane);
@@ -85,6 +88,7 @@ public class GameFXTitleScreenController {
 
     @FXML
     void newGameOnClick(ActionEvent event) throws IOException, URISyntaxException {
+    	model.playSoundEffect("Button Press.wav");
     	model.setGameFolderList();
     	model.getGameFolderList();
     	List<String> choices = new ArrayList<>();
@@ -101,6 +105,7 @@ public class GameFXTitleScreenController {
     	
     	Optional<String> result = dialog.showAndWait();
     	if (result.isPresent()){
+    		model.playSoundEffect("Button Press.wav");
     		
     		File file = new File("./res/Loading Folder Choice.txt");
     		PrintWriter writer = new PrintWriter(file, "UTF-8");
@@ -116,6 +121,7 @@ public class GameFXTitleScreenController {
         	window.setTitle(result.get());
         	window.setScene(scene2);
         	window.show();
+        	
     	}
     	
     	

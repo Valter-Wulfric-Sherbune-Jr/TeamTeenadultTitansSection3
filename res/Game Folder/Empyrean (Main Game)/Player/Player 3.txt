@@ -1,0 +1,14 @@
+Player Name:
+Twinkle Temur
+Player ID:
+P03
+Player Health:
+100
+Player Weapon:
+I01
+Player Icon:
+Player 3.png
+Player Select:
+Player Select 3.wav
+Player Death:
+Player Death 3.wav

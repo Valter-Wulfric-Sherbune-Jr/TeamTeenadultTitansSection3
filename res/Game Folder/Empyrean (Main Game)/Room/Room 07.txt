@@ -14,5 +14,6 @@ I14
 I12
 Room Monster:
 E04
+E02
 Room Picture:
 Room 1.png

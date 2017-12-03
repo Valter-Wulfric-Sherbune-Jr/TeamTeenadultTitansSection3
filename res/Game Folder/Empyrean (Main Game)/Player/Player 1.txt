@@ -1,0 +1,14 @@
+Player Name:
+Halo Rinnger
+Player ID:
+P01
+Player Health:
+100
+Player Weapon:
+I01
+Player Icon:
+Player 1.png
+Player Select:
+Player Select 1.wav
+Player Death:
+Player Death 1.wav

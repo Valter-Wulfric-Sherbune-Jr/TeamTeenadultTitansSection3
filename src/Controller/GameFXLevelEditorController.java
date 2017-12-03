@@ -55,7 +55,7 @@ public class GameFXLevelEditorController {
 	private TextArea levelEditorConsoleTextArea;
 
 	@FXML
-	private RadioButton levelEditorCharacterRadioButton;
+    private RadioButton levelEditorPlayerRadioButton;
 
 	@FXML
 	private RadioButton levelEditorItemRadioButton;
@@ -151,6 +151,7 @@ public class GameFXLevelEditorController {
 
 	public void initialize() throws URISyntaxException{
 		model.playMusic("Level Editor.mp3");
+		model.playSoundEffect("Scene Transition.wav");
 
 		tabSlot[0] = new tabSelection(levelEditorSlot1,levelEditorSlot1TextArea);		
 		tabSlot[1] = new tabSelection(levelEditorSlot2,levelEditorSlot2TextArea);		
@@ -174,7 +175,7 @@ public class GameFXLevelEditorController {
 		tabSlot[8].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 		tabSlot[9].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 
-		levelEditorCharacterRadioButton.setToggleGroup(radioToggleGroup);
+		levelEditorPlayerRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorItemRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorMonsterRadioButton.setToggleGroup(radioToggleGroup);
 		levelEditorPictureRadioButton.setToggleGroup(radioToggleGroup);
@@ -190,7 +191,7 @@ public class GameFXLevelEditorController {
 	@FXML
 	void levelEditorBackButtonEvent(ActionEvent event) throws IOException, URISyntaxException {
 		model.stopMusic();
-
+		model.playSoundEffect("Button Press.wav");
 		Parent secondPane = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
 		Scene scene = new Scene(secondPane);
 
@@ -202,6 +203,7 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	void levelEditorGetPresetEvent(ActionEvent event) {
+		model.playSoundEffect("Button Press.wav");
 		if(radioSelection.equalsIgnoreCase("")) {
 			levelEditorConsoleTextArea.setText("Please Select a "+"\n"+"Category of Files First");
 		}else {
@@ -210,20 +212,14 @@ public class GameFXLevelEditorController {
 			String output = "";
 			tabSlot[x].getTextAreaSlot().setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 			switch(radioSelection) {
-			case "Character":
-				output += "Character Name:";
+			case "Player":
+				output += "Player Name:";
 				output += "\nnull\n";
-				output += "Character ID:";
+				output += "Player ID:";
 				output += "\nnull\n";
-				output += "Character Description:";
+				output += "Player Health:";
 				output += "\nnull\n";
-				output += "Character Health:";
-				output += "\nnull\n";
-				output += "Character Inventory:";
-				output += "\nnull\n";
-				output += "Character Weapon:";
-				output += "\nnull\n";
-				output += "Character Location:";
+				output += "Player Weapon:";
 				output += "\nnull\n";
 				tabSlot[x].getTextAreaSlot().setText(output);
 				break;
@@ -298,7 +294,9 @@ public class GameFXLevelEditorController {
 				tabSlot[x].getTextAreaSlot().setText(output);
 				break;
 			case "Game Setting":
-				output += "Create Player:";
+				output += "Party Member:";
+				output += "\nnull\n";
+				output += "Party Inventory:";
 				output += "\nnull\n";
 				output += "Set Starting Room:";
 				output += "\nnull\n";
@@ -310,6 +308,7 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	void levelEditorLoadFileEvent(ActionEvent event) throws IOException {
+		model.playSoundEffect("Button Press.wav");
 		int x = levelEditorTabPane.getSelectionModel().getSelectedIndex(); 
 		FileChooser chooser = new FileChooser();
 		FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("CSV files (*.txt)", "*.txt");
@@ -348,6 +347,7 @@ public class GameFXLevelEditorController {
 			tabSlot[x].getTextAreaSlot().setText(output);
 			tabSlot[x].getTabSlot().setText(file.getName());
 			levelEditorConsoleTextArea.setText("File Loaded!");
+			model.playSoundEffect("Button Press.wav");
 		}else {
 			levelEditorConsoleTextArea.setText("Load File Cancel");
 		}
@@ -361,32 +361,22 @@ public class GameFXLevelEditorController {
 		String output = "";
 		levelEditorHelpTextArea.setFont(Font.font("Comic Sans MS", FontPosture.ITALIC, 12));
 		switch(radioSelection) {
-		case "Character":
-			output += "-[Character Name:]\n";
+		case "Player":
+			output += "-[Player Name:]\n";
 			output += "(Put in the character name)\n"
 					+ "(Rule: Only 1 character name allowed)\n\n";
 
-			output += "-[Character ID:]\n";
-			output += "(Letter C Followed by 2 Digit)\n"
+			output += "-[Player ID:]\n";
+			output += "(Letter P Followed by 2 Digit)\n"
 					+ "(Rule: Only 1 ID allowed)\n\n";
 
-			output += "-[Character Description:]\n";
+			output += "-[Player Health:]\n";
 			output += "(Describe the character)\n\n";
 
-			output += "-[Character Health:]\n";
-			output += "(Describe the character)\n\n";
-
-			output += "-[Character Inventory:]\n";
-			output += "(Letter I Followed by 2 Digit)\n"
-					+ "(Rule: Can have multiple item)\n\n";
-
-			output += "-[Character Weapon:]\n";
+			output += "-[Player Weapon:]\n";
 			output += "(Letter W Followed by 2 Digit)\n"
 					+ "(Rule: Can only have 1 weapon)\n\n";
-
-			output += "-[Character Location:]\n";
-			output += "(Letter R Followed by 2 Digit)\n"
-					+ "(Rule: Can only have 1 room)\n\n";
+			
 			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Item":
@@ -519,8 +509,8 @@ public class GameFXLevelEditorController {
 			levelEditorHelpTextArea.setText(output);
 			break;
 		case "Game Setting":
-			output += "-[Create Character:]\n";
-			output += "(Letter C Followed by 2 Digit)\n"
+			output += "-[Create Player:]\n";
+			output += "(Letter P Followed by 2 Digit)\n"
 					+ "(Hint: Can make multiple character)\n"
 					+ "(Rule: Max character is 3)\n\n";
 
@@ -538,6 +528,7 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	void levelEditorSaveFileEvent(ActionEvent event) {
+		model.playSoundEffect("Button Press.wav");
 		int x = levelEditorTabPane.getSelectionModel().getSelectedIndex();
 		if(tabSlot[x].getTextAreaSlot().getText().equalsIgnoreCase("")) {
 			levelEditorConsoleTextArea.setText("There is nothing to save");
@@ -562,6 +553,7 @@ public class GameFXLevelEditorController {
 				SaveFile(tabSlot[x].getTextAreaSlot().getText(), file);
 				tabSlot[x].getTabSlot().setText(file.getName());
 				levelEditorConsoleTextArea.setText("File Saved!");
+				model.playSoundEffect("Button Press.wav");
 			}else {
 				levelEditorConsoleTextArea.setText("Saving file cancel");
 			}
@@ -570,6 +562,7 @@ public class GameFXLevelEditorController {
 
 	@FXML
 	void levelEditorCreateGameFolderEvent(ActionEvent event) {
+		model.playSoundEffect("Button Press.wav");
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Game Folder Creater");
 		dialog.setHeaderText("Creating Game Folder");
@@ -579,12 +572,13 @@ public class GameFXLevelEditorController {
 		// Traditional way to get the response value.
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
+			model.playSoundEffect("Button Press.wav");
 			File filePath = new File("./res/Game Folder/" + result.get());
 			if(filePath.exists() && filePath.isDirectory()) {
 				levelEditorConsoleTextArea.setText("Folder already exist there");
 			}else {
 				File gameFolder = new File("./res/Game Folder/" + result.get());
-				File characterFolder = new File("./res/Game Folder/" + result.get() + "/Character");
+				File characterFolder = new File("./res/Game Folder/" + result.get() + "/Player");
 				File itemFolder = new File("./res/Game Folder/" + result.get() + "/Item");
 				File monsterFolder = new File("./res/Game Folder/" + result.get() + "/Monster");
 				File pictureFolder = new File("./res/Game Folder/" + result.get() + "/Picture");

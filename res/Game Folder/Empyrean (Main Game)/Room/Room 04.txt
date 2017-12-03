@@ -16,5 +16,6 @@ I18
 I20
 Room Monster:
 E01
+E03
 Room Picture:
 Room 1.png

@@ -1,0 +1,14 @@
+Player Name:
+Mander Prime
+Player ID:
+P02
+Player Health:
+100
+Player Weapon:
+I01
+Player Icon:
+Player 2.png
+Player Select:
+Player Select 2.wav
+Player Death:
+Player Death 2.wav

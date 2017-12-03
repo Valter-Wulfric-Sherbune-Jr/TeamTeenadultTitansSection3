@@ -16,5 +16,7 @@ I11
 I27
 Room Monster:
 E07
+E02
+E02
 Room Picture:
 Room 1.png

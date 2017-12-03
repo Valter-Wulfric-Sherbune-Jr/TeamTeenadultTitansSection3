@@ -14,5 +14,6 @@ Room Item:
 I17
 Room Monster:
 E01
+E04
 Room Picture:
 Room 1.png

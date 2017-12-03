@@ -14,5 +14,6 @@ Room Item:
 I26
 Room Monster:
 E06
+E01
 Room Picture:
 Room 1.png

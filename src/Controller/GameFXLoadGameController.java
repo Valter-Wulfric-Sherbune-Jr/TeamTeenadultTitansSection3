@@ -131,8 +131,8 @@ public class GameFXLoadGameController {
 			{
 				SaveData data = model.getSaveList().get(x);
 				observList.add(x + "." + data.getGameFolder()
-				+ " Time: " + data.getPlayerData().getGameTime()
-				+ " Room: " + data.getPlayerData().getCurrentRoom().getRoomFloor());
+				+ " Time: " + data.getParty().getGameTime()
+				+ " Room: " + data.getParty().getCurrentRoom().getRoomFloor());
 			}
 			else 
 			{
